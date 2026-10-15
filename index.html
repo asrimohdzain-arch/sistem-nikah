@@ -12,81 +12,130 @@
 :root{--maroon:#550000;--navy:#082b57;--gold:#9a7200;--bg:#f2f6fb;--line:#d9e2ec}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);font-family:'Segoe UI',sans-serif;color:#17212b;font-size:14px}
-.app{min-height:100vh;overflow-x:hidden}
-.header{background:var(--maroon);color:#fff;padding:20px;text-align:center;box-shadow:0 2px 8px #0003}
-.brand{font-size:18px;font-weight:700}
-.brand-sub{font-size:12px;opacity:0.85;margin-top:4px}
-.sidebar{display:none} /* Sidebar disembunyikan untuk fokus pada gaya menu grid moden */
-main{padding:15px;max-width:900px;margin:0 auto}
+.app{min-height:100vh;display:flex;flex-direction:column}
+
+/* SIDEBAR KHAS UNTUK KOMPUTER (DESKTOP) */
+.sidebar{position:fixed;left:0;top:0;width:240px;height:100vh;background:#fff;border-right:1px solid var(--line);padding:20px 12px;z-index:10;display:flex;flex-direction:column;gap:15px}
+.sidebar-logo{background:var(--maroon);color:#fff;text-align:center;border-radius:12px;padding:16px 10px;font-size:16px;font-weight:700}
+.sidebar-logo small{display:block;font-size:11px;font-weight:normal;opacity:0.9;margin-top:3px}
+.nav-menu{display:flex;flex-direction:column;gap:8px}
+.nav-menu button{border:0;background:var(--navy);color:#fff;border-radius:8px;padding:12px 14px;font-family:inherit;font-weight:650;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;transition:.2s}
+.nav-menu button:hover,.nav-menu button.active{background:var(--gold)}
+
+/* HEADER UTAMA */
+.header{background:var(--maroon);color:#fff;padding:18px 25px;margin-left:240px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px #0003}
+.brand{font-size:19px;font-weight:700}
+.brand-sub{font-size:12px;opacity:0.9;margin-top:2px}
+.date-pill{background:#ffffff22;border:1px solid #ffffff55;padding:8px 14px;border-radius:16px;font-size:12px;font-weight:600}
+
+main{margin-left:240px;padding:25px}
 .page{display:none}
 .page.active{display:block}
-.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 5px 15px #17324d10;margin-bottom:16px}
-.page-title{margin:0 0 15px;color:var(--maroon);font-size:16px}
-.menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
-.menu-card{background:#fff;border:1px solid #cbd8e5;border-radius:14px;padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:.2s;box-shadow:0 3px 10px #17324d08}
-.menu-card:active{transform:scale(0.98);background:#f6f9fc}
-.menu-card.active{border-color:var(--gold);background:#fffdf6}
-.menu-icon{width:42px;height:42px;border-radius:10px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 5px 15px #17324d0d;margin-bottom:18px}
+.page-title{margin:0 0 16px;color:var(--maroon);font-size:18px;font-weight:700}
+
+/* GRID KAD MENU MODEN */
+.menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:18px}
+.menu-card{background:#fff;border:1px solid #cbd8e5;border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:.2s;box-shadow:0 3px 10px #17324d08}
+.menu-card:hover{border-color:var(--navy);transform:translateY(-2px)}
+.menu-icon{width:46px;height:46px;border-radius:12px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
 .menu-card:nth-child(2) .menu-icon{background:var(--gold)}
 .menu-card:nth-child(3) .menu-icon{background:#25D366}
-.menu-card:nth-child(4) .menu-icon{background:#550000}
-.menu-info b{display:block;font-size:14px;color:var(--navy)}
-.menu-info span{font-size:11px;color:#53657a}
-.cards{display:grid;grid-template-columns:1fr;gap:12px}
-.card{background:#fff;border:1px solid #cbd8e5;border-radius:12px;padding:15px}
+.menu-card:nth-child(4) .menu-icon{background:#8b0000}
+.menu-info b{display:block;font-size:15px;color:var(--navy)}
+.menu-info span{font-size:12px;color:#53657a}
+
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:#fff;border:1px solid #cbd8e5;border-radius:12px;padding:16px}
 .card b{display:block;color:#53657a;margin-bottom:6px;font-size:13px}
-.value{font-size:26px;font-weight:800;color:var(--navy)}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.toolbar .btn{background:var(--navy);color:#fff;border:0;padding:9px 12px;border-radius:8px;font-weight:650;cursor:pointer;font-size:12px}
-.smart-search{display:flex;align-items:center;gap:8px;margin:0 0 12px;padding:8px;background:#f6f9fc;border:1px solid var(--line);border-radius:10px}
-.smart-search input{flex:1;padding:8px;border:1px solid #bcc9d6;border-radius:7px;font-size:13px}
-.clear-search{border:0;background:#dfe8f2;color:#082b57;border-radius:7px;padding:8px 10px;font-weight:700;cursor:pointer;font-size:12px}
-.search-count{color:#53657a;font-size:11px;white-space:nowrap}
-.form-shell{max-width:100%}
-.grid{display:grid;grid-template-columns:1fr;gap:12px}
+.value{font-size:28px;font-weight:800;color:var(--navy)}
+
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.toolbar .btn{background:var(--navy);color:#fff;border:0;padding:10px 14px;border-radius:8px;font-weight:650;cursor:pointer;font-size:13px}
+.smart-search{display:flex;align-items:center;gap:10px;margin:0 0 14px;padding:10px;background:#f6f9fc;border:1px solid var(--line);border-radius:10px}
+.smart-search input{flex:1;padding:9px 12px;border:1px solid #bcc9d6;border-radius:7px;font-size:13px}
+.clear-search{border:0;background:#dfe8f2;color:#082b57;border-radius:7px;padding:9px 12px;font-weight:700;cursor:pointer;font-size:12px}
+.search-count{color:#53657a;font-size:12px;white-space:nowrap}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .field.full{grid-column:1/-1}
-label{display:block;font-weight:650;margin:0 0 5px;font-size:13px}
+label{display:block;font-weight:650;margin:0 0 6px;font-size:13px}
 input,select,textarea{width:100%;padding:10px;border:1px solid #bcc9d6;border-radius:8px;font:14px 'Segoe UI',sans-serif;background:#fff}
 textarea{resize:vertical}
 .hidden{display:none!important}
+
 .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-table{width:100%;border-collapse:collapse;font-size:11px;min-width:700px}
-th,td{padding:8px;border:1px solid #bdc8d3;text-align:left}
-th{background:var(--navy);color:#fff;text-align:center}
-.chart-row{display:grid;grid-template-columns:1fr;gap:14px}
-.bars{display:flex;align-items:flex-end;gap:5px;height:160px;border-bottom:1px solid #aaa;padding:6px}
+table{width:100%;border-collapse:collapse;font-size:11px}
+th,td{padding:8px 10px;border:1px solid #bdc8d3;text-align:left;vertical-align:middle}
+th{background:var(--navy);color:#fff;text-align:center;white-space:nowrap}
+
+/* WARNA LATAR BELAKANG BULAN (LEMBUT & CERAH) */
+.month-0{background-color:#ffe6e6!important} /* Jan - Merah Muda Lembut */
+.month-1{background-color:#e6f9ff!important} /* Feb - Biru Muda Lembut */
+.month-2{background-color:#e6ffed!important} /* Mac - Hijau Muda Cerah */
+.month-3{background-color:#fffce6!important} /* Apr - Kuning Cair */
+.month-4{background-color:#f3e6ff!important} /* Mei - Ungu Muda */
+.month-5{background-color:#fff0e6!important} /* Jun - Oren Muda */
+.month-6{background-color:#e6fffb!important} /* Jul - Cyan Lembut */
+.month-7{background-color:#f4f4f4!important} /* Ogo - Kelabu Cerah */
+.month-8{background-color:#ffe6f7!important} /* Sep - Pink Cair */
+.month-9{background-color:#f0ffe6!important} /* Okt - Hijau Kuning Lembut */
+.month-10{background-color:#fff5e6!important} /* Nov - Krim Cair */
+.month-11{background-color:#eaeaea!important} /* Dis - Kelabu Lembut */
+
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.bars{display:flex;align-items:flex-end;gap:6px;height:170px;border-bottom:1px solid #aaa;padding:8px}
 .bar{flex:1;background:#587ba4;min-height:2px;position:relative}
-.bar .bar-count{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:800}
-.bar .bar-month{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:9px}
-.btn-wa{background:#25D366;color:#fff;border:0;padding:5px 8px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:11px;display:inline-block;text-decoration:none}
-.date-badge{display:inline-block;background:#ffffff22;border:1px solid #ffffff55;padding:6px 12px;border-radius:15px;font-size:12px;margin-top:8px}
-@media(min-width:768px){
-.grid{grid-template-columns:1fr 1fr}
-.cards{grid-template-columns:repeat(3,1fr)}
-.chart-row{grid-template-columns:1fr 1fr}
+.bar .bar-count{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:800}
+.bar .bar-month{position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-size:10px}
+.btn-wa{background:#25D366;color:#fff;border:0;padding:5px 9px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:11px;text-decoration:none;display:inline-block}
+
+/* RESPONSIF UNTUK TELEFON BIMBIT */
+@media(max-width:768px){
+.sidebar{display:none}
+.header{margin-left:0;padding:15px;flex-direction:column;text-align:center;gap:8px}
+main{margin-left:0;padding:12px}
+.cards,.chart-row,.grid,.menu-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 <div class="app" id="app">
+  <!-- SIDEBAR KIRI (MOD PC / KOMPUTER) -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      SISTEM NIKAH
+      <small>Mukim Banggol Setol</small>
+    </div>
+    <div class="nav-menu">
+      <button class="active" onclick="switchPage('utama', this)">🏠 Utama</button>
+      <button onclick="switchPage('rekod', this)">📋 Rekod Nikah</button>
+      <button onclick="switchPage('tetapan', this)">⚙️ Tetapan</button>
+      <button onclick="window.print()">🖨️ Cetak Halaman</button>
+    </div>
+  </aside>
+
+  <!-- HEADER UTAMA -->
   <header class="header">
-    <div class="brand">SISTEM REKOD NIKAH MUKIM</div>
-    <div class="brand-sub">Yayasan Islam Kelantan</div>
-    <div class="date-badge" id="today">Tarikh: Mengambil masa...</div>
+    <div>
+      <div class="brand">SISTEM REKOD NIKAH MUKIM</div>
+      <div class="brand-sub">Mukim Banggol Setol</div>
+    </div>
+    <div class="date-pill" id="today">Tarikh: Memuatkan...</div>
   </header>
 
   <main>
-    <!-- MENU UTAMA GRID BERPETAK (GAYA SISPAQ) -->
+    <!-- MENU UTAMA KAD MODEN (SESUAI UNTUK TELEFON & TABLET) -->
     <div class="menu-grid">
-      <div class="menu-card active" data-page="utama" onclick="switchPage('utama', this)">
+      <div class="menu-card" onclick="switchPage('utama', null)">
         <div class="menu-icon">🏠</div>
         <div class="menu-info"><b>Utama</b><span>Analisa & Statistik</span></div>
       </div>
-      <div class="menu-card" data-page="rekod" onclick="switchPage('rekod', this)">
+      <div class="menu-card" onclick="switchPage('rekod', null)">
         <div class="menu-icon">📋</div>
         <div class="menu-info"><b>Rekod Nikah</b><span>Senarai & Daftar</span></div>
       </div>
-      <div class="menu-card" data-page="tetapan" onclick="switchPage('tetapan', this)">
+      <div class="menu-card" onclick="switchPage('tetapan', null)">
         <div class="menu-icon">⚙️</div>
         <div class="menu-info"><b>Tetapan</b><span>Urus Data & Sistem</span></div>
       </div>
@@ -120,7 +169,7 @@ th{background:var(--navy);color:#fff;text-align:center}
           <button class="btn" id="showForm" type="button">＋ Tambah Rekod</button>
           <button class="btn" id="showList" type="button">📋 Senarai Rekod</button>
           <button class="btn" id="pdfBtn" type="button">📥 Muat Turun PDF</button>
-          <select id="yearSelect" style="width:auto;padding:7px;border-radius:8px"></select>
+          <select id="yearSelect" style="width:auto;padding:8px;border-radius:8px"></select>
         </div>
         <div id="searchPanel" class="smart-search">
           <input id="smartSearch" type="search" placeholder="Cari nama, kampung, tempat...">
@@ -226,8 +275,12 @@ $('#today').textContent = 'Tarikh: ' + new Intl.DateTimeFormat('ms-MY',{day:'2-d
 
 window.switchPage = function(id, el){
   $$('.page').forEach(p => p.classList.toggle('active', p.id === id));$$
-('.menu-card[data-page]').forEach(c => c.classList.remove('active'));
+('.sidebar .nav-menu button').forEach(b => b.classList.remove('active'));
   if(el) el.classList.add('active');
+  else {
+    const target = [...document.querySelectorAll('.sidebar .nav-menu button')].find(b => b.getAttribute('onclick')?.includes(id));
+    if(target) target.classList.add('active');
+  }
   if(id === 'rekod') renderRows();
 };
 
@@ -276,7 +329,7 @@ $('#nikahForm').onsubmit = async e => {
     $('#tLain').classList.add('hidden');
     await load();
     Swal.fire('Berjaya','Rekod nikah telah disimpan.','success');
-    switchPage('rekod', document.querySelector('.menu-card[data-page="rekod"]'));
+    switchPage('rekod', null);
   }catch(err){
     Swal.fire('Ralat',err.message,'error');
   }finally{
@@ -289,7 +342,6 @@ async function load(){
     const s = await db.collection('rekod_nikah').get();
     records = s.docs.map(d => ({id:d.id, ...d.data()})).sort((a,b) => (a.tarikh || '').localeCompare(b.tarikh || ''));
     
-    // Analisis kotak atas
     $('#total').textContent = records.length;
     const now = new Date(), ym = now.toISOString().slice(0,7);
     $('#monthTotal').textContent = records.filter(r => (r.tarikh || '').startsWith(ym)).length;
@@ -315,26 +367,29 @@ async function load(){
 window.sendWhatsapp = function(name, tel, tarikh, hari, masa, kampung, tempat, wali, catatan){
   let cleanTel = tel.replace(/[^\d]/g, '');
   if(cleanTel.startsWith('0')) cleanTel = '60' + cleanTel.slice(1);
-  const textMsg = `*Sistem Nikah Anak Mukim*\nNama: ${name}\nTarikh: ${tarikh} (${hari})\nMasa: ${masa}\nKampung: ${kampung}\nTempat: ${tempat}\nWali: ${wali}\nCatatan: ${catatan||'-'}`;
+  const textMsg = `*Sistem Nikah Mukim*\nNama: ${name}\nTarikh: ${tarikh} (${hari})\nMasa: ${masa}\nKampung: ${kampung}\nTempat: ${tempat}\nWali: ${wali}\nCatatan: ${catatan||'-'}`;
   window.open(`https://wa.me/${cleanTel}?text=${encodeURIComponent(textMsg)}`, '_blank');
 };
 
 function renderRows(){
   const q = ($('#smartSearch')?.value || '').toLowerCase();
   const filtered = !q ? records : records.filter(r => [r.nama,r.kampung,r.tempat,r.tarikh].some(v => (v||'').toLowerCase().includes(q)));
-  $('#rows').innerHTML = filtered.map((r,i) => `<tr>
-    <td>${i+1}</td>
-    <td>${r.tarikh||''}</td>
-    <td>${r.hari||''}</td>
-    <td>${r.masa||''}</td>
-    <td><b>${r.nama||''}</b></td>
-    <td>${r.kampung||''}</td>
-    <td>${r.tempat||''}</td>
-    <td>${r.tel||''}</td>
-    <td>${r.wali||''}</td>
-    <td>${r.catatan||''}</td>
-    <td><button class="btn-wa" onclick="sendWhatsapp('${r.nama}','${r.tel}','${r.tarikh}','${r.hari}','${r.masa}','${r.kampung}','${r.tempat}','${r.wali}','${r.catatan}')">WhatsApp</button></td>
-  </tr>`).join('') || '<tr><td colspan="11" style="text-align:center;padding:20px">Tiada rekod sepadan</td></tr>';
+  $('#rows').innerHTML = filtered.map((r,i) => {
+    const monthIndex = r.tarikh ? new Date(r.tarikh + 'T00:00:00').getMonth() : 0;
+    return `<tr class="month-${monthIndex}">
+      <td>${i+1}</td>
+      <td>${r.tarikh||''}</td>
+      <td>${r.hari||''}</td>
+      <td>${r.masa||''}</td>
+      <td><b>${r.nama||''}</b></td>
+      <td>${r.kampung||''}</td>
+      <td>${r.tempat||''}</td>
+      <td>${r.tel||''}</td>
+      <td>${r.wali||''}</td>
+      <td>${r.catatan||''}</td>
+      <td><button class="btn-wa" onclick="sendWhatsapp('${r.nama}','${r.tel}','${r.tarikh}','${r.hari}','${r.masa}','${r.kampung}','${r.tempat}','${r.wali}','${r.catatan}')">WhatsApp</button></td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="11" style="text-align:center;padding:20px">Tiada rekod sepadan</td></tr>';
   $('#searchCount').textContent = `${filtered.length} daripada ${records.length} rekod`;
 }
 
