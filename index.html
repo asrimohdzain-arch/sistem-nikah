@@ -75,6 +75,24 @@ th{background:var(--navy);color:#fff}
 .bar .bar-month{position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);font-size:10px}
 .bar span{position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);font-size:10px}
 .empty{color:#667;text-align:center;padding:25px}
+.login-screen{position:fixed;inset:0;background:#edf3f9;z-index:50;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-screen:before{content:'Sistem Rekod Nikah Mukim';position:absolute;left:0;right:0;top:0;height:155px;background:#550000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;letter-spacing:.3px}
+.login-card{position:relative;width:min(390px,100%);background:#fff;border-radius:18px;padding:30px;box-shadow:0 18px 55px #18324b2e;text-align:center}
+.login-card h1{margin:0 0 8px;color:#550000}
+.login-card p{color:#607080;margin:0 0 20px}
+.login-card label{text-align:left}
+.login-card input{margin-bottom:12px;padding-right:46px}
+.password-wrap{position:relative}
+.eye-btn{position:absolute;right:8px;top:7px;border:0;background:transparent;color:#550000;font-size:20px;cursor:pointer;padding:3px 7px}
+.eye-icon{display:block;position:relative;width:24px;height:16px;border:3px solid #550000;border-radius:50%/60%;transform:rotate(0deg)}
+.eye-icon:after{content:'';position:absolute;width:6px;height:6px;background:#550000;border-radius:50%;left:6px;top:2px}
+.eye-hide{display:block}
+.eye-hide:before{content:'';position:absolute;width:28px;height:3px;background:#550000;left:-5px;top:5px;transform:rotate(-45deg);border-radius:2px}
+.eye-show{display:none}
+.eye-btn.visible .eye-show{display:block}
+.eye-btn.visible .eye-hide{display:none}
+.forgot{display:inline-block;margin-top:13px;color:#550000;font-weight:700;text-decoration:underline;cursor:pointer;border:0;background:transparent;font-family:inherit}
+.logout{border:1px solid #ffffff77;background:#082b57;color:#fff;border-radius:8px;padding:9px 12px;font-family:inherit;font-weight:650;cursor:pointer}
 .btn-wa{background:#25D366;color:#fff;border:0;padding:4px 8px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:11px;display:inline-flex;align-items:center;gap:4px;text-decoration:none}
 .btn-wa:hover{background:#128C7E}
 @media(max-width:640px){
@@ -88,6 +106,7 @@ th{background:var(--navy);color:#fff}
 .header-right{gap:6px}
 .date-pill{display:none}
 .bell{width:36px;height:36px;font-size:17px}
+.logout{padding:8px;font-size:11px}
 main{margin-left:0;padding:10px 10px 80px}
 .panel{padding:12px;border-radius:12px}
 .cards{grid-template-columns:1fr}
@@ -98,6 +117,8 @@ main{margin-left:0;padding:10px 10px 80px}
 .field.full{grid-column:auto}
 .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 table{min-width:1020px}
+.login-screen:before{height:120px;font-size:23px}
+.login-card{padding:23px;margin-top:70px}
 }
 @media(max-width:820px){
 .sidebar{width:76px}
@@ -125,7 +146,7 @@ main{padding:10px}
 }
 @media print{
 @page{size:A4 portrait;margin:10mm}
-.sidebar,.header,.toolbar,.no-print,iframe{display:none!important}
+.sidebar,.header,.toolbar,.no-print,iframe,[class*="netlify"],[id*="netlify"],[data-netlify]{display:none!important}
 html,body,.app{width:100%!important;min-width:0!important;min-height:0!important;height:auto!important;overflow:visible!important;margin:0!important;padding:0!important}
 main{margin:0!important;padding:0!important;width:100%!important}
 .page{display:none!important;min-height:0!important}
@@ -142,8 +163,26 @@ th{color:#000!important;font-weight:800!important;background:#fff!important}
 </style>
 </head>
 <body>
+<div id="loginScreen" class="login-screen">
+  <form id="loginForm" class="login-card">
+    <h1>Selamat Datang!</h1>
+    <p><b>Sila Log Masuk Untuk<br>Meneruskan.</b></p>
+    <label>E-mel</label>
+    <div class="password-wrap">
+      <input id="loginEmail" type="text" autocomplete="username" placeholder="cth: email@domain.com" required>
+      <button class="eye-btn" id="toggleEmail" type="button" aria-label="Tunjuk e-mel"><span class="eye-icon eye-show"></span><span class="eye-icon eye-hide"></span></button>
+    </div>
+    <label>Kata Laluan</label>
+    <div class="password-wrap">
+      <input id="loginPassword" type="password" autocomplete="current-password" required>
+      <button class="eye-btn" id="togglePassword" type="button" aria-label="Tunjuk kata laluan"><span class="eye-icon eye-show"></span><span class="eye-icon eye-hide"></span></button>
+    </div>
+    <button class="btn" id="loginBtn" type="submit" style="width:100%">LOG MASUK</button>
+    <button class="forgot" id="forgotPassword" type="button">Lupa Kata Laluan?</button>
+  </form>
+</div>
 
-<div class="app" id="app">
+<div class="app hidden" id="app">
   <aside class="sidebar">
     <div class="logo">SISTEM NIKAH</div>
     <nav class="nav">
@@ -157,6 +196,7 @@ th{color:#000!important;font-weight:800!important;background:#fff!important}
     <div class="header-right">
       <button class="bell" id="bell" title="Peringatan nikah">🔔<span class="badge" id="badge">0</span></button>
       <div class="date-pill" id="today"></div>
+      <button class="logout" id="logoutBtn">Log Keluar</button>
     </div>
   </header>
   <div class="mobile-date" id="mobileToday"></div>
@@ -322,142 +362,160 @@ th{color:#000!important;font-weight:800!important;background:#fff!important}
 </div>
 
 <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js';
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, writeBatch, updateDoc } from 'https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js';
+import{initializeApp}from'https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js';
+import{getAuth,setPersistence,inMemoryPersistence,signInWithEmailAndPassword,sendPasswordResetEmail,onAuthStateChanged,signOut}from'https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js';
+import{getFirestore,collection,addDoc,getDocs,deleteDoc,doc,serverTimestamp,writeBatch,updateDoc}from'https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js';
 
-const firebaseConfig = { apiKey: "AIzaSyBflySl7ok21LE4urn0rKrSVxczRrZykQE", authDomain: "sistem-rekod-nikah.firebaseapp.com", projectId: "sistem-rekod-nikah", storageBucket: "sistem-rekod-nikah.firebasestorage.app", messagingSenderId: "473243104741", appId: "1:473243104741:web:be6dcfbe86256753beeb0c" };
-const app = initializeApp(firebaseConfig), db = getFirestore(app);
-let records = [];
-const $= s => document.querySelector(s),$$ = s => [...document.querySelectorAll(s)];
-const days = ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'], months = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
+const firebaseConfig={apiKey:"AIzaSyBflySl7ok21LE4urn0rKrSVxczRrZykQE",authDomain:"sistem-rekod-nikah.firebaseapp.com",projectId:"sistem-rekod-nikah",storageBucket:"sistem-rekod-nikah.firebasestorage.app",messagingSenderId:"473243104741",appId:"1:473243104741:web:be6dcfbe86256753beeb0c"};
+const app=initializeApp(firebaseConfig),db=getFirestore(app),auth=getAuth(app);
+let records=[];
+let loginApproved=false;
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const days=['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'],months=['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
 
-$('#today').textContent = 'Tarikh: ' + new Intl.DateTimeFormat('ms-MY',{day:'2-digit',month:'long',year:'numeric'}).format(new Date());
-$('#mobileToday').textContent = $('#today').textContent;
-const savedReminderDays = Number(localStorage.getItem('reminderDays'));
-if(savedReminderDays >= 1 && savedReminderDays <= 30) $('#reminderDays').value = savedReminderDays;
+$('#today').textContent='Tarikh: '+new Intl.DateTimeFormat('ms-MY',{day:'2-digit',month:'long',year:'numeric'}).format(new Date());
+$('#mobileToday').textContent=$('#today').textContent;
+const savedReminderDays=Number(localStorage.getItem('reminderDays'));
+if(savedReminderDays>=1&&savedReminderDays<=30)$('#reminderDays').value=savedReminderDays;
 
-let notificationRegistration = null;
+let notificationRegistration=null;
 async function getNotificationRegistration(){
-  if(!('serviceWorker' in navigator)) throw new Error('Service worker tidak disokong.');
-  notificationRegistration = notificationRegistration || await navigator.serviceWorker.register('./sw.js');
+  if(!('serviceWorker'in navigator))throw new Error('Service worker tidak disokong.');
+  notificationRegistration=notificationRegistration||await navigator.serviceWorker.register('./sw.js');
   await navigator.serviceWorker.ready;
-  return notificationRegistration;
+  return notificationRegistration
 }
 
-$('#enableNotifications').onclick = async() => { if(!('Notification' in window) \vert{}\vert{} !('serviceWorker' in navigator)) return Swal.fire('Tidak Disokong','Pelayar ini tidak menyokong notifikasi web.','info'); try{ const p = await Notification.requestPermission(); if(p !== 'granted') return Swal.fire('Tidak Dibenarkan','Benarkan notifikasi untuk laman ini dalam tetapan Chrome.','info'); await getNotificationRegistration(); Swal.fire('Berjaya','Notifikasi telefon telah diaktifkan.','success'); }catch(e){ Swal.fire('Ralat Notifikasi','Pastikan fail sw.js telah dimuat naik bersama index.html, kemudian muat semula laman.','error'); } }; $$('.nav button').forEach(b => b.onclick = () => openPage(b.dataset.page, b));
+$('#enableNotifications').onclick=async()=>{ if(!('Notification'in window)\vert{}\vert{}!('serviceWorker'in navigator))return Swal.fire('Tidak Disokong','Pelayar ini tidak menyokong notifikasi web.','info'); try{ const p=await Notification.requestPermission(); if(p!=='granted')return Swal.fire('Tidak Dibenarkan','Benarkan notifikasi untuk laman ini dalam tetapan Chrome.','info'); await getNotificationRegistration(); Swal.fire('Berjaya','Notifikasi telefon telah diaktifkan.','success') }catch(e){ Swal.fire('Ralat Notifikasi','Pastikan fail sw.js telah dimuat naik bersama index.html, kemudian muat semula laman.','error') } };  $$('.nav button').forEach(b=>b.onclick=()=>openPage(b.dataset.page,b));
 
-function showPage(id, btn){
-  $$('.page').forEach(p => p.classList.toggle('active', p.id === id));$$
-('.nav button').forEach(x => x.classList.remove('active'));
-  (btn || $(`[data-page="${id}"]`)).classList.add('active');
+function showPage(id,btn){
+  $$('.page').forEach(p=>p.classList.toggle('active',p.id===id));$$
+('.nav button').forEach(x=>x.classList.remove('active'));
+  (btn||$(`[data-page="${id}"]`)).classList.add('active')
 }
 
-function openPage(id, btn){
-  showPage(id, btn);
+let backExitArmed=false;
+function openPage(id,btn){
+  showPage(id,btn);
+  backExitArmed=false;
+  if(auth.currentUser)history.replaceState({app:true,page:id},'',location.pathname+location.search+'#'+id)
 }
 
-$('#nikahForm').tarikh.onchange = e => $('#nikahForm').hari.value = days[new Date(e.target.value + 'T00:00:00').getDay()];
+window.addEventListener('popstate',()=>{
+  if(!auth.currentUser)return;
+  const active=document.querySelector('.page.active')?.id;
+  if(!backExitArmed){
+    showPage('utama');
+    backExitArmed=true;
+    history.pushState({app:true,page:'utama'},'',location.pathname+location.search+'#utama')
+  }else{
+    signOut(auth);
+    history.back()
+  }
+});
 
-function toggle(sel, box, input){
-  const on = sel.value === 'Lain-lain';
-  box.classList.toggle('hidden', !on);
-  input.required = on;
-  if(!on) input.value = '';
+$('#nikahForm').tarikh.onchange=e=>$('#nikahForm').hari.value=days[new Date(e.target.value+'T00:00:00').getDay()];
+
+function toggle(sel,box,input){
+  const on=sel.value==='Lain-lain';
+  box.classList.toggle('hidden',!on);
+  input.required=on;
+  if(!on)input.value=''
 }
 
-$('#kampung').onchange = e => toggle(e.target, $('#kLain'), $('#nikahForm').kampung_lain);
-$('#tempat').onchange = e => toggle(e.target, $('#tLain'), $('#nikahForm').tempat_lain);
+$('#kampung').onchange=e=>toggle(e.target,$('#kLain'),$('#nikahForm').kampung_lain);
+$('#tempat').onchange=e=>toggle(e.target,$('#tLain'),$('#nikahForm').tempat_lain);
 
-$('#showForm').onclick = () => { $('#formPanel').classList.remove('hidden'); $('#listPanel').classList.add('hidden'); $('#searchPanel').classList.add('hidden'); };
-$('#showList').onclick = () => { $('#formPanel').classList.add('hidden'); $('#listPanel').classList.remove('hidden'); $('#searchPanel').classList.remove('hidden'); renderRows(); };
+$('#showForm').onclick=()=>{$('#formPanel').classList.remove('hidden');$('#listPanel').classList.add('hidden');$('#searchPanel').classList.add('hidden')};
+$('#showList').onclick=()=>{$('#formPanel').classList.add('hidden');$('#listPanel').classList.remove('hidden');$('#searchPanel').classList.remove('hidden');renderRows()};
 
-function clean(v){ return String(v || '').trim(); }
+function clean(v){return String(v||'').trim()}
 
 function normalizeDate(v){
-  const s = clean(v);
-  if(!s) return '';
-  let m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  if(m) return `${m[1]}-${m[2]}-${m[3]}`;
-  m = s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
-  if(m) return `${m[3]}-${String(m[2]).padStart(2,'0')}-${String(m[1]).padStart(2,'0')}`;
-  const namaBulan = {january:1,januari:1,february:2,februari:2,march:3,mac:3,april:4,may:5,mei:5,june:6,jun:6,july:7,julai:7,august:8,ogos:8,september:9,october:10,oktober:10,november:11,december:12,disember:12};
-  m = s.toLowerCase().match(/^(\d{1,2})\s+([a-z]+)\s+(\d{4})$/);
-  if(m && namaBulan[m[2]]) return `${m[3]}-${String(namaBulan[m[2]]).padStart(2,'0')}-${String(m[1]).padStart(2,'0')}`;
-  return '';
+  const s=clean(v);
+  if(!s)return'';
+  let m=s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(m)return`${m[1]}-${m[2]}-${m[3]}`;
+  m=s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+  if(m)return`${m[3]}-${String(m[2]).padStart(2,'0')}-${String(m[1]).padStart(2,'0')}`;
+  const namaBulan={january:1,januari:1,february:2,februari:2,march:3,mac:3,april:4,may:5,mei:5,june:6,jun:6,july:7,julai:7,august:8,ogos:8,september:9,october:10,oktober:10,november:11,december:12,disember:12};
+  m=s.toLowerCase().match(/^(\d{1,2})\s+([a-z]+)\s+(\d{4})$/);
+  if(m&&namaBulan[m[2]])return`${m[3]}-${String(namaBulan[m[2]]).padStart(2,'0')}-${String(m[1]).padStart(2,'0')}`;
+  return''
 }
 
 function formatDateMY(v){
-  const m = clean(v).match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  return m ? `${m[3]}-${m[2]}-${m[1]}` : clean(v);
+  const m=clean(v).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return m?`${m[3]}-${m[2]}-${m[1]}`:clean(v)
 }
 
 function formatTimeMY(v){
-  const s = clean(v), m = s.match(/^(\d{1,2}):(\d{2})$/);
-  if(!m) return s;
-  const h = Number(m[1]), min = m[2], jam = h % 12 || 12, label = h < 12 ? 'pagi' : h < 14 ? 'tengah hari' : h < 19 ? 'petang' : 'malam';
-  return `${String(jam).padStart(2,'0')}:${min} ${label}`;
+  const s=clean(v),m=s.match(/^(\d{1,2}):(\d{2})$/);
+  if(!m)return s;
+  const h=Number(m[1]),min=m[2],jam=h%12||12,label=h<12?'pagi':h<14?'tengah hari':h<19?'petang':'malam';
+  return`${String(jam).padStart(2,'0')}:${min} ${label}`
 }
 
-$('#nikahForm').onsubmit = async e => {
+$('#nikahForm').onsubmit=async e=>{
   e.preventDefault();
-  if(!e.target.reportValidity()) return;
-  const f = Object.fromEntries(new FormData(e.target));
-  $('#saveBtn').disabled = true;
+  if(!e.target.reportValidity())return;
+  const f=Object.fromEntries(new FormData(e.target));
+  $('#saveBtn').disabled=true;
   try{
     await addDoc(collection(db,'rekod_nikah'),{
-      tarikh: f.tarikh,
-      hari: f.hari,
-      masa: f.masa,
-      nama: clean(f.nama),
-      kampung: f.kampung === 'Lain-lain' ? clean(f.kampung_lain) : f.kampung,
-      tempat: f.tempat === 'Lain-lain' ? clean(f.tempat_lain) : f.tempat,
-      tel: clean(f.tel),
-      wali: f.wali,
-      catatan: clean(f.catatan),
-      diciptaPada: serverTimestamp()
+      tarikh:f.tarikh,
+      hari:f.hari,
+      masa:f.masa,
+      nama:clean(f.nama),
+      kampung:f.kampung==='Lain-lain'?clean(f.kampung_lain):f.kampung,
+      tempat:f.tempat==='Lain-lain'?clean(f.tempat_lain):f.tempat,
+      tel:clean(f.tel),
+      wali:f.wali,
+      catatan:clean(f.catatan),
+      diciptaPada:serverTimestamp()
     });
     e.target.reset();
     $('#kLain').classList.add('hidden');
     $('#tLain').classList.add('hidden');
     await load();
-    Swal.fire('Berjaya','Rekod telah disimpan.','success');
+    Swal.fire('Berjaya','Rekod telah disimpan.','success')
   }catch(err){
-    Swal.fire('Ralat',err.message,'error');
+    Swal.fire('Ralat',err.message,'error')
   }finally{
-    $('#saveBtn').disabled = false;
+    $('#saveBtn').disabled=false
   }
 };
 
 async function load(){
-  const s = await getDocs(collection(db,'rekod_nikah'));
-  records = s.docs.map(d => ({id:d.id, ...d.data()})).sort((a,b) => (a.tarikh || '').localeCompare(b.tarikh || ''));
-  render();
+  const s=await getDocs(collection(db,'rekod_nikah'));
+  records=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.tarikh||'').localeCompare(b.tarikh||''));
+  render()
 }
 
 function render(){
-  const now = new Date(), ym = now.toISOString().slice(0,7), vill = {};
-  $('#total').textContent = records.length;
-  $('#monthTotal').textContent = records.filter(r => (r.tarikh || '').startsWith(ym)).length;
-  records.forEach(r => vill[r.kampung] = (vill[r.kampung] || 0) + 1);
-  $('#villageTotal').textContent = Object.keys(vill).length;
-  $('#villageList').innerHTML = Object.entries(vill).sort((a,b) => b[1] - a[1]).map(([k,v]) => `<p>${esc(k)}: <b>${v}</b></p>`).join('') || '<p class="empty">Tiada data</p>';
+  const now=new Date(),ym=now.toISOString().slice(0,7),vill={};
+  $('#total').textContent=records.length;
+  $('#monthTotal').textContent=records.filter(r=>(r.tarikh||'').startsWith(ym)).length;
+  records.forEach(r=>vill[r.kampung]=(vill[r.kampung]||0)+1);
+  $('#villageTotal').textContent=Object.keys(vill).length;
+  $('#villageList').innerHTML=Object.entries(vill).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<p>${esc(k)}: <b>${v}</b></p>`).join('')||'<p class="empty">Tiada data</p>';
   
-  const mc = Array(12).fill(0);
-  records.forEach(r => { if(r.tarikh) mc[new Date(r.tarikh + 'T00:00:00').getMonth()]++; });
-  const max = Math.max(...mc, 1);
-  $('#monthBars').innerHTML = mc.map((v,i) => `<div class="bar" style="height:${Math.max(2,v/max*150)}px" title="${months[i]}: ${v}"><span class="bar-count">${v}</span><span class="bar-month">${months[i]}</span></div>`).join('');
+  const mc=Array(12).fill(0);
+  records.forEach(r=>{if(r.tarikh)mc[new Date(r.tarikh+'T00:00:00').getMonth()]++});
+  const max=Math.max(...mc,1);
+  $('#monthBars').innerHTML=mc.map((v,i)=>`<div class="bar" style="height:${Math.max(2,v/max*150)}px" title="${months[i]}: ${v}"><span class="bar-count">${v}</span><span class="bar-month">${months[i]}</span></div>`).join('');
   
   renderRows();
-  const ys = [...new Set(records.map(r => (r.tarikh || '').slice(0,4)).filter(Boolean))].sort();
-  $('#yearSelect').innerHTML = ys.map(y => `<option>${y}</option>`).join('') || `<option>${now.getFullYear()}</option>`;
-  notify();
+  const ys=[...new Set(records.map(r=>(r.tarikh||'').slice(0,4)).filter(Boolean))].sort();
+  $('#yearSelect').innerHTML=ys.map(y=>`<option>${y}</option>`).join('')||`<option>${now.getFullYear()}</option>`;
+  notify()
 }
 
 window.sendWhatsapp = function(id) {
   const r = records.find(item => item.id === id);
   if(!r) return;
   
-  const textMsg = `*Sistem Nikah Anak Mukim* \n*Maklumat Nikah :*\n1. Nama : ${r.nama||'-'}\n2. Tarikh : ${formatDateMY(r.tarikh)} (${r.hari||''})\n3. Masa : ${formatTimeMY(r.masa)}\n4. Kampung: ${r.kampung||'-'}\n5. Tempat Nikah : ${r.tempat||'-'}\n6. Wali : ${r.wali||'-'}\n7. Catatan : ${r.catatan||'-'}\n8. Pertanyaan sila hubungi :\n     Imam : 019-9467894`;
+  const textMsg = `*Sistem Nikah Anak Mukim* \n*Maklumat Nikah :*\n1. Nama : ${r.nama||'-'}\n2. Tarikh : ${formatDateMY(r.tarikh)} (${r.hari||''})\n3. Masa : ${formatTimeMY(r.masa)}\n4. Kampung: ${r.kampung||'-'}\n5. Tempat Nikah : ${r.tempat||'-'}\n6. Wali : ${r.wali||'-'}\n7. Catatan : ${r.catatan||'-'}\n8. Pertanyaan sila hubungi :\n      Imam : 019-9467894`;
   
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(textMsg);
@@ -488,12 +546,12 @@ window.sendWhatsapp = function(id) {
 };
 
 function renderRows(){
-  const q = clean($('#smartSearch')?.value).toLocaleLowerCase('ms'), today = new Date();
+  const q=clean($('#smartSearch')?.value).toLocaleLowerCase('ms'),today=new Date();
   today.setHours(0,0,0,0);
-  const filtered = !q ? records : records.filter(r => [r.tarikh,r.hari,r.masa,r.nama,r.kampung,r.tempat,r.tel,r.wali,r.catatan].some(v => clean(v).toLocaleLowerCase('ms').includes(q)));
+  const filtered=!q?records:records.filter(r=>[r.tarikh,r.hari,r.masa,r.nama,r.kampung,r.tempat,r.tel,r.wali,r.catatan].some(v=>clean(v).toLocaleLowerCase('ms').includes(q)));
   
-  $('#rows').innerHTML = filtered.map((r,i) => {
-    const d = new Date(r.tarikh + 'T00:00:00'), completed = d < today ? ' completed-row' : '';
+  $('#rows').innerHTML=filtered.map((r,i)=>{
+    const d=new Date(r.tarikh+'T00:00:00'),completed=d<today?' completed-row':'';
     return `<tr class="month-${d.getMonth()}${completed}">
       <td>${i+1}</td>
       <td>${esc(formatDateMY(r.tarikh))}</td>
@@ -502,180 +560,264 @@ function renderRows(){
       <td>${esc(r.nama)}</td>
       <td>${esc(r.kampung)}</td>
       <td>${esc(r.tempat)}</td>
-      <td>${clean(r.tel) && clean(r.tel) !== '-' ? `<a href="tel:${clean(r.tel).replace(/[^\d+]/g,'')}">${esc(r.tel)}</a>` : '-'}</td>
+      <td>${clean(r.tel)&&clean(r.tel)!=='-'?`<a href="tel:${clean(r.tel).replace(/[^\d+]/g,'')}">${esc(r.tel)}</a>`:'-'}</td>
       <td>${esc(r.wali)}</td>
       <td>${esc(r.catatan)}</td>
       <td class="no-print" style="text-align:center"><button class="btn-wa" onclick="sendWhatsapp('${r.id}')" title="Hantar maklumat ke WhatsApp">💬 WhatsApp</button></td>
-    </tr>`;
-  }).join('') || `<tr><td colspan="11" class="empty">${q ? 'Tiada rekod sepadan' : 'Tiada rekod'}</td></tr>`;
+    </tr>`
+  }).join('')||`<tr><td colspan="11" class="empty">${q?'Tiada rekod sepadan':'Tiada rekod'}</td></tr>`;
   
-  $('#searchCount').textContent = `${filtered.length} daripada ${records.length} rekod`;
+  $('#searchCount').textContent=`${filtered.length} daripada ${records.length} rekod`
 }
 
-$('#smartSearch').oninput = renderRows;
-$('#clearSearch').onclick = () => { $('#smartSearch').value = ''; renderRows(); $('#smartSearch').focus(); };
+$('#smartSearch').oninput=renderRows;
+$('#clearSearch').onclick=()=>{$('#smartSearch').value='';renderRows();$('#smartSearch').focus()};
 
-function esc(v){ return clean(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function esc(v){return clean(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 
 function notify(){
-  const n = Number($('#reminderDays').value) || 3, t = new Date(), todayUTC = Date.UTC(t.getFullYear(), t.getMonth(), t.getDate());
-  const upcoming = records.filter(r => {
-    const parts = clean(r.tarikh).split('-').map(Number);
-    if(parts.length !== 3 || parts.some(Number.isNaN)) return false;
-    const gap = Math.round((Date.UTC(parts[0], parts[1]-1, parts[2]) - todayUTC) / 86400000);
-    return gap >= 0 && gap <= n;
+  const n=Number($('#reminderDays').value)||3,t=new Date(),todayUTC=Date.UTC(t.getFullYear(),t.getMonth(),t.getDate());
+  const upcoming=records.filter(r=>{
+    const parts=clean(r.tarikh).split('-').map(Number);
+    if(parts.length!==3||parts.some(Number.isNaN))return false;
+    const gap=Math.round((Date.UTC(parts[0],parts[1]-1,parts[2])-todayUTC)/86400000);
+    return gap>=0&&gap<=n
   });
-  $('#badge').textContent = upcoming.length;
-  $('#badge').style.display = upcoming.length ? 'flex' : 'none';
-  if('Notification' in window && Notification.permission === 'granted' && upcoming.length){
-    const key = 'nikahNotify:' + new Date().toISOString().slice(0,10) + ':' + n + ':' + upcoming.map(r => r.id).join(',');
+  $('#badge').textContent=upcoming.length;
+  $('#badge').style.display=upcoming.length?'flex':'none';
+  if('Notification'in window&&Notification.permission==='granted'&&upcoming.length){
+    const key='nikahNotify:'+new Date().toISOString().slice(0,10)+':'+n+':'+upcoming.map(r=>r.id).join(',');
     if(!localStorage.getItem(key)){
-      getNotificationRegistration().then(reg => reg.showNotification('Peringatan Nikah', {body: `${upcoming.length} rekod nikah dalam tempoh ${n} hari.`, icon: './favicon.ico', badge: './favicon.ico'})).then(() => localStorage.setItem(key, '1')).catch(() => {});
+      getNotificationRegistration().then(reg=>reg.showNotification('Peringatan Nikah',{body:`${upcoming.length} rekod nikah dalam tempoh ${n} hari.`,icon:'./favicon.ico',badge:'./favicon.ico'})).then(()=>localStorage.setItem(key,'1')).catch(()=>{})
     }
   }
-  $('#bell').onclick = () => Swal.fire({title:'Peringatan Nikah', html: upcoming.length ? upcoming.map(r => `${esc(formatDateMY(r.tarikh))} — ${esc(r.nama)}`).join('<br>') : 'Tiada kejadian dalam tempoh peringatan.'});
+  $('#bell').onclick=()=>Swal.fire({title:'Peringatan Nikah',html:upcoming.length?upcoming.map(r=>`${esc(formatDateMY(r.tarikh))} — ${esc(r.nama)}`).join('<br>'):'Tiada kejadian dalam tempoh peringatan.'})
 }
 
-const saveReminderDays = () => {
-  let n = Math.min(30, Math.max(1, Number($('#reminderDays').value) || 3));
-  $('#reminderDays').value = n;
-  localStorage.setItem('reminderDays', String(n));
-  notify();
+const saveReminderDays=()=>{
+  let n=Math.min(30,Math.max(1,Number($('#reminderDays').value)||3));
+  $('#reminderDays').value=n;
+  localStorage.setItem('reminderDays',String(n));
+  notify()
 };
-$('#reminderDays').oninput = saveReminderDays;
-$('#reminderDays').onchange = saveReminderDays;
+$('#reminderDays').oninput=saveReminderDays;
+$('#reminderDays').onchange=saveReminderDays;
 
-$('#updateIndividual').onclick = async() => {
-  if(!records.length) return Swal.fire('Tiada Rekod','Belum ada rekod untuk dikemas kini.','info');
-  const q = await Swal.fire({title:'Kemaskini Rekod Nikah', input:'text', inputLabel:'Taip nama pengantin', inputPlaceholder:'Nama penuh tanpa mengira huruf besar atau kecil', showCancelButton:true, confirmButtonText:'Cari Rekod', cancelButtonText:'Batal', inputValidator: v => !clean(v) && 'Sila taip nama pengantin'});
-  if(!q.isConfirmed) return;
-  const matches = records.filter(r => clean(r.nama).toLocaleLowerCase('ms') === clean(q.value).toLocaleLowerCase('ms'));
-  if(!matches.length) return Swal.fire('Tidak Ditemui','Tiada rekod dengan nama tersebut.','warning');
-  let target = matches[0];
-  if(matches.length > 1){
-    const pick = await Swal.fire({title:'Pilih Rekod', input:'select', inputOptions: Object.fromEntries(matches.map(r => [r.id, `${r.nama} — ${formatDateMY(r.tarikh)} — ${r.kampung}`])), showCancelButton:true, confirmButtonText:'Pilih', cancelButtonText:'Batal'});
-    if(!pick.isConfirmed) return;
-    target = matches.find(r => r.id === pick.value);
+$('#updateIndividual').onclick=async()=>{
+  if(!records.length)return Swal.fire('Tiada Rekod','Belum ada rekod untuk dikemas kini.','info');
+  const q=await Swal.fire({title:'Kemaskini Rekod Nikah',input:'text',inputLabel:'Taip nama pengantin',inputPlaceholder:'Nama penuh tanpa mengira huruf besar atau kecil',showCancelButton:true,confirmButtonText:'Cari Rekod',cancelButtonText:'Batal',inputValidator:v=>!clean(v)&&'Sila taip nama pengantin'});
+  if(!q.isConfirmed)return;
+  const matches=records.filter(r=>clean(r.nama).toLocaleLowerCase('ms')===clean(q.value).toLocaleLowerCase('ms'));
+  if(!matches.length)return Swal.fire('Tidak Ditemui','Tiada rekod dengan nama tersebut.','warning');
+  let target=matches[0];
+  if(matches.length>1){
+    const pick=await Swal.fire({title:'Pilih Rekod',input:'select',inputOptions:Object.fromEntries(matches.map(r=>[r.id,`${r.nama} — ${formatDateMY(r.tarikh)} — ${r.kampung}`])),showCancelButton:true,confirmButtonText:'Pilih',cancelButtonText:'Batal'});
+    if(!pick.isConfirmed)return;
+    target=matches.find(r=>r.id===pick.value)
   }
-  const edit = await Swal.fire({
-    title: 'Kemaskini Rekod Nikah',
-    html: `<label>Tarikh</label><input id="uTarikh" class="swal2-input" type="date" value="${esc(target.tarikh)}"><label>Masa</label><input id="uMasa" class="swal2-input" type="time" value="${esc(target.masa)}"><label>Nama</label><input id="uNama" class="swal2-input" value="${esc(target.nama)}"><label>Kampung</label><input id="uKampung" class="swal2-input" value="${esc(target.kampung)}"><label>Tempat</label><input id="uTempat" class="swal2-input" value="${esc(target.tempat)}"><label>Telefon</label><input id="uTel" class="swal2-input" value="${esc(target.tel)}"><label>Wali</label><input id="uWali" class="swal2-input" value="${esc(target.wali)}"><label>Catatan</label><textarea id="uCatatan" class="swal2-textarea">${esc(target.catatan)}</textarea>`,
-    showCancelButton: true,
-    confirmButtonText: 'Simpan Kemaskini',
-    cancelButtonText: 'Batal',
-    focusConfirm: false,
-    preConfirm: () => {
-      const data = {tarikh: clean($('#uTarikh').value), masa: clean($('#uMasa').value), nama: clean($('#uNama').value), kampung: clean($('#uKampung').value), tempat: clean($('#uTempat').value), tel: clean($('#uTel').value), wali: clean($('#uWali').value), catatan: clean($('#uCatatan').value)};
-      if(!data.tarikh || !data.masa || !data.nama || !data.kampung || !data.tempat || !data.tel || !data.wali) return Swal.showValidationMessage('Sila lengkapkan semua medan penting.');
-      data.hari = days[new Date(data.tarikh + 'T00:00:00').getDay()];
-      return data;
+  const edit=await Swal.fire({
+    title:'Kemaskini Rekod Nikah',
+    html:`<label>Tarikh</label><input id="uTarikh" class="swal2-input" type="date" value="${esc(target.tarikh)}"><label>Masa</label><input id="uMasa" class="swal2-input" type="time" value="${esc(target.masa)}"><label>Nama</label><input id="uNama" class="swal2-input" value="${esc(target.nama)}"><label>Kampung</label><input id="uKampung" class="swal2-input" value="${esc(target.kampung)}"><label>Tempat</label><input id="uTempat" class="swal2-input" value="${esc(target.tempat)}"><label>Telefon</label><input id="uTel" class="swal2-input" value="${esc(target.tel)}"><label>Wali</label><input id="uWali" class="swal2-input" value="${esc(target.wali)}"><label>Catatan</label><textarea id="uCatatan" class="swal2-textarea">${esc(target.catatan)}</textarea>`,
+    showCancelButton:true,
+    confirmButtonText:'Simpan Kemaskini',
+    cancelButtonText:'Batal',
+    focusConfirm:false,
+    preConfirm:()=>{
+      const data={tarikh:clean($('#uTarikh').value),masa:clean($('#uMasa').value),nama:clean($('#uNama').value),kampung:clean($('#uKampung').value),tempat:clean($('#uTempat').value),tel:clean($('#uTel').value),wali:clean($('#uWali').value),catatan:clean($('#uCatatan').value)};
+      if(!data.tarikh||!data.masa||!data.nama||!data.kampung||!data.tempat||!data.tel||!data.wali)return Swal.showValidationMessage('Sila lengkapkan semua medan penting.');
+      data.hari=days[new Date(data.tarikh+'T00:00:00').getDay()];
+      return data
     }
   });
-  if(!edit.isConfirmed) return;
+  if(!edit.isConfirmed)return;
   try{
-    await updateDoc(doc(db,'rekod_nikah',target.id), edit.value);
+    await updateDoc(doc(db,'rekod_nikah',target.id),edit.value);
     await load();
-    Swal.fire('Berjaya','Rekod nikah telah dikemas kini.','success');
+    Swal.fire('Berjaya','Rekod nikah telah dikemas kini.','success')
   }catch(err){
-    Swal.fire('Ralat',err.message,'error');
+    Swal.fire('Ralat',err.message,'error')
   }
 };
 
-async function removeOne(id){ await deleteDoc(doc(db,'rekod_nikah',id)); await load(); }
+async function removeOne(id){await deleteDoc(doc(db,'rekod_nikah',id));await load()}
 
-$('#deleteIndividual').onclick = async() => {
-  if(!records.length) return Swal.fire('Tiada Rekod','Belum ada rekod untuk dihapuskan.','info');
-  const q = await Swal.fire({title:'Hapus Rekod Individu', input:'text', inputLabel:'Taip nama pengantin', inputPlaceholder:'Nama penuh seperti dalam senarai', showCancelButton:true, confirmButtonText:'Cari Rekod', cancelButtonText:'Batal', inputValidator: v => !clean(v) && 'Sila taip nama pengantin'});
-  if(!q.isConfirmed) return;
-  const matches = records.filter(r => clean(r.nama).toLocaleLowerCase('ms') === clean(q.value).toLocaleLowerCase('ms'));
-  if(!matches.length) return Swal.fire('Tidak Ditemui','Tiada rekod dengan nama tersebut.','warning');
-  let target = matches[0];
-  if(matches.length > 1){
-    const pick = await Swal.fire({title:'Pilih Rekod', input:'select', inputOptions: Object.fromEntries(matches.map(r => [r.id, `${r.nama} — ${r.tarikh} — ${r.kampung}`])), showCancelButton:true, confirmButtonText:'Pilih'});
-    if(!pick.isConfirmed) return;
-    target = matches.find(r => r.id === pick.value);
+$('#deleteIndividual').onclick=async()=>{
+  if(!records.length)return Swal.fire('Tiada Rekod','Belum ada rekod untuk dihapuskan.','info');
+  const q=await Swal.fire({title:'Hapus Rekod Individu',input:'text',inputLabel:'Taip nama pengantin',inputPlaceholder:'Nama penuh seperti dalam senarai',showCancelButton:true,confirmButtonText:'Cari Rekod',cancelButtonText:'Batal',inputValidator:v=>!clean(v)&&'Sila taip nama pengantin'});
+  if(!q.isConfirmed)return;
+  const matches=records.filter(r=>clean(r.nama).toLocaleLowerCase('ms')===clean(q.value).toLocaleLowerCase('ms'));
+  if(!matches.length)return Swal.fire('Tidak Ditemui','Tiada rekod dengan nama tersebut.','warning');
+  let target=matches[0];
+  if(matches.length>1){
+    const pick=await Swal.fire({title:'Pilih Rekod',input:'select',inputOptions:Object.fromEntries(matches.map(r=>[r.id,`${r.nama} — ${r.tarikh} — ${r.kampung}`])),showCancelButton:true,confirmButtonText:'Pilih'});
+    if(!pick.isConfirmed)return;
+    target=matches.find(r=>r.id===pick.value)
   }
-  const confirm = await Swal.fire({title:'Sahkan Penghapusan', html:`Taip semula nama <b>${esc(target.nama)}</b> untuk menghapus rekod bertarikh ${esc(target.tarikh)}.`, input:'text', showCancelButton:true, confirmButtonText:'Hapus', confirmButtonColor:'#8b0000', preConfirm: v => clean(v).toLocaleLowerCase('ms') === clean(target.nama).toLocaleLowerCase('ms') || Swal.showValidationMessage('Nama tidak sepadan')});
+  const confirm=await Swal.fire({title:'Sahkan Penghapusan',html:`Taip semula nama <b>${esc(target.nama)}</b> untuk menghapus rekod bertarikh ${esc(target.tarikh)}.`,input:'text',showCancelButton:true,confirmButtonText:'Hapus',confirmButtonColor:'#8b0000',preConfirm:v=>clean(v).toLocaleLowerCase('ms')===clean(target.nama).toLocaleLowerCase('ms')||Swal.showValidationMessage('Nama tidak sepadan')});
   if(confirm.isConfirmed){
     await removeOne(target.id);
-    Swal.fire('Selesai','Rekod individu telah dihapuskan.','success');
+    Swal.fire('Selesai','Rekod individu telah dihapuskan.','success')
   }
 };
 
-$('#deleteAll').onclick = async() => {
-  if(!records.length) return;
-  const c = await Swal.fire({title:'Hapus SEMUA rekod?', input:'text', inputLabel:'Taip HAPUS SEMUA untuk mengesahkan', showCancelButton:true, preConfirm: v => v === 'HAPUS SEMUA' || Swal.showValidationMessage('Teks pengesahan tidak tepat')});
+$('#deleteAll').onclick=async()=>{
+  if(!records.length)return;
+  const c=await Swal.fire({title:'Hapus SEMUA rekod?',input:'text',inputLabel:'Taip HAPUS SEMUA untuk mengesahkan',showCancelButton:true,preConfirm:v=>v==='HAPUS SEMUA'||Swal.showValidationMessage('Teks pengesahan tidak tepat')});
   if(c.isConfirmed){
-    const batch = writeBatch(db);
-    records.forEach(r => batch.delete(doc(db,'rekod_nikah',r.id)));
+    const batch=writeBatch(db);
+    records.forEach(r=>batch.delete(doc(db,'rekod_nikah',r.id)));
     await batch.commit();
     await load();
-    Swal.fire('Selesai','Semua rekod telah dihapus.','success');
+    Swal.fire('Selesai','Semua rekod telah dihapus.','success')
   }
 };
 
-$('#printBtn').onclick = () => window.print();
+$('#printBtn').onclick=()=>window.print();
 
-$('#pdfBtn').onclick = () => {
-  const y = $('#yearSelect').value, data = records.filter(r => (r.tarikh || '').startsWith(y)), {jsPDF} = window.jspdf, pdf = new jsPDF('l','mm','a4');
+$('#pdfBtn').onclick=()=>{
+  const y=$('#yearSelect').value,data=records.filter(r=>(r.tarikh||'').startsWith(y)),{jsPDF}=window.jspdf,pdf=new jsPDF('l','mm','a4');
   pdf.setFont('helvetica','bold');
   pdf.setFontSize(15);
-  pdf.text('REKOD NIKAH '+y, 14, 15);
+  pdf.text('REKOD NIKAH '+y,14,15);
   pdf.setFont('helvetica','normal');
   pdf.setFontSize(9);
-  let yy = 25;
-  data.forEach((r,i) => {
-    if(yy > 190){ pdf.addPage(); yy = 15; }
-    pdf.text(`${i+1}. ${formatDateMY(r.tarikh)} | ${r.hari} | ${r.masa} | ${r.nama} | ${r.kampung} | ${r.tempat}`, 14, yy, {maxWidth: 270});
-    yy += 8;
+  let yy=25;
+  data.forEach((r,i)=>{
+    if(yy>190){pdf.addPage();yy=15}
+    pdf.text(`${i+1}. ${formatDateMY(r.tarikh)} | ${r.hari} | ${r.masa} | ${r.nama} | ${r.kampung} | ${r.tempat}`,14,yy,{maxWidth:270});
+    yy+=8
   });
-  pdf.save('Rekod Nikah '+y+'.pdf');
+  pdf.save('Rekod Nikah '+y+'.pdf')
 };
 
-$('#backup').onclick = () => {
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([JSON.stringify(records,null,2)], {type:'application/json'}));
-  a.download = 'Sandaran Rekod Nikah ' + new Date().toISOString().slice(0,10) + '.json';
+$('#backup').onclick=()=>{
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(records,null,2)],{type:'application/json'}));
+  a.download='Sandaran Rekod Nikah '+new Date().toISOString().slice(0,10)+'.json';
   a.click();
-  URL.revokeObjectURL(a.href);
+  URL.revokeObjectURL(a.href)
 };
 
-$('#restoreBackup').onclick = () => $('#restoreFile').click();
-$('#restoreFile').onchange = async e => {
-  const file = e.target.files[0];
-  if(!file) return;
+$('#restoreBackup').onclick=()=>$('#restoreFile').click();
+$('#restoreFile').onchange=async e=>{
+  const file=e.target.files[0];
+  if(!file)return;
   try{
-    const parsed = JSON.parse(await file.text());
-    if(!Array.isArray(parsed)) throw new Error('Format sandaran tidak sah.');
-    const valid = parsed.map(r => ({...r, tarikh: normalizeDate(r.tarikh)})).filter(r => r && typeof r === 'object' && clean(r.nama) && r.tarikh);
-    if(!valid.length) throw new Error('Tiada rekod sah ditemui.');
-    const c = await Swal.fire({title:'Import Sandaran JSON?', text:`${valid.length} rekod akan ditambah ke dalam sistem.`, showCancelButton:true, confirmButtonText:'Import', cancelButtonText:'Batal'});
-    if(!c.isConfirmed) return;
+    const parsed=JSON.parse(await file.text());
+    if(!Array.isArray(parsed))throw new Error('Format sandaran tidak sah.');
+    const valid=parsed.map(r=>({...r,tarikh:normalizeDate(r.tarikh)})).filter(r=>r&&typeof r==='object'&&clean(r.nama)&&r.tarikh);
+    if(!valid.length)throw new Error('Tiada rekod sah ditemui.');
+    const c=await Swal.fire({title:'Import Sandaran JSON?',text:`${valid.length} rekod akan ditambah ke dalam sistem.`,showCancelButton:true,confirmButtonText:'Import',cancelButtonText:'Batal'});
+    if(!c.isConfirmed)return;
     for(const r of valid){
       await addDoc(collection(db,'rekod_nikah'),{
-        tarikh: r.tarikh,
-        hari: clean(r.hari) || days[new Date(r.tarikh+'T00:00:00').getDay()],
-        masa: clean(r.masa),
-        nama: clean(r.nama),
-        kampung: clean(r.kampung),
-        tempat: clean(r.tempat),
-        tel: clean(r.tel),
-        wali: clean(r.wali),
-        catatan: clean(r.catatan),
-        diciptaPada: serverTimestamp()
-      });
+        tarikh:r.tarikh,
+        hari:clean(r.hari)||days[new Date(r.tarikh+'T00:00:00').getDay()],
+        masa:clean(r.masa),
+        nama:clean(r.nama),
+        kampung:clean(r.kampung),
+        tempat:clean(r.tempat),
+        tel:clean(r.tel),
+        wali:clean(r.wali),
+        catatan:clean(r.catatan),
+        diciptaPada:serverTimestamp()
+      })
     }
     await load();
-    Swal.fire('Berjaya', `${valid.length} rekod telah diimport.`, 'success');
+    Swal.fire('Berjaya',`${valid.length} rekod telah diimport.`,'success')
   }catch(err){
-    Swal.fire('Import Gagal', err.message, 'error');
+    Swal.fire('Import Gagal',err.message,'error')
   }finally{
-    e.target.value = '';
+    e.target.value=''
   }
 };
 
-// Terus muat data Firestore dan paparkan sistem tanpa log masuk
-load().catch(e => Swal.fire('Ralat Data', e.message, 'error'));
+$('#toggleEmail').onclick=()=>{
+  const p=$('#loginEmail');
+  const isText = p.getAttribute('type') === 'text';
+  p.setAttribute('type', isText ? 'email' : 'text');
+  $('#toggleEmail').classList.toggle('visible', !isText);
+};
+
+$('#togglePassword').onclick=()=>{
+  const p=$('#loginPassword');
+  const isPass = p.getAttribute('type') === 'password';
+  p.setAttribute('type', isPass ? 'text' : 'password');
+  $('#togglePassword').classList.toggle('visible', isPass);
+};
+
+$('#forgotPassword').onclick=async()=>{
+  const email=$('#loginEmail').value.trim();
+  if(!email)return Swal.fire('E-mel Diperlukan','Masukkan e-mel pentadbir dahulu.','info');
+  try{
+    await sendPasswordResetEmail(auth,email);
+    Swal.fire('E-mel Dihantar','Semak peti masuk atau folder spam untuk pautan menetapkan semula kata laluan.','success')
+  }catch(err){
+    Swal.fire('Tidak Berjaya','Pastikan e-mel tersebut ialah akaun pentadbir yang didaftarkan.','error')
+  }
+};
+
+$('#loginForm').onsubmit=async e=>{
+  e.preventDefault();
+  const email = $('#loginEmail').value.trim();
+  const password = $('#loginPassword').value.trim();
+  
+  if(!email || !password) {
+    return Swal.fire('Sila Lengkapkan', 'Sila masukkan e-mel dan kata laluan.', 'warning');
+  }
+
+  const btn = $('#loginBtn');
+  loginApproved = true;
+  btn.disabled = true;
+  btn.textContent = 'SEDANG LOG MASUK...';
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch(err) {
+    loginApproved = false;
+    Swal.fire('Log Masuk Gagal', 'E-mel atau kata laluan tidak sah: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'LOG MASUK';
+  }
+};
+
+$('#logoutBtn').onclick=async()=>{
+  await signOut(auth);
+  records=[];
+  loginApproved=false;
+  $('#loginForm').reset();
+  $('#loginEmail').setAttribute('type', 'text');
+  $('#loginPassword').setAttribute('type', 'password');
+  $('#toggleEmail').classList.remove('visible');
+  $('#togglePassword').classList.remove('visible')
+};
+
+(async()=>{
+  try{
+    await setPersistence(auth,inMemoryPersistence);
+    await signOut(auth);
+    $('#app').classList.add('hidden');
+    $('#loginScreen').classList.remove('hidden');
+    onAuthStateChanged(auth,user=>{
+      if(user&&loginApproved){
+        $('#loginScreen').classList.add('hidden');
+        $('#app').classList.remove('hidden');
+        backExitArmed=false;
+        history.replaceState({appBase:true},'',location.pathname+location.search);
+        history.pushState({app:true,page:'utama'},'',location.pathname+location.search+'#utama');
+        showPage('utama');
+        load().catch(e=>Swal.fire('Ralat Data',e.message,'error'))
+      }else{
+        if(user&&!loginApproved)signOut(auth);
+        $('#app').classList.add('hidden');
+        $('#loginScreen').classList.remove('hidden')
+      }
+    })
+  }catch(e){
+    Swal.fire('Ralat Pengesahan',e.message,'error')
+  }
+})();
 </script>
 </body>
 </html>
