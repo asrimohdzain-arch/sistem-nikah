@@ -313,7 +313,9 @@ window.switchPage = function(id, pushHistory = true){
   });
   if(id === 'rekod') renderRows();
   
-  if(window.innerWidth <= 768){
+  if(id === 'utama'){
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  } else if(window.innerWidth <= 768){
     setTimeout(() => {
       const panelTarget = $('#' + id + ' .panel');
       if(panelTarget) panelTarget.scrollIntoView({behavior: 'smooth', block: 'start'});
@@ -418,14 +420,14 @@ window.sendWhatsapp = function(name, tel, tarikh, hari, masa, kampung, tempat, w
   let cleanTel = tel.replace(/[^\d]/g, '');
   if(cleanTel.startsWith('0')) cleanTel = '60' + cleanTel.slice(1);
   
-  // Tukar format tarikh YYYY-MM-DD kepada DD-MM-YYYY
   let formattedTarikh = tarikh;
   if(tarikh && tarikh.includes('-')){
     const p = tarikh.split('-');
     if(p.length === 3) formattedTarikh = `${p[2]}-${p[1]}-${p[0]}`;
   }
 
-  const textMsg = `Sistem Nikah Anak Mukim\nMaklumat Nikah :\n\n1. Nama : ${name}\n2. Tarikh : ${formattedTarikh} (${hari})\n3. Masa : ${masa}\n4. Kampung: ${kampung}\n5. Tempat Nikah : ${tempat}\n6. Wali : ${wali}\n7. Catatan : ${catatan||'-'}\n8. Pertanyaan sila hubungi :\n   Imam : 019-9467894`;
+  // FORMAT WHATSAPP BOLD TANPA JARAK
+  const textMsg = `*Sistem Nikah Anak Mukim*\n*Maklumat Nikah :*\n\n1. Nama : ${name}\n2. Tarikh : ${formattedTarikh} (${hari})\n3. Masa : ${masa}\n4. Kampung: ${kampung}\n5. Tempat Nikah : ${tempat}\n6. Wali : ${wali}\n7. Catatan : ${catatan||'-'}\n8. Pertanyaan sila hubungi :\n   Imam : 019-9467894`;
   
   window.open(`https://wa.me/${cleanTel}?text=${encodeURIComponent(textMsg)}`, '_blank');
 };
@@ -474,7 +476,6 @@ $('#deleteAll').onclick = async() => {
   });
 
   if (choice.isConfirmed) {
-    // Hapus mengikut tahun
     const { value: targetYear } = await Swal.fire({
       title: 'Hapus Ikut Tahun',
       input: 'text',
@@ -502,7 +503,6 @@ $('#deleteAll').onclick = async() => {
       }
     }
   } else if (choice.dismiss === Swal.DismissReason.cancel) {
-    // Hapus mengikut No Bil / ID Rekod
     const { value: targetBil } = await Swal.fire({
       title: 'Hapus No Bil',
       input: 'text',
