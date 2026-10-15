@@ -13,76 +13,90 @@
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);font-family:'Segoe UI',sans-serif;color:#17212b;font-size:14px}
 .app{min-height:100vh;overflow-x:hidden}
-.header{height:86px;background:var(--maroon);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 28px 0 250px;box-shadow:0 2px 8px #0003}
-.brand{font-size:20px;font-weight:700}
-.header-right{display:flex;align-items:center;gap:14px}
-.date-pill{background:#ffffff22;border:1px solid #ffffff55;padding:10px 14px;border-radius:18px;font-weight:600}
-.bell{position:relative;border:0;background:#ffffff22;color:#fff;width:42px;height:42px;border-radius:50%;font-size:21px;cursor:pointer}
-.badge{position:absolute;right:-3px;top:-4px;background:#d60000;color:#fff;min-width:19px;height:19px;border-radius:10px;font-size:11px;display:none;align-items:center;justify-content:center}
-.sidebar{position:fixed;left:0;top:0;width:225px;height:100vh;background:#fff;border-right:1px solid var(--line);padding:18px 10px;z-index:2}
-.logo{background:var(--maroon);color:#fff;text-align:center;border-radius:14px;padding:18px 8px;margin-bottom:18px;font-size:18px;font-weight:700}
-.nav{display:flex;flex-direction:column;gap:9px}
-.nav button,.btn{border:0;background:var(--navy);color:#fff;border-radius:8px;padding:11px 14px;font-family:inherit;font-weight:650;cursor:pointer;transition:.2s}
-.nav button{text-align:left;width:100%}
-.nav button.active,.btn.active{background:var(--gold)}
-main{margin-left:225px;padding:20px}
+.header{background:var(--maroon);color:#fff;padding:20px;text-align:center;box-shadow:0 2px 8px #0003}
+.brand{font-size:18px;font-weight:700}
+.brand-sub{font-size:12px;opacity:0.85;margin-top:4px}
+.sidebar{display:none} /* Sidebar disembunyikan untuk fokus pada gaya menu grid moden */
+main{padding:15px;max-width:900px;margin:0 auto}
 .page{display:none}
 .page.active{display:block}
-.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 7px 20px #17324d12;margin-bottom:16px}
-.page-title{margin:0 0 15px;color:var(--maroon)}
-.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.card{background:#fff;border:1px solid #cbd8e5;border-radius:12px;padding:17px}
-.card b{display:block;color:#53657a;margin-bottom:8px}
-.value{font-size:28px;font-weight:800;color:var(--navy)}
-.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}
-.smart-search{display:flex;align-items:center;gap:8px;margin:0 0 12px;padding:10px;background:#f6f9fc;border:1px solid var(--line);border-radius:10px}
-.smart-search input{flex:1;min-width:180px;padding:9px 12px}
-.search-count{color:#53657a;font-size:12px;white-space:nowrap}
-.clear-search{border:0;background:#dfe8f2;color:#082b57;border-radius:7px;padding:9px 11px;font-family:inherit;font-weight:700;cursor:pointer}
-.form-shell{max-width:760px;margin:auto}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 5px 15px #17324d10;margin-bottom:16px}
+.page-title{margin:0 0 15px;color:var(--maroon);font-size:16px}
+.menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
+.menu-card{background:#fff;border:1px solid #cbd8e5;border-radius:14px;padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:.2s;box-shadow:0 3px 10px #17324d08}
+.menu-card:active{transform:scale(0.98);background:#f6f9fc}
+.menu-card.active{border-color:var(--gold);background:#fffdf6}
+.menu-icon{width:42px;height:42px;border-radius:10px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.menu-card:nth-child(2) .menu-icon{background:var(--gold)}
+.menu-card:nth-child(3) .menu-icon{background:#25D366}
+.menu-card:nth-child(4) .menu-icon{background:#550000}
+.menu-info b{display:block;font-size:14px;color:var(--navy)}
+.menu-info span{font-size:11px;color:#53657a}
+.cards{display:grid;grid-template-columns:1fr;gap:12px}
+.card{background:#fff;border:1px solid #cbd8e5;border-radius:12px;padding:15px}
+.card b{display:block;color:#53657a;margin-bottom:6px;font-size:13px}
+.value{font-size:26px;font-weight:800;color:var(--navy)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.toolbar .btn{background:var(--navy);color:#fff;border:0;padding:9px 12px;border-radius:8px;font-weight:650;cursor:pointer;font-size:12px}
+.smart-search{display:flex;align-items:center;gap:8px;margin:0 0 12px;padding:8px;background:#f6f9fc;border:1px solid var(--line);border-radius:10px}
+.smart-search input{flex:1;padding:8px;border:1px solid #bcc9d6;border-radius:7px;font-size:13px}
+.clear-search{border:0;background:#dfe8f2;color:#082b57;border-radius:7px;padding:8px 10px;font-weight:700;cursor:pointer;font-size:12px}
+.search-count{color:#53657a;font-size:11px;white-space:nowrap}
+.form-shell{max-width:100%}
+.grid{display:grid;grid-template-columns:1fr;gap:12px}
 .field.full{grid-column:1/-1}
-label{display:block;font-weight:650;margin:0 0 6px}
-input,select,textarea{width:100%;padding:9px 10px;border:1px solid #bcc9d6;border-radius:7px;font:14px 'Segoe UI',sans-serif;background:#fff}
+label{display:block;font-weight:650;margin:0 0 5px;font-size:13px}
+input,select,textarea{width:100%;padding:10px;border:1px solid #bcc9d6;border-radius:8px;font:14px 'Segoe UI',sans-serif;background:#fff}
+textarea{resize:vertical}
 .hidden{display:none!important}
-.table-wrap{overflow:auto}
-table{width:100%;border-collapse:collapse;font-size:10px}
-th,td{padding:5px 6px;border:1px solid #bdc8d3;text-align:left}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:11px;min-width:700px}
+th,td{padding:8px;border:1px solid #bdc8d3;text-align:left}
 th{background:var(--navy);color:#fff;text-align:center}
-.settings-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.setting-card{position:relative;display:flex;flex-direction:column;padding:20px;border:1px solid #cbd8e5;border-radius:14px;background:#fff}
-.bars{display:flex;align-items:flex-end;gap:7px;height:190px;border-bottom:1px solid #aaa;padding:8px}
+.chart-row{display:grid;grid-template-columns:1fr;gap:14px}
+.bars{display:flex;align-items:flex-end;gap:5px;height:160px;border-bottom:1px solid #aaa;padding:6px}
 .bar{flex:1;background:#587ba4;min-height:2px;position:relative}
-.btn-wa{background:#25D366;color:#fff;border:0;padding:4px 8px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:11px}
-@media(max-width:640px){
-.sidebar{top:auto;bottom:0;width:100%;height:64px;display:flex;position:fixed;z-index:20;background:#fff}
-.logo{display:none}
-.nav{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.nav button{font-size:11px!important;text-align:center!important;padding:7px 3px}
-.header{height:68px;padding:8px 10px;position:sticky;top:0;z-index:15}
-main{margin-left:0;padding:10px 10px 80px}
-.cards{grid-template-columns:1fr}
+.bar .bar-count{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:800}
+.bar .bar-month{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:9px}
+.btn-wa{background:#25D366;color:#fff;border:0;padding:5px 8px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:11px;display:inline-block;text-decoration:none}
+.date-badge{display:inline-block;background:#ffffff22;border:1px solid #ffffff55;padding:6px 12px;border-radius:15px;font-size:12px;margin-top:8px}
+@media(min-width:768px){
+.grid{grid-template-columns:1fr 1fr}
+.cards{grid-template-columns:repeat(3,1fr)}
+.chart-row{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
 <body>
 <div class="app" id="app">
-  <aside class="sidebar">
-    <div class="logo">SISTEM NIKAH</div>
-    <nav class="nav">
-      <button class="active" data-page="utama" type="button">🏠 Utama</button>
-      <button data-page="rekod" type="button">📋 Rekod Nikah</button>
-      <button data-page="tetapan" type="button">⚙️ Tetapan</button>
-    </nav>
-  </aside>
   <header class="header">
     <div class="brand">SISTEM REKOD NIKAH MUKIM</div>
-    <div class="header-right">
-      <button class="bell" id="bell" type="button">🔔<span class="badge" id="badge">0</span></button>
-      <div class="date-pill" id="today"></div>
-    </div>
+    <div class="brand-sub">Yayasan Islam Kelantan</div>
+    <div class="date-badge" id="today">Tarikh: Mengambil masa...</div>
   </header>
+
   <main>
+    <!-- MENU UTAMA GRID BERPETAK (GAYA SISPAQ) -->
+    <div class="menu-grid">
+      <div class="menu-card active" data-page="utama" onclick="switchPage('utama', this)">
+        <div class="menu-icon">🏠</div>
+        <div class="menu-info"><b>Utama</b><span>Analisa & Statistik</span></div>
+      </div>
+      <div class="menu-card" data-page="rekod" onclick="switchPage('rekod', this)">
+        <div class="menu-icon">📋</div>
+        <div class="menu-info"><b>Rekod Nikah</b><span>Senarai & Daftar</span></div>
+      </div>
+      <div class="menu-card" data-page="tetapan" onclick="switchPage('tetapan', this)">
+        <div class="menu-icon">⚙️</div>
+        <div class="menu-info"><b>Tetapan</b><span>Urus Data & Sistem</span></div>
+      </div>
+      <div class="menu-card" onclick="window.print()">
+        <div class="menu-icon">🖨️</div>
+        <div class="menu-info"><b>Cetak</b><span>Halaman Semasa</span></div>
+      </div>
+    </div>
+
+    <!-- LAMAN UTAMA -->
     <section id="utama" class="page active">
       <div class="panel">
         <h2 class="page-title">Analisa Rekod Nikah</h2>
@@ -98,28 +112,30 @@ main{margin-left:0;padding:10px 10px 80px}
       </div>
     </section>
     
+    <!-- LAMAN REKOD NIKAH -->
     <section id="rekod" class="page">
       <div class="panel">
-        <h2 class="page-title">Rekod Nikah</h2>
+        <h2 class="page-title">Pengurusan Rekod Nikah</h2>
         <div class="toolbar">
-          <button class="btn" id="showForm" type="button">Tambah Rekod Nikah</button>
-          <button class="btn" id="showList" type="button">Senarai Rekod</button>
-          <button class="btn" id="printBtn" type="button">Cetak Rekod</button>
-          <button class="btn" id="pdfBtn" type="button">Muat Turun PDF</button>
-          <select id="yearSelect" style="width:auto"></select>
+          <button class="btn" id="showForm" type="button">＋ Tambah Rekod</button>
+          <button class="btn" id="showList" type="button">📋 Senarai Rekod</button>
+          <button class="btn" id="pdfBtn" type="button">📥 Muat Turun PDF</button>
+          <select id="yearSelect" style="width:auto;padding:7px;border-radius:8px"></select>
         </div>
         <div id="searchPanel" class="smart-search">
-          <input id="smartSearch" type="search" placeholder="Cari nama, tarikh, kampung...">
-          <button id="clearSearch" class="clear-search" type="button">Kosongkan</button>
+          <input id="smartSearch" type="search" placeholder="Cari nama, kampung, tempat...">
+          <button id="clearSearch" class="clear-search" type="button">Kosong</button>
           <span id="searchCount" class="search-count">0 rekod</span>
         </div>
-        <div id="formPanel" class="form-shell hidden">
+        
+        <!-- BORANG TAMBAH -->
+        <div id="formPanel" class="form-shell hidden" style="margin-top:15px">
           <form id="nikahForm">
             <div class="grid">
               <div class="field"><label>Tarikh Nikah</label><input type="date" name="tarikh" required></div>
               <div class="field"><label>Hari</label><input name="hari" readonly required placeholder="Automatik"></div>
               <div class="field"><label>Masa Nikah</label><input type="time" name="masa" required></div>
-              <div class="field"><label>Nama Pengantin</label><input name="nama" required></div>
+              <div class="field"><label>Nama Pengantin</label><input name="nama" required placeholder="Nama penuh"></div>
               <div class="field">
                 <label>Kampung</label>
                 <select name="kampung" id="kampung" required>
@@ -138,7 +154,7 @@ main{margin-left:0;padding:10px 10px 80px}
                   <option value="Lain-lain">Lain-lain</option>
                 </select>
               </div>
-              <div class="field hidden" id="kLain"><label>Nama Kampung</label><input name="kampung_lain"></div>
+              <div class="field hidden" id="kLain"><label>Nama Kampung Lain</label><input name="kampung_lain"></div>
               <div class="field">
                 <label>Tempat Nikah</label>
                 <select name="tempat" id="tempat" required>
@@ -150,8 +166,8 @@ main{margin-left:0;padding:10px 10px 80px}
                   <option value="Lain-lain">Lain-lain</option>
                 </select>
               </div>
-              <div class="field hidden" id="tLain"><label>Lokasi Nikah</label><input name="tempat_lain"></div>
-              <div class="field"><label>No. Telefon</label><input type="tel" name="tel" required></div>
+              <div class="field hidden" id="tLain"><label>Lokasi Lain</label><input name="tempat_lain"></div>
+              <div class="field"><label>No. Telefon (WhatsApp)</label><input type="tel" name="tel" required placeholder="019..."></div>
               <div class="field">
                 <label>Jenis Wali</label>
                 <select name="wali" required>
@@ -159,18 +175,21 @@ main{margin-left:0;padding:10px 10px 80px}
                   <option>Bapa</option>
                   <option>Datuk</option>
                   <option>Wali Sultan</option>
+                  <option>Lain-lain</option>
                 </select>
               </div>
               <div class="field full"><label>Catatan</label><textarea name="catatan" rows="3"></textarea></div>
             </div>
-            <button class="btn" type="submit" id="saveBtn" style="margin-top:14px">Simpan Rekod</button>
+            <button class="btn" type="submit" id="saveBtn" style="margin-top:14px;background:var(--maroon);width:100%;padding:12px">Simpan Rekod Nikah</button>
           </form>
         </div>
-        <div id="listPanel" class="table-wrap">
+
+        <!-- JADUAL SENARAI -->
+        <div id="listPanel" class="table-wrap" style="margin-top:15px">
           <table>
             <thead>
               <tr>
-                <th>Bil.</th><th>Tarikh</th><th>Hari</th><th>Masa</th><th>Nama</th><th>Kampung</th><th>Tempat</th><th>Telefon</th><th>Wali</th><th>Catatan</th><th>Whatsapp</th>
+                <th>Bil</th><th>Tarikh</th><th>Hari</th><th>Masa</th><th>Nama</th><th>Kampung</th><th>Tempat</th><th>Telefon</th><th>Wali</th><th>Catatan</th><th>Aksi</th>
               </tr>
             </thead>
             <tbody id="rows"></tbody>
@@ -179,11 +198,16 @@ main{margin-left:0;padding:10px 10px 80px}
       </div>
     </section>
     
+    <!-- LAMAN TETAPAN -->
     <section id="tetapan" class="page">
       <div class="panel">
-        <h2 class="page-title">Tetapan</h2>
-        <div class="settings-grid">
-          <div class="setting-card"><b>Hapus Semua</b><button class="btn" id="deleteAll" style="background:#8b0000;margin-top:10px" type="button">Hapus</button></div>
+        <h2 class="page-title">Tetapan Sistem</h2>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="padding:15px;border:1px solid #cbd8e5;border-radius:10px">
+            <b>Hapus Semua Rekod</b>
+            <p style="font-size:12px;color:#53657a;margin:5px 0 10px">Tindakan ini akan memadam semua data di pangkalan data.</p>
+            <button class="btn" id="deleteAll" type="button" style="background:#8b0000">Hapus Semua Data</button>
+          </div>
         </div>
       </div>
     </section>
@@ -195,55 +219,154 @@ const firebaseConfig = { apiKey: "AIzaSyBflySl7ok21LE4urn0rKrSVxczRrZykQE", auth
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 let records = [];
+const $= s => document.querySelector(s),$$ = s => [...document.querySelectorAll(s)];
+const days = ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'], months = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
 
-document.addEventListener("DOMContentLoaded", () => {
-  const $= s => document.querySelector(s),$$ = s => [...document.querySelectorAll(s)];
-  const days = ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'];
+$('#today').textContent = 'Tarikh: ' + new Intl.DateTimeFormat('ms-MY',{day:'2-digit',month:'long',year:'numeric'}).format(new Date());
 
-  $('#today').textContent = 'Tarikh: ' + new Intl.DateTimeFormat('ms-MY',{day:'2-digit',month:'long',year:'numeric'}).format(new Date());    $$('.nav button').forEach(b => {
-    b.onclick = () => {
-      $$('.page').forEach(p => p.classList.toggle('active', p.id === b.dataset.page));$$
-('.nav button').forEach(x => x.classList.remove('active'));
-      b.classList.add('active');
-      if(b.dataset.page === 'rekod') renderRows();
-    };
-  });
+window.switchPage = function(id, el){
+  $$('.page').forEach(p => p.classList.toggle('active', p.id === id));$$
+('.menu-card[data-page]').forEach(c => c.classList.remove('active'));
+  if(el) el.classList.add('active');
+  if(id === 'rekod') renderRows();
+};
 
-  const tarikhInput = document.querySelector('#nikahForm input[name="tarikh"]');
-  if(tarikhInput){
-    tarikhInput.onchange = e => {
-      const val = e.target.value;
-      if(val){
-        const d = new Date(val + 'T00:00:00');
-        document.querySelector('#nikahForm input[name="hari"]').value = days[d.getDay()];
-      }
-    };
-  }
-
-  $('#showForm').onclick = () => { $('#formPanel').classList.remove('hidden'); $('#listPanel').classList.add('hidden'); $('#searchPanel').classList.add('hidden'); };
-  $('#showList').onclick = () => { $('#formPanel').classList.add('hidden'); $('#listPanel').classList.remove('hidden'); $('#searchPanel').classList.remove('hidden'); renderRows(); };
-
-  async function load(){
-    try {
-      const s = await db.collection('rekod_nikah').get();
-      records = s.docs.map(d => ({id:d.id, ...d.data()})).sort((a,b) => (a.tarikh || '').localeCompare(b.tarikh || ''));
-      $('#total').textContent = records.length;
-      renderRows();
-    }catch(err){
-      console.error("Ralat pangkalan data:", err);
+const tarikhInput = document.querySelector('#nikahForm input[name="tarikh"]');
+if(tarikhInput){
+  tarikhInput.onchange = e => {
+    const val = e.target.value;
+    if(val){
+      const d = new Date(val + 'T00:00:00');
+      document.querySelector('#nikahForm input[name="hari"]').value = days[d.getDay()];
     }
-  }
+  };
+}
 
-  function renderRows(){
-    const q = ($('#smartSearch')?.value || '').toLowerCase();
-    const filtered = !q ? records : records.filter(r => (r.nama || '').toLowerCase().includes(q));
-    $('#rows').innerHTML = filtered.map((r,i) => `<tr><td>${i+1}</td><td>${r.tarikh||''}</td><td>${r.hari||''}</td><td>${r.masa||''}</td><td>${r.nama||''}</td><td>${r.kampung||''}</td><td>${r.tempat||''}</td><td>${r.tel||''}</td><td>${r.wali||''}</td><td>${r.catatan||''}</td><td><button class="btn-wa" onclick="alert('${r.nama}')">WhatsApp</button></td></tr>`).join('') || '<tr><td colspan="11" style="text-align:center">Tiada rekod</td></tr>';
-    $('#searchCount').textContent = `${filtered.length} daripada ${records.length} rekod`;
-  }
+function toggle(sel, box, input){
+  const on = sel.value === 'Lain-lain';
+  box.classList.toggle('hidden', !on);
+  input.required = on;
+  if(!on) input.value = '';
+}
+$('#kampung').onchange = e => toggle(e.target, $('#kLain'), document.querySelector('#nikahForm input[name="kampung_lain"]'));
+$('#tempat').onchange = e => toggle(e.target, $('#tLain'), document.querySelector('#nikahForm input[name="tempat_lain"]'));
 
-  $('#smartSearch').oninput = renderRows;
-  load();
-});
+$('#showForm').onclick = () => { $('#formPanel').classList.remove('hidden'); $('#listPanel').classList.add('hidden'); $('#searchPanel').classList.add('hidden'); };
+$('#showList').onclick = () => { $('#formPanel').classList.add('hidden'); $('#listPanel').classList.remove('hidden'); $('#searchPanel').classList.remove('hidden'); renderRows(); };
+
+$('#nikahForm').onsubmit = async e => {
+  e.preventDefault();
+  const f = Object.fromEntries(new FormData(e.target));
+  $('#saveBtn').disabled = true;
+  try{
+    await db.collection('rekod_nikah').add({
+      tarikh: f.tarikh,
+      hari: f.hari,
+      masa: f.masa,
+      nama: f.nama.trim(),
+      kampung: f.kampung === 'Lain-lain' ? f.kampung_lain.trim() : f.kampung,
+      tempat: f.tempat === 'Lain-lain' ? f.tempat_lain.trim() : f.tempat,
+      tel: f.tel.trim(),
+      wali: f.wali,
+      catatan: f.catatan.trim(),
+      diciptaPada: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    e.target.reset();
+    $('#kLain').classList.add('hidden');
+    $('#tLain').classList.add('hidden');
+    await load();
+    Swal.fire('Berjaya','Rekod nikah telah disimpan.','success');
+    switchPage('rekod', document.querySelector('.menu-card[data-page="rekod"]'));
+  }catch(err){
+    Swal.fire('Ralat',err.message,'error');
+  }finally{
+    $('#saveBtn').disabled = false;
+  }
+};
+
+async function load(){
+  try {
+    const s = await db.collection('rekod_nikah').get();
+    records = s.docs.map(d => ({id:d.id, ...d.data()})).sort((a,b) => (a.tarikh || '').localeCompare(b.tarikh || ''));
+    
+    // Analisis kotak atas
+    $('#total').textContent = records.length;
+    const now = new Date(), ym = now.toISOString().slice(0,7);
+    $('#monthTotal').textContent = records.filter(r => (r.tarikh || '').startsWith(ym)).length;
+    const vill = {};
+    records.forEach(r => { if(r.kampung) vill[r.kampung] = (vill[r.kampung] || 0) + 1; });
+    $('#villageTotal').textContent = Object.keys(vill).length;
+    $('#villageList').innerHTML = Object.entries(vill).sort((a,b) => b[1] - a[1]).map(([k,v]) => `<p style="margin:4px 0">${k}: <b>${v}</b></p>`).join('') || '<p style="color:#667">Tiada data</p>';
+    
+    const mc = Array(12).fill(0);
+    records.forEach(r => { if(r.tarikh) mc[new Date(r.tarikh + 'T00:00:00').getMonth()]++; });
+    const max = Math.max(...mc, 1);
+    $('#monthBars').innerHTML = mc.map((v,i) => `<div class="bar" style="height:${Math.max(2,v/max*130)}px"><span class="bar-count">${v}</span><span class="bar-month">${months[i]}</span></div>`).join('');
+    
+    const ys = [...new Set(records.map(r => (r.tarikh || '').slice(0,4)).filter(Boolean))].sort();
+    $('#yearSelect').innerHTML = ys.map(y => `<option>${y}</option>`).join('') || `<option>${now.getFullYear()}</option>`;
+    
+    renderRows();
+  }catch(err){
+    console.error("Ralat data:", err);
+  }
+}
+
+window.sendWhatsapp = function(name, tel, tarikh, hari, masa, kampung, tempat, wali, catatan){
+  let cleanTel = tel.replace(/[^\d]/g, '');
+  if(cleanTel.startsWith('0')) cleanTel = '60' + cleanTel.slice(1);
+  const textMsg = `*Sistem Nikah Anak Mukim*\nNama: ${name}\nTarikh: ${tarikh} (${hari})\nMasa: ${masa}\nKampung: ${kampung}\nTempat: ${tempat}\nWali: ${wali}\nCatatan: ${catatan||'-'}`;
+  window.open(`https://wa.me/${cleanTel}?text=${encodeURIComponent(textMsg)}`, '_blank');
+};
+
+function renderRows(){
+  const q = ($('#smartSearch')?.value || '').toLowerCase();
+  const filtered = !q ? records : records.filter(r => [r.nama,r.kampung,r.tempat,r.tarikh].some(v => (v||'').toLowerCase().includes(q)));
+  $('#rows').innerHTML = filtered.map((r,i) => `<tr>
+    <td>${i+1}</td>
+    <td>${r.tarikh||''}</td>
+    <td>${r.hari||''}</td>
+    <td>${r.masa||''}</td>
+    <td><b>${r.nama||''}</b></td>
+    <td>${r.kampung||''}</td>
+    <td>${r.tempat||''}</td>
+    <td>${r.tel||''}</td>
+    <td>${r.wali||''}</td>
+    <td>${r.catatan||''}</td>
+    <td><button class="btn-wa" onclick="sendWhatsapp('${r.nama}','${r.tel}','${r.tarikh}','${r.hari}','${r.masa}','${r.kampung}','${r.tempat}','${r.wali}','${r.catatan}')">WhatsApp</button></td>
+  </tr>`).join('') || '<tr><td colspan="11" style="text-align:center;padding:20px">Tiada rekod sepadan</td></tr>';
+  $('#searchCount').textContent = `${filtered.length} daripada ${records.length} rekod`;
+}
+
+$('#smartSearch').oninput = renderRows;
+$('#clearSearch').onclick = () => { $('#smartSearch').value = ''; renderRows(); };
+
+$('#deleteAll').onclick = async() => {
+  const c = await Swal.fire({title:'Hapus SEMUA rekod?', input:'text', inputLabel:'Taip HAPUS SEMUA', showCancelButton:true, preConfirm: v => v === 'HAPUS SEMUA'});
+  if(c.isConfirmed){
+    const batch = db.batch();
+    records.forEach(r => batch.delete(db.collection('rekod_nikah').doc(r.id)));
+    await batch.commit();
+    await load();
+    Swal.fire('Selesai','Semua rekod telah dipadam.','success');
+  }
+};
+
+$('#pdfBtn').onclick = () => {
+  const y = $('#yearSelect').value, data = records.filter(r => (r.tarikh || '').startsWith(y)), {jsPDF} = window.jspdf, pdf = new jsPDF('l','mm','a4');
+  pdf.setFont('helvetica','bold'); pdf.setFontSize(14);
+  pdf.text('REKOD NIKAH MUKIM TAHUN '+y, 14, 15);
+  pdf.setFont('helvetica','normal'); pdf.setFontSize(9);
+  let yy = 25;
+  data.forEach((r,i) => {
+    if(yy > 180){ pdf.addPage(); yy = 15; }
+    pdf.text(`${i+1}. ${r.tarikh} | ${r.hari} | ${r.nama} | Kampung: ${r.kampung} | Tempat: ${r.tempat} | Tel: ${r.tel}`, 14, yy);
+    yy += 7;
+  });
+  pdf.save('Rekod Nikah '+y+'.pdf');
+};
+
+load();
 </script>
 </body>
 </html>
