@@ -6,6 +6,9 @@
 <title>Sistem Rekod Nikah Mukim</title>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- Firebase App (Compat) & Firestore -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <style>
 :root{--maroon:#550000;--navy:#082b57;--gold:#9a7200;--bg:#f2f6fb;--line:#d9e2ec}
 *{box-sizing:border-box}
@@ -57,7 +60,6 @@ th{background:var(--navy);color:#fff}
 .completed-row td{color:#0066cc!important}
 .month-0{background:#fff0f0}.month-1{background:#eef6ff}.month-2{background:#effff0}.month-3{background:#fffde8}.month-4{background:#f8efff}.month-5{background:#fff3e8}.month-6{background:#eaffff}.month-7{background:#f1f1f1}.month-8{background:#fff0fa}.month-9{background:#f0fff4}.month-10{background:#fff6df}.month-11{background:#edf0f5}
 .danger{background:#8b0000}
-.setting{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #edf1f5}
 .settings-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .setting-card{position:relative;display:flex;flex-direction:column;align-items:stretch;min-height:190px;padding:52px 16px 16px;border:1px solid #cbd8e5;border-radius:14px;background:#fff;box-shadow:0 5px 14px #17324d12}
 .setting-card .setting-no{position:absolute;top:14px;left:14px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:7px;background:var(--maroon);color:#fff;font-weight:800}
@@ -295,12 +297,11 @@ th{color:#000!important;font-weight:800!important;background:#fff!important}
   </main>
 </div>
 
-<script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js';
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, writeBatch, updateDoc } from 'https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js';
-
+<script>
 const firebaseConfig = { apiKey: "AIzaSyBflySl7ok21LE4urn0rKrSVxczRrZykQE", authDomain: "sistem-rekod-nikah.firebaseapp.com", projectId: "sistem-rekod-nikah", storageBucket: "sistem-rekod-nikah.firebasestorage.app", messagingSenderId: "473243104741", appId: "1:473243104741:web:be6dcfbe86256753beeb0c" };
-const app = initializeApp(firebaseConfig), db = getFirestore(app);
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
 let records = [];
 const $= s => document.querySelector(s),$$ = s => [...document.querySelectorAll(s)];
 const days = ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'], months = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
@@ -318,7 +319,7 @@ async function getNotificationRegistration(){
   return notificationRegistration;
 }
 
-$('#enableNotifications').onclick = async() => { if(!('Notification' in window) \vert{}\vert{} !('serviceWorker' in navigator)) return Swal.fire('Tidak Disokong','Pelayar ini tidak menyokong notifikasi web.','info'); try{ const p = await Notification.requestPermission(); if(p !== 'granted') return Swal.fire('Tidak Dibenarkan','Benarkan notifikasi untuk laman ini dalam tetapan Chrome.','info'); await getNotificationRegistration(); Swal.fire('Berjaya','Notifikasi telefon telah diaktifkan.','success'); }catch(e){ Swal.fire('Ralat Notifikasi','Pastikan fail sw.js telah dimuat naik bersama index.html, kemudian muat semula laman.','error'); } };  $$('.nav button').forEach(b => {
+$('#enableNotifications').onclick = async() => { if(!('Notification' in window) \vert{}\vert{} !('serviceWorker' in navigator)) return Swal.fire('Tidak Disokong','Pelayar ini tidak menyokong notifikasi web.','info'); try{ const p = await Notification.requestPermission(); if(p !== 'granted') return Swal.fire('Tidak Dibenarkan','Benarkan notifikasi untuk laman ini dalam tetapan Chrome.','info'); await getNotificationRegistration(); Swal.fire('Berjaya','Notifikasi telefon telah diaktifkan.','success'); }catch(e){ Swal.fire('Ralat Notifikasi','Pastikan fail sw.js telah dimuat naik, kemudian muat semula laman.','error'); } };  $$('.nav button').forEach(b => {
   b.onclick = () => showPage(b.dataset.page, b);
 });
 
@@ -387,7 +388,7 @@ $('#nikahForm').onsubmit = async e => {
   const f = Object.fromEntries(new FormData(e.target));
   $('#saveBtn').disabled = true;
   try{
-    await addDoc(collection(db,'rekod_nikah'),{
+    await db.collection('rekod_nikah').add({
       tarikh: f.tarikh,
       hari: f.hari,
       masa: f.masa,
@@ -397,7 +398,7 @@ $('#nikahForm').onsubmit = async e => {
       tel: clean(f.tel),
       wali: f.wali,
       catatan: clean(f.catatan),
-      diciptaPada: serverTimestamp()
+      diciptaPada: firebase.firestore.FieldValue.serverTimestamp()
     });
     e.target.reset();
     $('#kLain').classList.add('hidden');
@@ -413,7 +414,7 @@ $('#nikahForm').onsubmit = async e => {
 
 async function load(){
   try {
-    const s = await getDocs(collection(db,'rekod_nikah'));
+    const s = await db.collection('rekod_nikah').get();
     records = s.docs.map(d => ({id:d.id, ...d.data()})).sort((a,b) => (a.tarikh || '').localeCompare(b.tarikh || ''));
     render();
   }catch(err){
@@ -560,7 +561,7 @@ $('#updateIndividual').onclick = async() => {
   });
   if(!edit.isConfirmed) return;
   try{
-    await updateDoc(doc(db,'rekod_nikah',target.id), edit.value);
+    await db.collection('rekod_nikah').doc(target.id).update(edit.value);
     await load();
     Swal.fire('Berjaya','Rekod nikah telah dikemas kini.','success');
   }catch(err){
@@ -568,7 +569,7 @@ $('#updateIndividual').onclick = async() => {
   }
 };
 
-async function removeOne(id){ await deleteDoc(doc(db,'rekod_nikah',id)); await load(); }
+async function removeOne(id){ await db.collection('rekod_nikah').doc(id).delete(); await load(); }
 
 $('#deleteIndividual').onclick = async() => {
   if(!records.length) return Swal.fire('Tiada Rekod','Belum ada rekod untuk dihapuskan.','info');
@@ -593,8 +594,8 @@ $('#deleteAll').onclick = async() => {
   if(!records.length) return;
   const c = await Swal.fire({title:'Hapus SEMUA rekod?', input:'text', inputLabel:'Taip HAPUS SEMUA untuk mengesahkan', showCancelButton:true, preConfirm: v => v === 'HAPUS SEMUA' || Swal.showValidationMessage('Teks pengesahan tidak tepat')});
   if(c.isConfirmed){
-    const batch = writeBatch(db);
-    records.forEach(r => batch.delete(doc(db,'rekod_nikah',r.id)));
+    const batch = db.batch();
+    records.forEach(r => batch.delete(db.collection('rekod_nikah').doc(r.id)));
     await batch.commit();
     await load();
     Swal.fire('Selesai','Semua rekod telah dihapus.','success');
@@ -639,7 +640,7 @@ $('#restoreFile').onchange = async e => {
     const c = await Swal.fire({title:'Import Sandaran JSON?', text:`${valid.length} rekod akan ditambah ke dalam sistem.`, showCancelButton:true, confirmButtonText:'Import', cancelButtonText:'Batal'});
     if(!c.isConfirmed) return;
     for(const r of valid){
-      await addDoc(collection(db,'rekod_nikah'),{
+      await db.collection('rekod_nikah').add({
         tarikh: r.tarikh,
         hari: clean(r.hari) || days[new Date(r.tarikh+'T00:00:00').getDay()],
         masa: clean(r.masa),
@@ -649,7 +650,7 @@ $('#restoreFile').onchange = async e => {
         tel: clean(r.tel),
         wali: clean(r.wali),
         catatan: clean(r.catatan),
-        diciptaPada: serverTimestamp()
+        diciptaPada: firebase.firestore.FieldValue.serverTimestamp()
       });
     }
     await load();
