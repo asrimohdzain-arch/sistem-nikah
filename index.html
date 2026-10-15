@@ -118,27 +118,16 @@ main{margin-left:0;padding:12px}
 .m-date-badge{display:inline-block;background:#ffffff28;border:1px solid #ffffff55;padding:5px 12px;border-radius:15px;font-size:11px;font-weight:600}
 
 .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
-.menu-card{background:#fff;border:1px solid #cbd8e5;border-radius:12px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;cursor:pointer;box-shadow:0 3px 10px #17324d08;transition:all 0.2s ease}
-.menu-icon{width:38px;height:38px;border-radius:10px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:all 0.2s ease}
+.menu-card{background:#fff;border:1px solid #cbd8e5;border-radius:12px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;cursor:pointer;box-shadow:0 3px 10px #17324d08}
+.menu-icon{width:38px;height:38px;border-radius:10px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
 .menu-info b{display:block;font-size:12px;color:var(--navy)}
 .menu-info span{font-size:10px;color:#53657a}
 
-/* GAYA BILA KAD MENU TELEFON AKTIF (KUNING TUA GELAP) */
-.menu-card.active {
-  background: var(--dark-gold) !important;
-  border-color: var(--gold) !important;
-  box-shadow: 0 4px 12px rgba(122, 90, 0, 0.4) !important;
-}
-.menu-card.active .menu-icon {
-  background: #fff !important;
-  color: var(--dark-gold) !important;
-}
-.menu-card.active .menu-info b {
-  color: #fff !important;
-}
-.menu-card.active .menu-info span {
-  color: #f0e6c2 !important;
-}
+/* GAYA KUNING TUA GELAP BILA KAD MENU AKTIF */
+.menu-card.active{background:var(--dark-gold)!important;border-color:var(--gold)!important;box-shadow:0 4px 12px rgba(122,90,0,0.4)!important}
+.menu-card.active .menu-icon{background:#fff!important;color:var(--dark-gold)!important}
+.menu-card.active .menu-info b{color:#fff!important}
+.menu-card.active .menu-info span{color:#f0e6c2!important}
 }
 </style>
 </head>
@@ -315,24 +304,21 @@ let records = [];
 const $= s => document.querySelector(s),$$ = s => [...document.querySelectorAll(s)];
 const days = ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'], months = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
 
-// MATIKAN SCROLL AUTOMATIK PELAYAR
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
 }
 
 const formattedDate = new Intl.DateTimeFormat('ms-MY',{day:'2-digit',month:'long',year:'numeric'}).format(new Date());
 $('#todayPC').textContent = 'Tarikh: ' + formattedDate;
-$('#todayMobile').textContent = formattedDate;  let currentPage = 'utama';  window.switchPage = function(id, fromBack = false){ currentPage = id;  // Tentukan halaman aktif $$('.page').forEach(p => p.classList.toggle('active', p.id === id));
+$('#todayMobile').textContent = formattedDate;  let currentPage = 'utama';  window.switchPage = function(id, fromBack = false){ currentPage = id;  $$('.page').forEach(p => p.classList.toggle('active', p.id === id));
   
-  // Tukar butang aktif Sidebar PC
-  $$('.sidebar .nav-menu button').forEach(b => { b.classList.toggle('active', b.getAttribute('onclick')?.includes(id)); });    // Tukar butang aktif Kad Menu Telefon (Kuning Tua Gelap) $$
+  $$('.sidebar .nav-menu button').forEach(b => { b.classList.toggle('active', b.getAttribute('onclick')?.includes(id)); });    $$
 ('.menu-card').forEach(c => c.classList.remove('active'));
   const activeMobileBtn = $('#mbtn-' + id);
   if(activeMobileBtn) activeMobileBtn.classList.add('active');
   
   if(id === 'rekod') renderRows();
 
-  // Kawalan Sejarah Pelayar (2 Langkah Back Sahaja)
   if(!fromBack){
     if(id !== 'utama'){
       history.pushState({page: id}, '', '#' + id);
@@ -341,7 +327,6 @@ $('#todayMobile').textContent = formattedDate;  let currentPage = 'utama';  wind
     }
   }
 
-  // PAKSA KEDUKAN SKRIN KE PALING ATAS
   window.scrollTo({top: 0, left: 0, behavior: 'instant'});
 };
 
@@ -352,7 +337,6 @@ window.addEventListener('popstate', e => {
   }
 });
 
-// MULA SISTEM DI PALING ATAS
 window.addEventListener('DOMContentLoaded', () => {
   window.scrollTo({top: 0, left: 0, behavior: 'instant'});
   switchPage('utama', true);
