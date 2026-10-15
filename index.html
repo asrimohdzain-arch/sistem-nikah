@@ -85,7 +85,24 @@ th:last-child, td:last-child { text-align:center; }
 .bar .bar-month{position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-size:10px}
 .btn-wa{background:#25D366;color:#fff;border:0;padding:4px 8px;border-radius:5px;cursor:pointer;font-weight:bold;font-size:10px;text-decoration:none;display:inline-block}
 
-/* RESPONSIF TELEFON */
+/* BUTANG MODEN UNTUK PADAM */
+.btn-modern-danger {
+  background: #d32f2f;
+  color: #fff;
+  border: 0;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
+  transition: 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-modern-danger:hover { background: #b71c1c; transform: translateY(-1px); }
+
 @media(max-width:768px){
 .sidebar{display:none}
 .header{display:none}
@@ -111,7 +128,6 @@ main{margin-left:0;padding:12px}
 </head>
 <body>
 <div class="app" id="app">
-  <!-- SIDEBAR KIRI (MOD PC) -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       SISTEM NIKAH
@@ -124,7 +140,6 @@ main{margin-left:0;padding:12px}
     </div>
   </aside>
 
-  <!-- HEADER UTAMA (MOD PC) -->
   <header class="header">
     <div>
       <div class="brand">SISTEM REKOD NIKAH MUKIM</div>
@@ -134,7 +149,6 @@ main{margin-left:0;padding:12px}
   </header>
 
   <main>
-    <!-- HEADER KHAS MUDAH ALIH (TELEFON) -->
     <div class="mobile-banner">
       <div class="m-header">
         <h1>SISTEM NIKAH</h1>
@@ -193,7 +207,6 @@ main{margin-left:0;padding:12px}
           <span id="searchCount" class="search-count">0 rekod</span>
         </div>
         
-        <!-- BORANG TAMBAH -->
         <div id="formPanel" class="form-shell hidden" style="margin-top:15px">
           <form id="nikahForm">
             <div class="grid">
@@ -249,7 +262,6 @@ main{margin-left:0;padding:12px}
           </form>
         </div>
 
-        <!-- JADUAL SENARAI -->
         <div id="listPanel" class="table-wrap" style="margin-top:15px">
           <table>
             <thead>
@@ -271,7 +283,7 @@ main{margin-left:0;padding:12px}
           <div style="padding:15px;border:1px solid #cbd8e5;border-radius:10px">
             <b>Hapus Semua Rekod</b>
             <p style="font-size:12px;color:#53657a;margin:5px 0 10px">Tindakan ini akan memadam semua data di pangkalan data.</p>
-            <button class="btn" id="deleteAll" type="button" style="background:#8b0000;color:#fff">Hapus Semua Data</button>
+            <button class="btn-modern-danger" id="deleteAll" type="button">🗑️ Hapus Semua Data</button>
           </div>
         </div>
       </div>
@@ -301,7 +313,6 @@ window.switchPage = function(id, pushHistory = true){
   });
   if(id === 'rekod') renderRows();
   
-  // Auto scroll ke tajuk panel di telefon
   if(window.innerWidth <= 768){
     setTimeout(() => {
       const panelTarget = $('#' + id + ' .panel');
@@ -315,7 +326,6 @@ window.addEventListener('popstate', e => {
   switchPage(page, false);
 });
 
-// Tetapkan laluan permulaan kepada 'utama' dan pastikan skrin berada di atas
 if(!location.hash || location.hash === '#utama'){
   history.replaceState({page: 'utama'}, '', '#utama');
   switchPage('utama', false);
@@ -407,7 +417,16 @@ async function load(){
 window.sendWhatsapp = function(name, tel, tarikh, hari, masa, kampung, tempat, wali, catatan){
   let cleanTel = tel.replace(/[^\d]/g, '');
   if(cleanTel.startsWith('0')) cleanTel = '60' + cleanTel.slice(1);
-  const textMsg = `*Sistem Nikah Mukim*\nNama: ${name}\nTarikh: ${tarikh} (${hari})\nMasa: ${masa}\nKampung: ${kampung}\nTempat: ${tempat}\nWali: ${wali}\nCatatan: ${catatan||'-'}`;
+  
+  // Tukar format tarikh YYYY-MM-DD kepada DD-MM-YYYY
+  let formattedTarikh = tarikh;
+  if(tarikh && tarikh.includes('-')){
+    const p = tarikh.split('-');
+    if(p.length === 3) formattedTarikh = `${p[2]}-${p[1]}-${p[0]}`;
+  }
+
+  const textMsg = `Sistem Nikah Anak Mukim\nMaklumat Nikah :\n\n1. Nama : ${name}\n2. Tarikh : ${formattedTarikh} (${hari})\n3. Masa : ${masa}\n4. Kampung: ${kampung}\n5. Tempat Nikah : ${tempat}\n6. Wali : ${wali}\n7. Catatan : ${catatan||'-'}\n8. Pertanyaan sila hubungi :\n   Imam : 019-9467894`;
+  
   window.open(`https://wa.me/${cleanTel}?text=${encodeURIComponent(textMsg)}`, '_blank');
 };
 
@@ -443,13 +462,75 @@ $('#smartSearch').oninput = renderRows;
 $('#clearSearch').onclick = () => { $('#smartSearch').value = ''; renderRows(); };
 
 $('#deleteAll').onclick = async() => {
-  const c = await Swal.fire({title:'Hapus SEMUA rekod?', input:'text', inputLabel:'Taip HAPUS SEMUA', showCancelButton:true, preConfirm: v => v === 'HAPUS SEMUA'});
-  if(c.isConfirmed){
-    const batch = db.batch();
-    records.forEach(r => batch.delete(db.collection('rekod_nikah').doc(r.id)));
-    await batch.commit();
-    await load();
-    Swal.fire('Selesai','Semua rekod telah dipadam.','success');
+  const choice = await Swal.fire({
+    title: 'Hapus Data',
+    text: 'Sila pilih kaedah penghapusan:',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Hapus Ikut Tahun',
+    cancelButtonText: 'Hapus No Bil',
+    confirmButtonColor: '#d32f2f',
+    cancelButtonColor: '#082b57'
+  });
+
+  if (choice.isConfirmed) {
+    // Hapus mengikut tahun
+    const { value: targetYear } = await Swal.fire({
+      title: 'Hapus Ikut Tahun',
+      input: 'text',
+      inputLabel: 'Masukkan Tahun (contoh: 2026)',
+      showCancelButton: true,
+      inputValidator: (value) => { if (!value) return 'Sila masukkan tahun!'; }
+    });
+
+    if (targetYear) {
+      const confirmText = await Swal.fire({
+        title: `Hapus semua data tahun ${targetYear}?`,
+        input: 'text',
+        inputLabel: 'Taip HAPUS TAHUN untuk mengesahkan',
+        showCancelButton: true,
+        preConfirm: v => v === 'HAPUS TAHUN'
+      });
+
+      if (confirmText.isConfirmed) {
+        const batch = db.batch();
+        const targetRecs = records.filter(r => (r.tarikh || '').startsWith(targetYear));
+        targetRecs.forEach(r => batch.delete(db.collection('rekod_nikah').doc(r.id)));
+        await batch.commit();
+        await load();
+        Swal.fire('Selesai', `Semua rekod tahun ${targetYear} telah dipadam.`, 'success');
+      }
+    }
+  } else if (choice.dismiss === Swal.DismissReason.cancel) {
+    // Hapus mengikut No Bil / ID Rekod
+    const { value: targetBil } = await Swal.fire({
+      title: 'Hapus No Bil',
+      input: 'text',
+      inputLabel: 'Masukkan No Bil yang ingin dipadam',
+      showCancelButton: true,
+      inputValidator: (value) => { if (!value) return 'Sila masukkan No Bil!'; }
+    });
+
+    if (targetBil) {
+      const index = parseInt(targetBil) - 1;
+      if (index >= 0 && index < records.length) {
+        const targetRec = records[index];
+        const confirmDel = await Swal.fire({
+          title: `Hapus rekod Bil ${targetBil} (${targetRec.nama})?`,
+          showCancelButton: true,
+          confirmButtonText: 'Ya, Padam',
+          confirmButtonColor: '#d32f2f'
+        });
+
+        if (confirmDel.isConfirmed) {
+          await db.collection('rekod_nikah').doc(targetRec.id).delete();
+          await load();
+          Swal.fire('Selesai', `Rekod Bil ${targetBil} telah dipadam.`, 'success');
+        }
+      } else {
+        Swal.fire('Ralat', 'No Bil tidak sah / tiada dalam senarai.', 'error');
+      }
+    }
   }
 };
 
