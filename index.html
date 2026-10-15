@@ -34,7 +34,6 @@ main{margin-left:240px;padding:25px}
 .panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 5px 15px #17324d0d;margin-bottom:18px}
 .page-title{margin:0 0 16px;color:var(--maroon);font-size:18px;font-weight:700}
 
-/* MENU GRID KAD (HANYA MUNCUL DI TELEFON - 3 PILIHAN) */
 .menu-grid{display:none} 
 .mobile-banner{display:none}
 
@@ -58,10 +57,10 @@ textarea{resize:vertical}
 .hidden{display:none!important}
 
 .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-table{width:100%;border-collapse:collapse;font-size:11px}
-th,td{padding:8px 10px;border:1px solid #bdc8d3;text-align:left;vertical-align:middle}
-th{background:var(--navy);color:#fff;text-align:center;white-space:nowrap}
-th:first-child, td:first-child { text-align:center; width:50px; }
+table{width:100%;border-collapse:collapse;font-family:'Segoe UI',sans-serif;font-size:10px}
+th,td{padding:5px 8px;border:1px solid #bdc8d3;text-align:left;vertical-align:middle}
+th{background:var(--navy);color:#fff;text-align:center;white-space:nowrap;font-size:10px}
+th:first-child, td:first-child { text-align:center; width:45px; }
 th:last-child, td:last-child { text-align:center; }
 
 .completed-row { color: #0056b3 !important; font-weight: 600; }
@@ -84,9 +83,9 @@ th:last-child, td:last-child { text-align:center; }
 .bar{flex:1;background:#587ba4;min-height:2px;position:relative}
 .bar .bar-count{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:800}
 .bar .bar-month{position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-size:10px}
-.btn-wa{background:#25D366;color:#fff;border:0;padding:5px 12px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:11px;text-decoration:none;display:inline-block}
+.btn-wa{background:#25D366;color:#fff;border:0;padding:4px 8px;border-radius:5px;cursor:pointer;font-weight:bold;font-size:10px;text-decoration:none;display:inline-block}
 
-/* RESPONSIF TELEFON (3 KAD SAHAJA) */
+/* RESPONSIF TELEFON */
 @media(max-width:768px){
 .sidebar{display:none}
 .header{display:none}
@@ -135,7 +134,7 @@ main{margin-left:0;padding:12px}
   </header>
 
   <main>
-    <!-- HEADER KHAS MUDAH ALIH (TELEFON) - 3 KAD -->
+    <!-- HEADER KHAS MUDAH ALIH (TELEFON) -->
     <div class="mobile-banner">
       <div class="m-header">
         <h1>SISTEM NIKAH</h1>
@@ -180,7 +179,7 @@ main{margin-left:0;padding:12px}
     
     <!-- LAMAN REKOD NIKAH -->
     <section id="rekod" class="page">
-      <div class="panel">
+      <div class="panel" id="rekodPanel">
         <h2 class="page-title">Pengurusan Rekod Nikah</h2>
         <div class="toolbar">
           <button class="btn" id="showForm" type="button">＋ Tambah Rekod</button>
@@ -266,7 +265,7 @@ main{margin-left:0;padding:12px}
     
     <!-- LAMAN TETAPAN -->
     <section id="tetapan" class="page">
-      <div class="panel">
+      <div class="panel" id="tetapanPanel">
         <h2 class="page-title">Tetapan Sistem</h2>
         <div style="display:flex;flex-direction:column;gap:12px">
           <div style="padding:15px;border:1px solid #cbd8e5;border-radius:10px">
@@ -301,6 +300,14 @@ window.switchPage = function(id, pushHistory = true){
     b.classList.toggle('active', b.getAttribute('onclick')?.includes(id));
   });
   if(id === 'rekod') renderRows();
+  
+  // Auto scroll ke tajuk panel di telefon
+  if(window.innerWidth <= 768){
+    setTimeout(() => {
+      const panelTarget = $('#' + id + ' .panel');
+      if(panelTarget) panelTarget.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }, 50);
+  }
 };
 
 window.addEventListener('popstate', e => {
@@ -308,9 +315,11 @@ window.addEventListener('popstate', e => {
   switchPage(page, false);
 });
 
-// Tetapkan status asal sejarah
-if(!location.hash){
+// Tetapkan laluan permulaan kepada 'utama' dan pastikan skrin berada di atas
+if(!location.hash || location.hash === '#utama'){
   history.replaceState({page: 'utama'}, '', '#utama');
+  switchPage('utama', false);
+  window.scrollTo(0, 0);
 } else {
   switchPage(location.hash.substring(1), false);
 }
