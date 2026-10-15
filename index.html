@@ -85,7 +85,6 @@ th:last-child, td:last-child { text-align:center; }
 .bar .bar-month{position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-size:10px}
 .btn-wa{background:#25D366;color:#fff;border:0;padding:4px 8px;border-radius:5px;cursor:pointer;font-weight:bold;font-size:10px;text-decoration:none;display:inline-block}
 
-/* BUTANG MODEN UNTUK PADAM */
 .btn-modern-danger {
   background: #d32f2f;
   color: #fff;
@@ -328,13 +327,14 @@ window.addEventListener('popstate', e => {
   switchPage(page, false);
 });
 
+// Pastikan sistem mula di atas dan pada tab 'utama' tanpa auto-scroll ke bawah
 if(!location.hash || location.hash === '#utama'){
   history.replaceState({page: 'utama'}, '', '#utama');
   switchPage('utama', false);
-  window.scrollTo(0, 0);
 } else {
   switchPage(location.hash.substring(1), false);
 }
+window.scrollTo(0, 0);
 
 const tarikhInput = document.querySelector('#nikahForm input[name="tarikh"]');
 if(tarikhInput){
@@ -426,8 +426,8 @@ window.sendWhatsapp = function(name, tel, tarikh, hari, masa, kampung, tempat, w
     if(p.length === 3) formattedTarikh = `${p[2]}-${p[1]}-${p[0]}`;
   }
 
-  // FORMAT WHATSAPP BOLD TANPA JARAK
-  const textMsg = `*Sistem Nikah Anak Mukim*\n*Maklumat Nikah :*\n\n1. Nama : ${name}\n2. Tarikh : ${formattedTarikh} (${hari})\n3. Masa : ${masa}\n4. Kampung: ${kampung}\n5. Tempat Nikah : ${tempat}\n6. Wali : ${wali}\n7. Catatan : ${catatan||'-'}\n8. Pertanyaan sila hubungi :\n   Imam : 019-9467894`;
+  // FORMAT WHATSAPP BOLD TANPA JARAK KOSONG DI TENGAH
+  const textMsg = `*Sistem Nikah Anak Mukim*\n*Maklumat Nikah :*\n1. Nama : ${name}\n2. Tarikh : ${formattedTarikh} (${hari})\n3. Masa : ${masa}\n4. Kampung: ${kampung}\n5. Tempat Nikah : ${tempat}\n6. Wali : ${wali}\n7. Catatan : ${catatan||'-'}\n8. Pertanyaan sila hubungi :\n   Imam : 019-9467894`;
   
   window.open(`https://wa.me/${cleanTel}?text=${encodeURIComponent(textMsg)}`, '_blank');
 };
