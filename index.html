@@ -73,7 +73,6 @@ th{background:var(--navy);color:#fff}
 .bar{flex:1;background:#587ba4;min-height:2px;border-radius:5px 5px 0 0;position:relative}
 .bar .bar-count{position:absolute;top:-22px;left:50%;transform:translateX(-50%);min-width:20px;text-align:center;font-size:12px;font-weight:800;color:#082b57}
 .bar .bar-month{position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);font-size:10px}
-.bar span{position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);font-size:10px}
 .empty{color:#667;text-align:center;padding:25px}
 .btn-wa{background:#25D366;color:#fff;border:0;padding:4px 8px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:11px;display:inline-flex;align-items:center;gap:4px;text-decoration:none}
 .btn-wa:hover{background:#128C7E}
@@ -99,30 +98,6 @@ main{margin-left:0;padding:10px 10px 80px}
 .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 table{min-width:1020px}
 }
-@media(max-width:820px){
-.sidebar{width:76px}
-.logo{font-size:0}
-.logo:after{content:'SN';font-size:18px}
-.nav button{font-size:0;text-align:center}
-.nav button:before{font-size:20px}
-.nav button[data-page='utama']:before{content:'⌂'}
-.nav button[data-page='rekod']:before{content:'▤'}
-.nav button[data-page='tetapan']:before{content:'⚙'}
-.header{padding-left:96px}
-.brand{font-size:16px}
-main{margin-left:76px}
-.cards,.chart-row{grid-template-columns:1fr}
-.settings-grid{grid-template-columns:1fr 1fr}
-.grid{grid-template-columns:1fr}
-.field.full{grid-column:auto}
-}
-@media(max-width:520px){
-.header{padding:10px 12px 10px 88px;height:auto}
-.date-pill{font-size:11px}
-.brand{display:none}
-main{padding:10px}
-.panel{padding:12px}
-}
 @media print{
 @page{size:A4 portrait;margin:10mm}
 .sidebar,.header,.toolbar,.no-print,iframe{display:none!important}
@@ -142,20 +117,19 @@ th{color:#000!important;font-weight:800!important;background:#fff!important}
 </style>
 </head>
 <body>
-
 <div class="app" id="app">
   <aside class="sidebar">
     <div class="logo">SISTEM NIKAH</div>
     <nav class="nav">
-      <button class="active" data-page="utama">🏠 Utama</button>
-      <button data-page="rekod">📋 Rekod Nikah</button>
-      <button data-page="tetapan">⚙️ Tetapan</button>
+      <button class="active" data-page="utama" type="button">🏠 Utama</button>
+      <button data-page="rekod" type="button">📋 Rekod Nikah</button>
+      <button data-page="tetapan" type="button">⚙️ Tetapan</button>
     </nav>
   </aside>
   <header class="header">
     <div class="brand">SISTEM REKOD NIKAH MUKIM</div>
     <div class="header-right">
-      <button class="bell" id="bell" title="Peringatan nikah">🔔<span class="badge" id="badge">0</span></button>
+      <button class="bell" id="bell" title="Peringatan nikah" type="button">🔔<span class="badge" id="badge">0</span></button>
       <div class="date-pill" id="today"></div>
     </div>
   </header>
@@ -180,11 +154,11 @@ th{color:#000!important;font-weight:800!important;background:#fff!important}
       <div class="panel">
         <h2 class="page-title">Rekod Nikah</h2>
         <div class="toolbar no-print">
-          <button class="btn" id="showForm">Tambah Rekod Nikah</button>
-          <button class="btn" id="showList">Senarai Rekod</button>
-          <button class="btn" id="printBtn">Cetak Rekod</button>
-          <button class="btn" id="pdfBtn">Muat Turun PDF</button>
-          <select id="yearSelect" style="width:auto" title="Pilih tahun"></select>
+          <button class="btn" id="showForm" type="button">Tambah Rekod Nikah</button>
+          <button class="btn" id="showList" type="button">Senarai Rekod</button>
+          <button class="btn" id="printBtn" type="button">Cetak Rekod</button>
+          <button class="btn" id="pdfBtn" type="button">Muat Turun PDF</button>
+          <select id="yearSelect" title="Pilih tahun" style="width:auto"></select>
         </div>
         <div id="searchPanel" class="smart-search no-print">
           <input id="smartSearch" type="search" placeholder="Cari nama, tarikh, kampung, tempat, telefon, wali atau catatan..." aria-label="Carian pintar rekod" autocomplete="off">
@@ -285,22 +259,22 @@ th{color:#000!important;font-weight:800!important;background:#fff!important}
           <div class="setting-card">
             <span class="setting-no">1</span>
             <div class="setting-copy"><b>Kemaskini Rekod Nikah</b><small>Taip nama pengantin tanpa mengira huruf besar atau kecil untuk memilih rekod yang hendak dikemas kini.</small></div>
-            <button class="btn" id="updateIndividual">Kemaskini Rekod Nikah</button>
+            <button class="btn" id="updateIndividual" type="button">Kemaskini Rekod Nikah</button>
           </div>
           <div class="setting-card">
             <span class="setting-no">2</span>
             <div class="setting-copy"><b>Hapus Rekod Individu</b><small>Taip nama pengantin untuk memilih dan mengesahkan rekod yang hendak dihapuskan.</small></div>
-            <button class="btn danger" id="deleteIndividual">Hapus Individu</button>
+            <button class="btn danger" id="deleteIndividual" type="button">Hapus Individu</button>
           </div>
           <div class="setting-card">
             <span class="setting-no">3</span>
             <div class="setting-copy"><b>Hapus Semua Rekod</b><small>Memerlukan pengesahan dua langkah.</small></div>
-            <button class="btn danger" id="deleteAll">Hapus Semua</button>
+            <button class="btn danger" id="deleteAll" type="button">Hapus Semua</button>
           </div>
           <div class="setting-card">
             <span class="setting-no">4</span>
             <div class="setting-copy"><b>Eksport Sandaran JSON</b><small>Simpan salinan data sebelum menghapus rekod.</small></div>
-            <button class="btn" id="backup">Eksport</button>
+            <button class="btn" id="backup" type="button">Eksport</button>
             <input id="restoreFile" type="file" accept="application/json,.json" class="hidden">
             <button class="btn" id="restoreBackup" type="button">Import Sandaran JSON</button>
           </div>
@@ -312,7 +286,7 @@ th{color:#000!important;font-weight:800!important;background:#fff!important}
           <div class="setting-card">
             <span class="setting-no">6</span>
             <div class="setting-copy"><b>Notifikasi Telefon</b><small>Benarkan telefon memaparkan peringatan semasa sistem sedang dibuka.</small></div>
-            <button class="btn" id="enableNotifications">Aktifkan Notifikasi</button>
+            <button class="btn" id="enableNotifications" type="button">Aktifkan Notifikasi</button>
           </div>
           <div class="settings-footer"><span>Sistem Rekod Nikah Mukim © asri 2026</span></div>
         </div>
@@ -344,19 +318,28 @@ async function getNotificationRegistration(){
   return notificationRegistration;
 }
 
-$('#enableNotifications').onclick = async() => { if(!('Notification' in window) \vert{}\vert{} !('serviceWorker' in navigator)) return Swal.fire('Tidak Disokong','Pelayar ini tidak menyokong notifikasi web.','info'); try{ const p = await Notification.requestPermission(); if(p !== 'granted') return Swal.fire('Tidak Dibenarkan','Benarkan notifikasi untuk laman ini dalam tetapan Chrome.','info'); await getNotificationRegistration(); Swal.fire('Berjaya','Notifikasi telefon telah diaktifkan.','success'); }catch(e){ Swal.fire('Ralat Notifikasi','Pastikan fail sw.js telah dimuat naik bersama index.html, kemudian muat semula laman.','error'); } }; $$('.nav button').forEach(b => b.onclick = () => openPage(b.dataset.page, b));
+$('#enableNotifications').onclick = async() => { if(!('Notification' in window) \vert{}\vert{} !('serviceWorker' in navigator)) return Swal.fire('Tidak Disokong','Pelayar ini tidak menyokong notifikasi web.','info'); try{ const p = await Notification.requestPermission(); if(p !== 'granted') return Swal.fire('Tidak Dibenarkan','Benarkan notifikasi untuk laman ini dalam tetapan Chrome.','info'); await getNotificationRegistration(); Swal.fire('Berjaya','Notifikasi telefon telah diaktifkan.','success'); }catch(e){ Swal.fire('Ralat Notifikasi','Pastikan fail sw.js telah dimuat naik bersama index.html, kemudian muat semula laman.','error'); } };  $$('.nav button').forEach(b => {
+  b.onclick = () => showPage(b.dataset.page, b);
+});
 
 function showPage(id, btn){
   $$('.page').forEach(p => p.classList.toggle('active', p.id === id));$$
 ('.nav button').forEach(x => x.classList.remove('active'));
   (btn || $(`[data-page="${id}"]`)).classList.add('active');
+  if(id === 'rekod') renderRows();
 }
 
-function openPage(id, btn){
-  showPage(id, btn);
+const tarikhInput = document.querySelector('#nikahForm input[name="tarikh"]');
+if(tarikhInput){
+  tarikhInput.onchange = e => {
+    const val = e.target.value;
+    if(val){
+      const d = new Date(val + 'T00:00:00');
+      const hariInput = document.querySelector('#nikahForm input[name="hari"]');
+      if(hariInput) hariInput.value = days[d.getDay()];
+    }
+  };
 }
-
-$('#nikahForm').tarikh.onchange = e => $('#nikahForm').hari.value = days[new Date(e.target.value + 'T00:00:00').getDay()];
 
 function toggle(sel, box, input){
   const on = sel.value === 'Lain-lain';
@@ -365,8 +348,8 @@ function toggle(sel, box, input){
   if(!on) input.value = '';
 }
 
-$('#kampung').onchange = e => toggle(e.target, $('#kLain'), $('#nikahForm').kampung_lain);
-$('#tempat').onchange = e => toggle(e.target, $('#tLain'), $('#nikahForm').tempat_lain);
+$('#kampung').onchange = e => toggle(e.target, $('#kLain'), document.querySelector('#nikahForm input[name="kampung_lain"]'));
+$('#tempat').onchange = e => toggle(e.target, $('#tLain'), document.querySelector('#nikahForm input[name="tempat_lain"]'));
 
 $('#showForm').onclick = () => { $('#formPanel').classList.remove('hidden'); $('#listPanel').classList.add('hidden'); $('#searchPanel').classList.add('hidden'); };
 $('#showList').onclick = () => { $('#formPanel').classList.add('hidden'); $('#listPanel').classList.remove('hidden'); $('#searchPanel').classList.remove('hidden'); renderRows(); };
@@ -429,16 +412,20 @@ $('#nikahForm').onsubmit = async e => {
 };
 
 async function load(){
-  const s = await getDocs(collection(db,'rekod_nikah'));
-  records = s.docs.map(d => ({id:d.id, ...d.data()})).sort((a,b) => (a.tarikh || '').localeCompare(b.tarikh || ''));
-  render();
+  try {
+    const s = await getDocs(collection(db,'rekod_nikah'));
+    records = s.docs.map(d => ({id:d.id, ...d.data()})).sort((a,b) => (a.tarikh || '').localeCompare(b.tarikh || ''));
+    render();
+  }catch(err){
+    console.error("Ralat memuat data:", err);
+  }
 }
 
 function render(){
   const now = new Date(), ym = now.toISOString().slice(0,7), vill = {};
   $('#total').textContent = records.length;
   $('#monthTotal').textContent = records.filter(r => (r.tarikh || '').startsWith(ym)).length;
-  records.forEach(r => vill[r.kampung] = (vill[r.kampung] || 0) + 1);
+  records.forEach(r => { if(r.kampung) vill[r.kampung] = (vill[r.kampung] || 0) + 1; });
   $('#villageTotal').textContent = Object.keys(vill).length;
   $('#villageList').innerHTML = Object.entries(vill).sort((a,b) => b[1] - a[1]).map(([k,v]) => `<p>${esc(k)}: <b>${v}</b></p>`).join('') || '<p class="empty">Tiada data</p>';
   
@@ -505,7 +492,7 @@ function renderRows(){
       <td>${clean(r.tel) && clean(r.tel) !== '-' ? `<a href="tel:${clean(r.tel).replace(/[^\d+]/g,'')}">${esc(r.tel)}</a>` : '-'}</td>
       <td>${esc(r.wali)}</td>
       <td>${esc(r.catatan)}</td>
-      <td class="no-print" style="text-align:center"><button class="btn-wa" onclick="sendWhatsapp('${r.id}')" title="Hantar maklumat ke WhatsApp">💬 WhatsApp</button></td>
+      <td class="no-print" style="text-align:center"><button class="btn-wa" onclick="sendWhatsapp('${r.id}')" title="Hantar maklumat ke WhatsApp" type="button">💬 WhatsApp</button></td>
     </tr>`;
   }).join('') || `<tr><td colspan="11" class="empty">${q ? 'Tiada rekod sepadan' : 'Tiada rekod'}</td></tr>`;
   
@@ -674,7 +661,6 @@ $('#restoreFile').onchange = async e => {
   }
 };
 
-// Terus muat data Firestore dan paparkan sistem tanpa log masuk
 load().catch(e => Swal.fire('Ralat Data', e.message, 'error'));
 </script>
 </body>
