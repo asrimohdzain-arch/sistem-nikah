@@ -304,10 +304,6 @@ let records = [];
 const $= s => document.querySelector(s),$$ = s => [...document.querySelectorAll(s)];
 const days = ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'], months = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
 
-if ('scrollRestoration' in history) {
-  history.scrollRestoration = 'manual';
-}
-
 const formattedDate = new Intl.DateTimeFormat('ms-MY',{day:'2-digit',month:'long',year:'numeric'}).format(new Date());
 $('#todayPC').textContent = 'Tarikh: ' + formattedDate;
 $('#todayMobile').textContent = formattedDate;  let currentPage = 'utama';  window.switchPage = function(id, fromBack = false){ currentPage = id;  $$('.page').forEach(p => p.classList.toggle('active', p.id === id));
@@ -327,7 +323,15 @@ $('#todayMobile').textContent = formattedDate;  let currentPage = 'utama';  wind
     }
   }
 
-  window.scrollTo({top: 0, left: 0, behavior: 'instant'});
+  // Kawalan Skrol: Utama di atas, Halaman lain automatik skrol ke tajuk panel
+  if(id === 'utama'){
+    window.scrollTo({top: 0, left: 0, behavior: 'instant'});
+  } else if(window.innerWidth <= 768){
+    setTimeout(() => {
+      const panelTarget = $('#' + id + ' .panel');
+      if(panelTarget) panelTarget.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }, 50);
+  }
 };
 
 window.addEventListener('popstate', e => {
