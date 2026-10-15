@@ -14,7 +14,7 @@
 body{margin:0;background:var(--bg);font-family:'Segoe UI',sans-serif;color:#17212b;font-size:14px}
 .app{min-height:100vh;display:flex;flex-direction:column}
 
-/* SIDEBAR KHAS UNTUK KOMPUTER (DESKTOP) */
+/* SIDEBAR KIRI (MOD PC) */
 .sidebar{position:fixed;left:0;top:0;width:240px;height:100vh;background:#fff;border-right:1px solid var(--line);padding:20px 12px;z-index:10;display:flex;flex-direction:column;gap:15px}
 .sidebar-logo{background:var(--maroon);color:#fff;text-align:center;border-radius:12px;padding:16px 10px;font-size:16px;font-weight:700}
 .sidebar-logo small{display:block;font-size:11px;font-weight:normal;opacity:0.9;margin-top:3px}
@@ -22,7 +22,7 @@ body{margin:0;background:var(--bg);font-family:'Segoe UI',sans-serif;color:#1721
 .nav-menu button{border:0;background:var(--navy);color:#fff;border-radius:8px;padding:12px 14px;font-family:inherit;font-weight:650;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;transition:.2s}
 .nav-menu button:hover,.nav-menu button.active{background:var(--gold)}
 
-/* HEADER UTAMA */
+/* HEADER UTAMA PC */
 .header{background:var(--maroon);color:#fff;padding:18px 25px;margin-left:240px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px #0003}
 .brand{font-size:19px;font-weight:700}
 .brand-sub{font-size:12px;opacity:0.9;margin-top:2px}
@@ -34,16 +34,9 @@ main{margin-left:240px;padding:25px}
 .panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 5px 15px #17324d0d;margin-bottom:18px}
 .page-title{margin:0 0 16px;color:var(--maroon);font-size:18px;font-weight:700}
 
-/* GRID KAD MENU MODEN */
-.menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:18px}
-.menu-card{background:#fff;border:1px solid #cbd8e5;border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:.2s;box-shadow:0 3px 10px #17324d08}
-.menu-card:hover{border-color:var(--navy);transform:translateY(-2px)}
-.menu-icon{width:46px;height:46px;border-radius:12px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-.menu-card:nth-child(2) .menu-icon{background:var(--gold)}
-.menu-card:nth-child(3) .menu-icon{background:#25D366}
-.menu-card:nth-child(4) .menu-icon{background:#8b0000}
-.menu-info b{display:block;font-size:15px;color:var(--navy)}
-.menu-info span{font-size:12px;color:#53657a}
+/* MENU GRID KAD (HANYA MUNCUL DI TELEFON) */
+.menu-grid{display:none} 
+.mobile-banner{display:none}
 
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .card{background:#fff;border:1px solid #cbd8e5;border-radius:12px;padding:16px}
@@ -68,40 +61,61 @@ textarea{resize:vertical}
 table{width:100%;border-collapse:collapse;font-size:11px}
 th,td{padding:8px 10px;border:1px solid #bdc8d3;text-align:left;vertical-align:middle}
 th{background:var(--navy);color:#fff;text-align:center;white-space:nowrap}
+th:first-child, td:first-child { text-align:center; width:50px; }
+th:last-child, td:last-child { text-align:center; }
+
+/* WARNA SELESAI NIKAH (LEPAS TARIKH SEMASA) */
+.completed-row { color: #0056b3 !important; font-weight: 600; }
 
 /* WARNA LATAR BELAKANG BULAN (LEMBUT & CERAH) */
-.month-0{background-color:#ffe6e6!important} /* Jan - Merah Muda Lembut */
-.month-1{background-color:#e6f9ff!important} /* Feb - Biru Muda Lembut */
-.month-2{background-color:#e6ffed!important} /* Mac - Hijau Muda Cerah */
-.month-3{background-color:#fffce6!important} /* Apr - Kuning Cair */
-.month-4{background-color:#f3e6ff!important} /* Mei - Ungu Muda */
-.month-5{background-color:#fff0e6!important} /* Jun - Oren Muda */
-.month-6{background-color:#e6fffb!important} /* Jul - Cyan Lembut */
-.month-7{background-color:#f4f4f4!important} /* Ogo - Kelabu Cerah */
-.month-8{background-color:#ffe6f7!important} /* Sep - Pink Cair */
-.month-9{background-color:#f0ffe6!important} /* Okt - Hijau Kuning Lembut */
-.month-10{background-color:#fff5e6!important} /* Nov - Krim Cair */
-.month-11{background-color:#eaeaea!important} /* Dis - Kelabu Lembut */
+.month-0{background-color:#ffe6e6!important}
+.month-1{background-color:#e6f9ff!important}
+.month-2{background-color:#e6ffed!important}
+.month-3{background-color:#fffce6!important}
+.month-4{background-color:#f3e6ff!important}
+.month-5{background-color:#fff0e6!important}
+.month-6{background-color:#e6fffb!important}
+.month-7{background-color:#f4f4f4!important}
+.month-8{background-color:#ffe6f7!important}
+.month-9{background-color:#f0ffe6!important}
+.month-10{background-color:#fff5e6!important}
+.month-11{background-color:#eaeaea!important}
 
 .chart-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .bars{display:flex;align-items:flex-end;gap:6px;height:170px;border-bottom:1px solid #aaa;padding:8px}
 .bar{flex:1;background:#587ba4;min-height:2px;position:relative}
 .bar .bar-count{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:800}
 .bar .bar-month{position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-size:10px}
-.btn-wa{background:#25D366;color:#fff;border:0;padding:5px 9px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:11px;text-decoration:none;display:inline-block}
+.btn-wa{background:#25D366;color:#fff;border:0;padding:5px 12px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:11px;text-decoration:none;display:inline-block}
 
-/* RESPONSIF UNTUK TELEFON BIMBIT */
+/* RESPONSIF UNTUK TELEFON BIMBIT (GAYA SEPERTI RUJUKAN) */
 @media(max-width:768px){
 .sidebar{display:none}
-.header{margin-left:0;padding:15px;flex-direction:column;text-align:center;gap:8px}
+.header{display:none} /* Ganti dengan banner mudah alih bergaya khas */
 main{margin-left:0;padding:12px}
-.cards,.chart-row,.grid,.menu-grid{grid-template-columns:1fr}
+.cards,.chart-row,.grid{grid-template-columns:1fr}
+.mobile-banner{display:block}
+.m-header{background:linear-gradient(135deg, #550000 0%, #330000 100%);color:#fff;padding:22px 15px;text-align:center;border-radius:14px;box-shadow:0 4px 12px #0003;margin-bottom:14px}
+.m-header h1{margin:0 0 4px;font-size:20px;font-weight:800;letter-spacing:0.5px}
+.m-header p{margin:0;font-size:12px;opacity:0.9}
+.m-sub-banner{background:linear-gradient(135deg, #7a1111 0%, #550000 100%);color:#fff;padding:18px;border-radius:14px;margin-bottom:14px;box-shadow:0 4px 12px #0003;position:relative;overflow:hidden}
+.m-sub-banner h3{margin:0 0 2px;font-size:16px;font-weight:700}
+.m-sub-banner p{margin:0 0 10px;font-size:11px;opacity:0.9}
+.m-date-badge{display:inline-block;background:#ffffff28;border:1px solid #ffffff55;padding:5px 12px;border-radius:15px;font-size:11px;font-weight:600}
+.menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.menu-card{background:#fff;border:1px solid #cbd8e5;border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;box-shadow:0 3px 10px #17324d08}
+.menu-icon{width:40px;height:40px;border-radius:10px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.menu-card:nth-child(2) .menu-icon{background:var(--gold)}
+.menu-card:nth-child(3) .menu-icon{background:#25D366}
+.menu-card:nth-child(4) .menu-icon{background:#8b0000}
+.menu-info b{display:block;font-size:13px;color:var(--navy)}
+.menu-info span{font-size:10px;color:#53657a}
 }
 </style>
 </head>
 <body>
 <div class="app" id="app">
-  <!-- SIDEBAR KIRI (MOD PC / KOMPUTER) -->
+  <!-- SIDEBAR KIRI (MOD PC) -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       SISTEM NIKAH
@@ -111,37 +125,47 @@ main{margin-left:0;padding:12px}
       <button class="active" onclick="switchPage('utama', this)">🏠 Utama</button>
       <button onclick="switchPage('rekod', this)">📋 Rekod Nikah</button>
       <button onclick="switchPage('tetapan', this)">⚙️ Tetapan</button>
-      <button onclick="window.print()">🖨️ Cetak Halaman</button>
     </div>
   </aside>
 
-  <!-- HEADER UTAMA -->
+  <!-- HEADER UTAMA (MOD PC) -->
   <header class="header">
     <div>
       <div class="brand">SISTEM REKOD NIKAH MUKIM</div>
       <div class="brand-sub">Mukim Banggol Setol</div>
     </div>
-    <div class="date-pill" id="today">Tarikh: Memuatkan...</div>
+    <div class="date-pill" id="todayPC">Tarikh: Memuatkan...</div>
   </header>
 
   <main>
-    <!-- MENU UTAMA KAD MODEN (SESUAI UNTUK TELEFON & TABLET) -->
-    <div class="menu-grid">
-      <div class="menu-card" onclick="switchPage('utama', null)">
-        <div class="menu-icon">🏠</div>
-        <div class="menu-info"><b>Utama</b><span>Analisa & Statistik</span></div>
+    <!-- HEADER KHAS MUDAH ALIH (TELEFON) -->
+    <div class="mobile-banner">
+      <div class="m-header">
+        <h1>SISTEM NIKAH</h1>
+        <p>Mukim Banggol Setol</p>
       </div>
-      <div class="menu-card" onclick="switchPage('rekod', null)">
-        <div class="menu-icon">📋</div>
-        <div class="menu-info"><b>Rekod Nikah</b><span>Senarai & Daftar</span></div>
+      <div class="menu-grid">
+        <div class="menu-card" onclick="switchPage('utama', null)">
+          <div class="menu-icon">🏠</div>
+          <div class="menu-info"><b>Utama</b><span>Analisa</span></div>
+        </div>
+        <div class="menu-card" onclick="switchPage('rekod', null)">
+          <div class="menu-icon">📋</div>
+          <div class="menu-info"><b>Rekod Nikah</b><span>Senarai</span></div>
+        </div>
+        <div class="menu-card" onclick="switchPage('tetapan', null)">
+          <div class="menu-icon">⚙️</div>
+          <div class="menu-info"><b>Tetapan</b><span>Urus Data</span></div>
+        </div>
+        <div class="menu-card" onclick="window.print()">
+          <div class="menu-icon">🖨️</div>
+          <div class="menu-info"><b>Cetak</b><span>Halaman</span></div>
+        </div>
       </div>
-      <div class="menu-card" onclick="switchPage('tetapan', null)">
-        <div class="menu-icon">⚙️</div>
-        <div class="menu-info"><b>Tetapan</b><span>Urus Data & Sistem</span></div>
-      </div>
-      <div class="menu-card" onclick="window.print()">
-        <div class="menu-icon">🖨️</div>
-        <div class="menu-info"><b>Cetak</b><span>Halaman Semasa</span></div>
+      <div class="m-sub-banner">
+        <h3>Mukim Banggol Setol</h3>
+        <p>Pengurusan Rekod Nikah Rasmi</p>
+        <div class="m-date-badge" id="todayMobile">15 Oktober 2026</div>
       </div>
     </div>
 
@@ -229,7 +253,7 @@ main{margin-left:0;padding:12px}
               </div>
               <div class="field full"><label>Catatan</label><textarea name="catatan" rows="3"></textarea></div>
             </div>
-            <button class="btn" type="submit" id="saveBtn" style="margin-top:14px;background:var(--maroon);width:100%;padding:12px">Simpan Rekod Nikah</button>
+            <button class="btn" type="submit" id="saveBtn" style="margin-top:14px;background:var(--maroon);color:#fff;width:100%;padding:12px;font-weight:bold">Simpan Rekod Nikah</button>
           </form>
         </div>
 
@@ -238,7 +262,7 @@ main{margin-left:0;padding:12px}
           <table>
             <thead>
               <tr>
-                <th>Bil</th><th>Tarikh</th><th>Hari</th><th>Masa</th><th>Nama</th><th>Kampung</th><th>Tempat</th><th>Telefon</th><th>Wali</th><th>Catatan</th><th>Aksi</th>
+                <th>Bil</th><th>Tarikh</th><th>Hari</th><th>Masa</th><th>Nama</th><th>Kampung</th><th>Tempat</th><th>Telefon</th><th>Wali</th><th>Catatan</th><th>WhatsApp</th>
               </tr>
             </thead>
             <tbody id="rows"></tbody>
@@ -255,7 +279,7 @@ main{margin-left:0;padding:12px}
           <div style="padding:15px;border:1px solid #cbd8e5;border-radius:10px">
             <b>Hapus Semua Rekod</b>
             <p style="font-size:12px;color:#53657a;margin:5px 0 10px">Tindakan ini akan memadam semua data di pangkalan data.</p>
-            <button class="btn" id="deleteAll" type="button" style="background:#8b0000">Hapus Semua Data</button>
+            <button class="btn" id="deleteAll" type="button" style="background:#8b0000;color:#fff">Hapus Semua Data</button>
           </div>
         </div>
       </div>
@@ -271,7 +295,9 @@ let records = [];
 const $= s => document.querySelector(s),$$ = s => [...document.querySelectorAll(s)];
 const days = ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'], months = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
 
-$('#today').textContent = 'Tarikh: ' + new Intl.DateTimeFormat('ms-MY',{day:'2-digit',month:'long',year:'numeric'}).format(new Date());
+const formattedDate = new Intl.DateTimeFormat('ms-MY',{day:'2-digit',month:'long',year:'numeric'}).format(new Date());
+$('#todayPC').textContent = 'Tarikh: ' + formattedDate;
+$('#todayMobile').textContent = formattedDate;
 
 window.switchPage = function(id, el){
   $$('.page').forEach(p => p.classList.toggle('active', p.id === id));$$
@@ -374,10 +400,16 @@ window.sendWhatsapp = function(name, tel, tarikh, hari, masa, kampung, tempat, w
 function renderRows(){
   const q = ($('#smartSearch')?.value || '').toLowerCase();
   const filtered = !q ? records : records.filter(r => [r.nama,r.kampung,r.tempat,r.tarikh].some(v => (v||'').toLowerCase().includes(q)));
+  
+  const todayStr = new Date().toISOString().slice(0,10);
+
   $('#rows').innerHTML = filtered.map((r,i) => {
     const monthIndex = r.tarikh ? new Date(r.tarikh + 'T00:00:00').getMonth() : 0;
-    return `<tr class="month-${monthIndex}">
-      <td>${i+1}</td>
+    const isCompleted = r.tarikh && r.tarikh < todayStr;
+    const rowClass = `month-${monthIndex} ${isCompleted ? 'completed-row' : ''}`;
+    
+    return `<tr class="${rowClass}">
+      <td style="text-align:center">${i+1}</td>
       <td>${r.tarikh||''}</td>
       <td>${r.hari||''}</td>
       <td>${r.masa||''}</td>
@@ -387,7 +419,7 @@ function renderRows(){
       <td>${r.tel||''}</td>
       <td>${r.wali||''}</td>
       <td>${r.catatan||''}</td>
-      <td><button class="btn-wa" onclick="sendWhatsapp('${r.nama}','${r.tel}','${r.tarikh}','${r.hari}','${r.masa}','${r.kampung}','${r.tempat}','${r.wali}','${r.catatan}')">WhatsApp</button></td>
+      <td style="text-align:center"><button class="btn-wa" onclick="sendWhatsapp('${r.nama}','${r.tel}','${r.tarikh}','${r.hari}','${r.masa}','${r.kampung}','${r.tempat}','${r.wali}','${r.catatan}')">WhatsApp</button></td>
     </tr>`;
   }).join('') || '<tr><td colspan="11" style="text-align:center;padding:20px">Tiada rekod sepadan</td></tr>';
   $('#searchCount').textContent = `${filtered.length} daripada ${records.length} rekod`;
