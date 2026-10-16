@@ -1015,6 +1015,9 @@
           document.querySelector('#nikahForm textarea[name="catatan"]').value = r.catatan || '';
           
           $('#saveBtn').textContent = 'Kemaskini Rekod Nikah';
+          
+          // Tukar halaman ke 'rekod' dan buka borang pengisian
+          switchPage('rekod');
           $('#formPanel').classList.remove('hidden');
           $('#listPanel').classList.add('hidden');
           $('#searchPanel').classList.add('hidden');
