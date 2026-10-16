@@ -173,7 +173,7 @@
     .toolbar {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 10px;
       margin-bottom: 14px;
       align-items: center;
     }
@@ -181,23 +181,23 @@
       background: var(--navy);
       color: #fff;
       border: 0;
-      padding: 12px 20px;
-      border-radius: 25px;
+      padding: 9px 14px;
+      border-radius: 20px;
       font-weight: bold;
-      font-size: 14px;
+      font-size: 13px;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(8, 43, 87, 0.3);
+      box-shadow: 0 3px 8px rgba(8, 43, 87, 0.25);
       transition: 0.2s;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       width: 100%;
     }
     .toolbar .btn-tab:hover { background: #051b38; transform: translateY(-1px); }
     .toolbar .btn-tab.active-tab {
       background: var(--dark-gold) !important;
-      box-shadow: 0 4px 12px rgba(122, 90, 0, 0.4) !important;
+      box-shadow: 0 3px 10px rgba(122, 90, 0, 0.35) !important;
     }
 
     .smart-search {
@@ -604,7 +604,7 @@
             <button class="btn-tab active-tab" id="showForm" type="button">＋ Tambah Rekod</button>
             <button class="btn-tab" id="showList" type="button">📋 Senarai Rekod</button>
             <button class="btn-tab" id="pdfBtn" type="button">📥 Muat Turun PDF</button>
-            <select id="yearSelect" style="width: 100%; padding: 12px; border-radius: 25px; border: 1px solid #bcc9d6; font-weight: 650; background: #fff;"></select>
+            <select id="yearSelect" style="width: 100%; padding: 9px 12px; border-radius: 20px; border: 1px solid #bcc9d6; font-weight: 650; background: #fff; font-size: 13px;"></select>
           </div>
           <div id="searchPanel" class="smart-search hidden">
             <input id="smartSearch" type="search" placeholder="Cari nama, kampung, tempat...">
@@ -989,7 +989,24 @@
         if (p.length === 3) formattedTarikh = `${p[2]}-${p[1]}-${p[0]}`;
       }
 
-      const textMsg = `*Sistem Nikah Anak Mukim*\n*Maklumat Nikah :*\n1. Nama : ${name}\n2. Tarikh : ${formattedTarikh} (${hari})\n3. Masa : ${masa}\n4. Kampung: ${kampung}\n5. Tempat Nikah : ${tempat}\n6. Wali : ${wali}\n7. Catatan : ${catatan || '-'}\n8. Pertanyaan sila hubungi :\n   Imam : 019-9467894`;
+      let formattedMasa = masa;
+      if (masa && masa.includes(':')) {
+        const parts = masa.split(':');
+        let hh = parseInt(parts[0], 10);
+        const mm = parts[1];
+        let suffix = 'pagi';
+        if (hh >= 12) {
+          suffix = 'petang';
+          if (hh > 12) hh -= 12;
+        }
+        if (hh >= 19 || (hh >= 1 && hh < 4 && suffix === 'petang')) {
+          if (hh >= 7 && suffix === 'petang') suffix = 'malam';
+        }
+        if (hh === 0) hh = 12;
+        formattedMasa = `${String(hh).padStart(2, '0')}:${mm} ${suffix}`;
+      }
+
+      const textMsg = `*Sistem Nikah Anak Mukim*\n*Maklumat Nikah :*\n1. Nama : ${name}\n2. Tarikh : ${formattedTarikh} (${hari})\n3. Masa : ${formattedMasa}\n4. Kampung: ${kampung}\n5. Tempat Nikah : ${tempat}\n6. Wali : ${wali}\n7. Catatan : ${catatan || '-'}\n8. Pertanyaan sila hubungi :\n   Imam : 019-9467894`;
       
       window.open(`https://wa.me/${cleanTel}?text=${encodeURIComponent(textMsg)}`, '_blank');
     };
