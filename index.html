@@ -314,6 +314,13 @@
       text-decoration: none;
       display: inline-block;
     }
+    .phone-link {
+      color: inherit;
+      text-decoration: none;
+    }
+    .phone-link:hover {
+      text-decoration: underline;
+    }
 
     .btn-modern-danger {
       background: #d32f2f;
@@ -784,7 +791,12 @@
       let html = '<div style="text-align: left; max-height: 300px; overflow-y: auto;">';
       upcomingNotifs.forEach((n, idx) => {
         let dText = n.daysLeft === 0 ? 'Hari ini!' : (n.daysLeft === 1 ? 'Esok' : `Dalam ${n.daysLeft} hari`);
-        html += `<div style="border-bottom: 1px solid #ddd; padding: 8px 0; font-size: 12px;"><b>${idx + 1}. ${n.nama}</b><br>Tarikh: ${n.tarikh} (${dText})<br>Tempat: ${n.tempat}</div>`;
+        let formattedD = n.tarikh;
+        if(n.tarikh && n.tarikh.includes('-')){
+          const p = n.tarikh.split('-');
+          if(p.length === 3) formattedD = `${p[2]}-${p[1]}-${p[0]}`;
+        }
+        html += `<div style="border-bottom: 1px solid #ddd; padding: 8px 0; font-size: 12px;"><b>${idx + 1}. ${n.nama}</b><br>Tarikh: ${formattedD} (${dText})<br>Tempat: ${n.tempat}</div>`;
       });
       html += '</div>';
       Swal.fire({
@@ -820,15 +832,26 @@
         const isCompleted = r.tarikh && r.tarikh < todayStr;
         const rowClass = `month-${monthIndex} ${isCompleted ? 'completed-row' : ''}`;
         
+        let displayDate = r.tarikh || '';
+        if (displayDate && displayDate.includes('-')) {
+          const p = displayDate.split('-');
+          if (p.length === 3) displayDate = `${p[2]}-${p[1]}-${p[0]}`;
+        }
+        
+        let phoneHtml = r.tel || '';
+        if (r.tel && r.tel !== '-' && r.tel.trim() !== '') {
+          phoneHtml = `<a href="tel:${r.tel}" class="phone-link">${r.tel}</a>`;
+        }
+        
         return `<tr class="${rowClass}">
           <td style="text-align: center">${i + 1}</td>
-          <td>${r.tarikh || ''}</td>
+          <td>${displayDate}</td>
           <td>${r.hari || ''}</td>
           <td>${r.masa || ''}</td>
           <td><b>${r.nama || ''}</b></td>
           <td>${r.kampung || ''}</td>
           <td>${r.tempat || ''}</td>
-          <td>${r.tel || ''}</td>
+          <td>${phoneHtml}</td>
           <td>${r.wali || ''}</td>
           <td>${r.catatan || ''}</td>
           <td style="text-align: center"><button class="btn-wa" onclick="sendWhatsapp('${r.nama}','${r.tel}','${r.tarikh}','${r.hari}','${r.masa}','${r.kampung}','${r.tempat}','${r.wali}','${r.catatan}')">WhatsApp</button></td>
@@ -919,7 +942,12 @@
       let yy = 25;
       data.forEach((r, i) => {
         if (yy > 180) { pdf.addPage(); yy = 15; }
-        pdf.text(`${i + 1}. ${r.tarikh} | ${r.hari} | ${r.nama} | Kampung: ${r.kampung} | Tempat: ${r.tempat} | Tel: ${r.tel}`, 14, yy);
+        let dFormatted = r.tarikh || '';
+        if (dFormatted && dFormatted.includes('-')) {
+          const p = dFormatted.split('-');
+          if (p.length === 3) dFormatted = `${p[2]}-${p[1]}-${p[0]}`;
+        }
+        pdf.text(`${i + 1}. ${dFormatted} | ${r.hari} | ${r.nama} | Kampung: ${r.kampung} | Tempat: ${r.tempat} | Tel: ${r.tel}`, 14, yy);
         yy += 7;
       });
       pdf.save('Rekod Nikah ' + y + '.pdf');
