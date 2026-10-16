@@ -160,17 +160,29 @@
       gap: 10px;
       flex-wrap: wrap;
       margin-bottom: 14px;
+      align-items: center;
     }
-    .toolbar .btn {
+    .toolbar .btn-tab {
       background: var(--navy);
       color: #fff;
       border: 0;
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-weight: 650;
+      padding: 12px 20px;
+      border-radius: 25px;
+      font-weight: bold;
+      font-size: 14px;
       cursor: pointer;
-      font-size: 13px;
+      box-shadow: 0 4px 10px rgba(8, 43, 87, 0.3);
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
+    .toolbar .btn-tab:hover { background: #051b38; transform: translateY(-1px); }
+    .toolbar .btn-tab.active-tab {
+      background: var(--dark-gold) !important;
+      box-shadow: 0 4px 12px rgba(122, 90, 0, 0.4) !important;
+    }
+
     .smart-search {
       display: flex;
       align-items: center;
@@ -566,18 +578,18 @@
         <div class="panel" id="rekodPanel">
           <h2 class="page-title">Pengurusan Rekod Nikah</h2>
           <div class="toolbar">
-            <button class="btn" id="showForm" type="button">＋ Tambah Rekod</button>
-            <button class="btn" id="showList" type="button">📋 Senarai Rekod</button>
-            <button class="btn" id="pdfBtn" type="button">📥 Muat Turun PDF</button>
-            <select id="yearSelect" style="width: auto; padding: 8px; border-radius: 8px;"></select>
+            <button class="btn-tab active-tab" id="showForm" type="button">＋ Tambah Rekod</button>
+            <button class="btn-tab" id="showList" type="button">📋 Senarai Rekod</button>
+            <button class="btn-tab" id="pdfBtn" type="button">📥 Muat Turun PDF</button>
+            <select id="yearSelect" style="width: auto; padding: 10px; border-radius: 20px; border: 1px solid #bcc9d6; font-weight: 650; background: #fff;"></select>
           </div>
-          <div id="searchPanel" class="smart-search">
+          <div id="searchPanel" class="smart-search hidden">
             <input id="smartSearch" type="search" placeholder="Cari nama, kampung, tempat...">
             <button id="clearSearch" class="clear-search" type="button">Kosong</button>
             <span id="searchCount" class="search-count">0 rekod</span>
           </div>
           
-          <div id="formPanel" class="form-shell hidden" style="margin-top: 15px;">
+          <div id="formPanel" class="form-shell" style="margin-top: 15px;">
             <form id="nikahForm">
               <input type="hidden" name="editId" id="editId">
               <div class="grid">
@@ -634,7 +646,7 @@
             </form>
           </div>
 
-          <div id="listPanel" class="table-wrap" style="margin-top: 15px;">
+          <div id="listPanel" class="table-wrap hidden" style="margin-top: 15px;">
             <table>
               <thead>
                 <tr>
@@ -786,8 +798,45 @@
     $('#tempat').onchange = e => toggle(e.target, $('#tLain'), document.querySelector('#nikahForm input[name="tempat_lain"]'));
     $('#wali').onchange = e => toggle(e.target, $('#wLain'), document.querySelector('#nikahForm input[name="wali_lain"]'));
 
-    $('#showForm').onclick = () => { $('#formPanel').classList.remove('hidden'); $('#listPanel').classList.add('hidden'); $('#searchPanel').classList.add('hidden'); };
-    $('#showList').onclick = () => { $('#formPanel').classList.add('hidden'); $('#listPanel').classList.remove('hidden'); $('#searchPanel').classList.remove('hidden'); renderRows(); };
+    function setActiveTab(activeBtn) {
+      $$('.toolbar .btn-tab').forEach(b => b.classList.remove('active-tab'));
+      activeBtn.classList.add('active-tab');
+    }
+
+    $('#showForm').onclick = () => {
+      setActiveTab($('#showForm'));
+      $('#formPanel').classList.remove('hidden');
+      $('#listPanel').classList.add('hidden');
+      $('#searchPanel').classList.add('hidden');
+    };
+    
+    $('#showList').onclick = () => {
+      setActiveTab($('#showList'));
+      $('#formPanel').classList.add('hidden');
+      $('#listPanel').classList.remove('hidden');
+      $('#searchPanel').classList.remove('hidden');
+      renderRows();
+    };
+
+    $('#pdfBtn').onclick = () => {
+      setActiveTab($('#pdfBtn'));
+      const y = $('#yearSelect').value, data = records.filter(r => (r.tarikh || '').startsWith(y)), { jsPDF } = window.jspdf, pdf = new jsPDF('l', 'mm', 'a4');
+      pdf.setFont('helvetica', 'bold'); pdf.setFontSize(14);
+      pdf.text('REKOD NIKAH MUKIM TAHUN ' + y, 14, 15);
+      pdf.setFont('helvetica', 'normal'); pdf.setFontSize(9);
+      let yy = 25;
+      data.forEach((r, i) => {
+        if (yy > 180) { pdf.addPage(); yy = 15; }
+        let dFormatted = r.tarikh || '';
+        if (dFormatted && dFormatted.includes('-')) {
+          const p = dFormatted.split('-');
+          if (p.length === 3) dFormatted = `${p[2]}-${p[1]}-${p[0]}`;
+        }
+        pdf.text(`${i + 1}. ${dFormatted} | ${r.hari} | ${r.nama} | Kampung: ${r.kampung} | Tempat: ${r.tempat} | Tel: ${r.tel}`, 14, yy);
+        yy += 7;
+      });
+      pdf.save('Rekod Nikah ' + y + '.pdf');
+    };
 
     $('#nikahForm').onsubmit = async e => {
       e.preventDefault();
@@ -1032,6 +1081,7 @@
           $('#saveBtn').textContent = 'Kemaskini Rekod Nikah';
           
           switchPage('rekod');
+          setActiveTab($('#showForm'));
           $('#formPanel').classList.remove('hidden');
           $('#listPanel').classList.add('hidden');
           $('#searchPanel').classList.add('hidden');
@@ -1180,25 +1230,6 @@
           }
         }
       }
-    };
-
-    $('#pdfBtn').onclick = () => {
-      const y = $('#yearSelect').value, data = records.filter(r => (r.tarikh || '').startsWith(y)), { jsPDF } = window.jspdf, pdf = new jsPDF('l', 'mm', 'a4');
-      pdf.setFont('helvetica', 'bold'); pdf.setFontSize(14);
-      pdf.text('REKOD NIKAH MUKIM TAHUN ' + y, 14, 15);
-      pdf.setFont('helvetica', 'normal'); pdf.setFontSize(9);
-      let yy = 25;
-      data.forEach((r, i) => {
-        if (yy > 180) { pdf.addPage(); yy = 15; }
-        let dFormatted = r.tarikh || '';
-        if (dFormatted && dFormatted.includes('-')) {
-          const p = dFormatted.split('-');
-          if (p.length === 3) dFormatted = `${p[2]}-${p[1]}-${p[0]}`;
-        }
-        pdf.text(`${i + 1}. ${dFormatted} | ${r.hari} | ${r.nama} | Kampung: ${r.kampung} | Tempat: ${r.tempat} | Tel: ${r.tel}`, 14, yy);
-        yy += 7;
-      });
-      pdf.save('Rekod Nikah ' + y + '.pdf');
     };
 
     load();
