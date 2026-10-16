@@ -99,6 +99,11 @@
     }
     .brand { font-size: 19px; font-weight: 700; }
     .brand-sub { font-size: 12px; opacity: 0.9; margin-top: 2px; }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
     .date-pill {
       background: #ffffff22;
       border: 1px solid #ffffff55;
@@ -106,6 +111,16 @@
       border-radius: 16px;
       font-size: 12px;
       font-weight: 600;
+    }
+    .pc-notif {
+      cursor: pointer;
+      position: relative;
+      background: rgba(255,255,255,0.15);
+      padding: 8px 10px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     main {
@@ -156,9 +171,9 @@
     }
 
     .toolbar {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
       margin-bottom: 14px;
       align-items: center;
     }
@@ -175,7 +190,9 @@
       transition: 0.2s;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
+      width: 100%;
     }
     .toolbar .btn-tab:hover { background: #051b38; transform: translateY(-1px); }
     .toolbar .btn-tab.active-tab {
@@ -515,7 +532,13 @@
         <div class="brand">SISTEM REKOD NIKAH MUKIM</div>
         <div class="brand-sub">Mukim Banggol Setol</div>
       </div>
-      <div class="date-pill" id="todayPC">Tarikh: Memuatkan...</div>
+      <div class="header-right">
+        <div class="date-pill" id="todayPC">Tarikh: Memuatkan...</div>
+        <div class="pc-notif" onclick="showNotifications()">
+          <span style="font-size: 18px;">🔔</span>
+          <span id="notifBadgePC" style="position: absolute; top: -5px; right: -5px; background: #d32f2f; color: #fff; font-size: 10px; font-weight: bold; padding: 1px 5px; border-radius: 50%; display: none;">0</span>
+        </div>
+      </div>
     </header>
 
     <main>
@@ -542,7 +565,7 @@
           <div>
             <h3>Mukim Banggol Setol</h3>
             <p>Pengurusan Rekod Nikah Rasmi</p>
-            <div class="m-date-badge" id="todayMobile">15 Oktober 2026</div>
+            <div class="m-date-badge" id="todayMobile">16 Oktober 2026</div>
           </div>
           <div onclick="showNotifications()" style="cursor: pointer; position: relative; background: rgba(255,255,255,0.15); padding: 8px 10px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
             <span style="font-size: 18px;">🔔</span>
@@ -581,7 +604,7 @@
             <button class="btn-tab active-tab" id="showForm" type="button">＋ Tambah Rekod</button>
             <button class="btn-tab" id="showList" type="button">📋 Senarai Rekod</button>
             <button class="btn-tab" id="pdfBtn" type="button">📥 Muat Turun PDF</button>
-            <select id="yearSelect" style="width: auto; padding: 10px; border-radius: 20px; border: 1px solid #bcc9d6; font-weight: 650; background: #fff;"></select>
+            <select id="yearSelect" style="width: 100%; padding: 12px; border-radius: 25px; border: 1px solid #bcc9d6; font-weight: 650; background: #fff;"></select>
           </div>
           <div id="searchPanel" class="smart-search hidden">
             <input id="smartSearch" type="search" placeholder="Cari nama, kampung, tempat...">
@@ -923,11 +946,13 @@
         }
       });
       const badge = $('#notifBadge');
+      const badgePC = $('#notifBadgePC');
       if (upcomingNotifs.length > 0) {
-        badge.textContent = upcomingNotifs.length;
-        badge.style.display = 'inline-block';
+        if(badge) { badge.textContent = upcomingNotifs.length; badge.style.display = 'inline-block'; }
+        if(badgePC) { badgePC.textContent = upcomingNotifs.length; badgePC.style.display = 'inline-block'; }
       } else {
-        badge.style.display = 'none';
+        if(badge) badge.style.display = 'none';
+        if(badgePC) badgePC.style.display = 'none';
       }
     }
 
