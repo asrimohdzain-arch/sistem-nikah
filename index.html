@@ -619,14 +619,15 @@
                 <div class="field"><label>No. Telefon (WhatsApp)</label><input type="tel" name="tel" required placeholder="019..."></div>
                 <div class="field">
                   <label>Jenis Wali</label>
-                  <select name="wali" required>
+                  <select name="wali" id="wali" required>
                     <option value="">-- Sila Pilih --</option>
                     <option>Bapa</option>
                     <option>Datuk</option>
                     <option>Wali Sultan</option>
-                    <option>Lain-lain</option>
+                    <option value="Lain-lain">Lain-lain</option>
                   </select>
                 </div>
+                <div class="field hidden" id="wLain"><label>Jenis Wali Lain</label><input name="wali_lain"></div>
                 <div class="field full"><label>Catatan</label><textarea name="catatan" rows="3"></textarea></div>
               </div>
               <button class="btn" type="submit" id="saveBtn" style="margin-top: 14px; background: var(--maroon); color: #fff; width: 100%; padding: 12px; font-weight: bold;">Simpan Rekod Nikah</button>
@@ -671,8 +672,7 @@
 
             <!-- Bahagian Sandaran JSON -->
             <div style="padding: 15px; border: 1px solid #cbd8e5; border-radius: 10px;">
-              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
-                <span style="background: #198754; color: #fff; font-size: 11px; font-weight: bold; padding: 2px 8px; border-radius: 6px;">5</span>
+              <div style="margin-bottom: 5px;">
                 <b style="font-size: 15px;">Sandaran JSON</b>
               </div>
               <p style="font-size: 12px; color: #53657a; margin: 0 0 12px;">Eksport atau import fail sandaran pangkalan data dalam format JSON.</p>
@@ -784,6 +784,7 @@
     }
     $('#kampung').onchange = e => toggle(e.target, $('#kLain'), document.querySelector('#nikahForm input[name="kampung_lain"]'));
     $('#tempat').onchange = e => toggle(e.target, $('#tLain'), document.querySelector('#nikahForm input[name="tempat_lain"]'));
+    $('#wali').onchange = e => toggle(e.target, $('#wLain'), document.querySelector('#nikahForm input[name="wali_lain"]'));
 
     $('#showForm').onclick = () => { $('#formPanel').classList.remove('hidden'); $('#listPanel').classList.add('hidden'); $('#searchPanel').classList.add('hidden'); };
     $('#showList').onclick = () => { $('#formPanel').classList.add('hidden'); $('#listPanel').classList.remove('hidden'); $('#searchPanel').classList.remove('hidden'); renderRows(); };
@@ -802,7 +803,7 @@
           kampung: f.kampung === 'Lain-lain' ? f.kampung_lain.trim() : f.kampung,
           tempat: f.tempat === 'Lain-lain' ? f.tempat_lain.trim() : f.tempat,
           tel: f.tel.trim(),
-          wali: f.wali,
+          wali: f.wali === 'Lain-lain' ? f.wali_lain.trim() : f.wali,
           catatan: f.catatan.trim()
         };
 
@@ -820,6 +821,7 @@
         e.target.reset();
         $('#kLain').classList.add('hidden');
         $('#tLain').classList.add('hidden');
+        $('#wLain').classList.add('hidden');
         await load();
         switchPage('rekod');
       } catch(err) {
@@ -1010,13 +1012,25 @@
             $('#tLain').classList.add('hidden');
           }
 
+          const wSelect = $('#wali');
+          let foundW = false;
+          for(let opt of wSelect.options){
+            if(opt.value === r.wali){ wSelect.value = r.wali; foundW = true; break; }
+          }
+          if(!foundW && r.wali){
+            wSelect.value = 'Lain-lain';
+            $('#wLain').classList.remove('hidden');
+            document.querySelector('#nikahForm input[name="wali_lain"]').value = r.wali;
+            document.querySelector('#nikahForm input[name="wali_lain"]').required = true;
+          } else {
+            $('#wLain').classList.add('hidden');
+          }
+
           document.querySelector('#nikahForm input[name="tel"]').value = r.tel || '';
-          document.querySelector('#nikahForm select[name="wali"]').value = r.wali || '';
           document.querySelector('#nikahForm textarea[name="catatan"]').value = r.catatan || '';
           
           $('#saveBtn').textContent = 'Kemaskini Rekod Nikah';
           
-          // Tukar halaman ke 'rekod' dan buka borang pengisian
           switchPage('rekod');
           $('#formPanel').classList.remove('hidden');
           $('#listPanel').classList.add('hidden');
