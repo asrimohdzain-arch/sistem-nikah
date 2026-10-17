@@ -961,7 +961,7 @@
         Swal.fire('Notifikasi', 'Tiada majlis nikah dalam masa terdekat (3 hari).', 'info');
         return;
       }
-      let html = '<div style="text-align: left; max-height: 300px; overflow-y: auto;">';
+      let html = '<div style="text-align: left; max-height: 250px; overflow-y: auto;">';
       upcomingNotifs.forEach((n, idx) => {
         let dText = n.daysLeft === 0 ? 'Hari ini!' : (n.daysLeft === 1 ? 'Esok' : `Dalam ${n.daysLeft} hari`);
         let formattedD = n.tarikh;
@@ -969,12 +969,31 @@
           const p = n.tarikh.split('-');
           if(p.length === 3) formattedD = `${p[2]}-${p[1]}-${p[0]}`;
         }
-        html += `<div style="border-bottom: 1px solid #ddd; padding: 8px 0; font-size: 12px;"><b>${idx + 1}. ${n.nama}</b><br>Tarikh: ${formattedD} (${dText})<br>Tempat: ${n.tempat}</div>`;
+        
+        let formattedMasa = n.masa || '';
+        if (formattedMasa && formattedMasa.includes(':')) {
+          const parts = formattedMasa.split(':');
+          let hh = parseInt(parts[0], 10);
+          const mm = parts[1];
+          let suffix = 'pagi';
+          if (hh >= 12) {
+            suffix = 'petang';
+            if (hh > 12) hh -= 12;
+          }
+          if (hh >= 19 || (hh >= 1 && hh < 4 && suffix === 'petang')) {
+            if (hh >= 7 && suffix === 'petang') suffix = 'malam';
+          }
+          if (hh === 0) hh = 12;
+          formattedMasa = `${String(hh).padStart(2, '0')}:${mm} ${suffix}`;
+        }
+
+        html += `<div style="border-bottom: 1px solid #ddd; padding: 6px 0; font-size: 12px;"><b>${idx + 1}. ${n.nama}</b><br>Tarikh: ${formattedD} (${dText})<br>Masa: ${formattedMasa}<br>Tempat: ${n.tempat}</div>`;
       });
       html += '</div>';
       Swal.fire({
-        title: `🔔 Notifikasi Nikah (${upcomingNotifs.length})`,
+        title: `<span style="font-size: 18px;">🔔 Notifikasi Nikah (${upcomingNotifs.length})</span>`,
         html: html,
+        width: '340px',
         confirmButtonText: 'Tutup'
       });
     };
