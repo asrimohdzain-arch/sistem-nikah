@@ -91,6 +91,38 @@ th:last-child, td:last-child { text-align:center; }
   gap: 8px;
 }
 .btn-modern-danger:hover { background: #b71c1c; transform: translateY(-1px); }
+.btn-modern-warning {
+  background: #e65100;
+  color: #fff;
+  border: 0;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(230, 81, 0, 0.3);
+  transition: 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-modern-warning:hover { background: #bf360c; transform: translateY(-1px); }
+.btn-modern-primary {
+  background: var(--navy);
+  color: #fff;
+  border: 0;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(8, 43, 87, 0.3);
+  transition: 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-modern-primary:hover { background: #051d3b; transform: translateY(-1px); }
 /* RESPONSIF TELEFON */
 @media(max-width:768px){
 .sidebar{display:none}
@@ -198,6 +230,7 @@ main{margin-left:0;padding:12px}
         
         <div id="formPanel" class="form-shell hidden" style="margin-top:15px">
           <form id="nikahForm">
+            <input type="hidden" name="editId" id="editId">
             <div class="grid">
               <div class="field"><label>Tarikh Nikah</label><input type="date" name="tarikh" required></div>
               <div class="field"><label>Hari</label><input name="hari" readonly required placeholder="Automatik"></div>
@@ -267,7 +300,21 @@ main{margin-left:0;padding:12px}
     <section id="tetapan" class="page">
       <div class="panel" id="tetapanPanel">
         <h2 class="page-title">Tetapan Sistem</h2>
-        <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="padding:15px;border:1px solid #cbd8e5;border-radius:10px">
+            <b>Kemaskini Rekod</b>
+            <p style="font-size:12px;color:#53657a;margin:5px 0 10px">Kemaskini maklumat rekod sedia ada berdasarkan No Bil.</p>
+            <button class="btn-modern-warning" id="updateRecordBtn" type="button">✏️ Kemaskini Rekod</button>
+          </div>
+          <div style="padding:15px;border:1px solid #cbd8e5;border-radius:10px">
+            <b>Sandaran JSON</b>
+            <p style="font-size:12px;color:#53657a;margin:5px 0 10px">Eksport data kefail JSON atau import semula fail sandaran.</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button class="btn-modern-primary" id="exportJson" type="button">📤 Eksport JSON</button>
+              <button class="btn-modern-primary" id="importJsonBtn" type="button">📥 Import JSON</button>
+              <input type="file" id="importFile" accept=".json" class="hidden">
+            </div>
+          </div>
           <div style="padding:15px;border:1px solid #cbd8e5;border-radius:10px">
             <b>Hapus Semua Rekod</b>
             <p style="font-size:12px;color:#53657a;margin:5px 0 10px">Tindakan ini akan memadam semua data di pangkalan data.</p>
@@ -302,7 +349,6 @@ $('#todayMobile').textContent = formattedDate;  let currentPage = 'utama';  wind
       history.replaceState({page: 'utama'}, '', '#utama');
     }
   }
-  // Kawalan Skrol: Utama di atas, Halaman lain automatik skrol ke tajuk panel
   if(id === 'utama'){
     window.scrollTo({top: 0, left: 0, behavior: 'instant'});
   } else if(window.innerWidth <= 768){
@@ -341,14 +387,24 @@ function toggle(sel, box, input){
 }
 $('#kampung').onchange = e => toggle(e.target, $('#kLain'), document.querySelector('#nikahForm input[name="kampung_lain"]'));
 $('#tempat').onchange = e => toggle(e.target, $('#tLain'), document.querySelector('#nikahForm input[name="tempat_lain"]'));
-$('#showForm').onclick = () => { $('#formPanel').classList.remove('hidden'); $('#listPanel').classList.add('hidden'); $('#searchPanel').classList.add('hidden'); };
+$('#showForm').onclick = () => { 
+  $('#editId').value = '';
+  $('#nikahForm').reset();
+  $('#kLain').classList.add('hidden');
+  $('#tLain').classList.add('hidden');
+  $('#saveBtn').textContent = 'Simpan Rekod Nikah';
+  $('#formPanel').classList.remove('hidden'); 
+  $('#listPanel').classList.add('hidden'); 
+  $('#searchPanel').classList.add('hidden'); 
+};
 $('#showList').onclick = () => { $('#formPanel').classList.add('hidden'); $('#listPanel').classList.remove('hidden'); $('#searchPanel').classList.remove('hidden'); renderRows(); };
 $('#nikahForm').onsubmit = async e => {
   e.preventDefault();
   const f = Object.fromEntries(new FormData(e.target));
   $('#saveBtn').disabled = true;
+  const editId = $('#editId').value;
   try{
-    await db.collection('rekod_nikah').add({
+    const dataPayload = {
       tarikh: f.tarikh,
       hari: f.hari,
       masa: f.masa,
@@ -357,14 +413,23 @@ $('#nikahForm').onsubmit = async e => {
       tempat: f.tempat === 'Lain-lain' ? f.tempat_lain.trim() : f.tempat,
       tel: f.tel.trim(),
       wali: f.wali,
-      catatan: f.catatan.trim(),
-      diciptaPada: firebase.firestore.FieldValue.serverTimestamp()
-    });
+      catatan: f.catatan.trim()
+    };
+    
+    if(editId){
+      await db.collection('rekod_nikah').doc(editId).update(dataPayload);
+      Swal.fire('Berjaya','Rekod nikah telah dikemaskini.','success');
+    } else {
+      dataPayload.diciptaPada = firebase.firestore.FieldValue.serverTimestamp();
+      await db.collection('rekod_nikah').add(dataPayload);
+      Swal.fire('Berjaya','Rekod nikah telah disimpan.','success');
+    }
+    
     e.target.reset();
+    $('#editId').value = '';
     $('#kLain').classList.add('hidden');
     $('#tLain').classList.add('hidden');
     await load();
-    Swal.fire('Berjaya','Rekod nikah telah disimpan.','success');
     switchPage('rekod');
   }catch(err){
     Swal.fire('Ralat',err.message,'error');
@@ -445,7 +510,6 @@ function renderRows(){
     const isCompleted = r.tarikh && r.tarikh < todayStr;
     const rowClass = `month-${monthIndex} ${isCompleted ? 'completed-row' : ''}`;
     
-    // Tukar format tarikh paparan dari yyyy-mm-dd ke dd-mm-yyyy
     let displayTarikh = r.tarikh || '';
     if(displayTarikh && displayTarikh.includes('-')){
       const p = displayTarikh.split('-');
@@ -478,6 +542,115 @@ function renderRows(){
 }
 $('#smartSearch').oninput = renderRows;
 $('#clearSearch').onclick = () => { $('#smartSearch').value = ''; renderRows(); };
+
+// Fungsian Kemaskini Rekod mengikut No Bil
+$('#updateRecordBtn').onclick = async() => {
+  const { value: targetBil } = await Swal.fire({
+    title: 'Kemaskini Rekod',
+    input: 'text',
+    inputLabel: 'Masukkan No Bil yang ingin dikemaskini',
+    showCancelButton: true,
+    inputValidator: (value) => { if (!value) return 'Sila masukkan No Bil!'; }
+  });
+  if (targetBil) {
+    const index = parseInt(targetBil) - 1;
+    if (index >= 0 && index < records.length) {
+      const r = records[index];
+      $('#editId').value = r.id;
+      const form = $('#nikahForm');
+      form.querySelector('input[name="tarikh"]').value = r.tarikh || '';
+      form.querySelector('input[name="hari"]').value = r.hari || '';
+      form.querySelector('input[name="masa"]').value = r.masa || '';
+      form.querySelector('input[name="nama"]').value = r.nama || '';
+      
+      const kampungSel = form.querySelector('#kampung');
+      const kampungOpts = [...kampungSel.options].map(o => o.value);
+      if(kampungOpts.includes(r.kampung)){
+        kampungSel.value = r.kampung;
+        $('#kLain').classList.add('hidden');
+        form.querySelector('input[name="kampung_lain"]').value = '';
+      } else {
+        kampungSel.value = 'Lain-lain';
+        $('#kLain').classList.remove('hidden');
+        form.querySelector('input[name="kampung_lain"]').value = r.kampung || '';
+      }
+      
+      const tempatSel = form.querySelector('#tempat');
+      const tempatOpts = [...tempatSel.options].map(o => o.value);
+      if(tempatOpts.includes(r.tempat)){
+        tempatSel.value = r.tempat;
+        $('#tLain').classList.add('hidden');
+        form.querySelector('input[name="tempat_lain"]').value = '';
+      } else {
+        tempatSel.value = 'Lain-lain';
+        $('#tLain').classList.remove('hidden');
+        form.querySelector('input[name="tempat_lain"]').value = r.tempat || '';
+      }
+      
+      form.querySelector('input[name="tel"]').value = r.tel || '';
+      form.querySelector('select[name="wali"]').value = r.wali || '';
+      form.querySelector('textarea[name="catatan"]').value = r.catatan || '';
+      
+      $('#saveBtn').textContent = 'Kemaskini Rekod Nikah';
+      $('#formPanel').classList.remove('hidden');
+      $('#listPanel').classList.add('hidden');
+      $('#searchPanel').classList.add('hidden');
+      switchPage('rekod');
+    } else {
+      Swal.fire('Ralat', 'No Bil tidak sah / tiada dalam senarai.', 'error');
+    }
+  }
+};
+
+// Sandaran JSON: Eksport dan Import
+$('#exportJson').onclick = () => {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(records, null, 2));
+  const dlAnchorElem = document.createElement('a');
+  dlAnchorElem.setAttribute("href", dataStr);
+  dlAnchorElem.setAttribute("download", "sandaran_rekod_nikah.json");
+  document.body.appendChild(dlAnchorElem);
+  dlAnchorElem.click();
+  dlAnchorElem.remove();
+};
+
+$('#importJsonBtn').onclick = () => { $('#importFile').click(); };
+
+$('#importFile').onchange = (e) => {
+  const fileReader = new FileReader();
+  if(e.target.files[0]){
+    fileReader.readAsText(e.target.files[0], "UTF-8");
+    fileReader.onload = async (event) => {
+      try {
+        const importedData = JSON.parse(event.target.result);
+        if(Array.isArray(importedData)){
+          const confirmImp = await Swal.fire({
+            title: 'Import Data JSON',
+            text: `Jumpa ${importedData.length} rekod. Teruskan import ke pangkalan data?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Import'
+          });
+          if(confirmImp.isConfirmed){
+            const batch = db.batch();
+            importedData.forEach(item => {
+              const newRef = db.collection('rekod_nikah').doc();
+              const {id, ...itemData} = item;
+              batch.set(newRef, itemData);
+            });
+            await batch.commit();
+            await load();
+            Swal.fire('Berjaya', 'Data JSON berjaya diimport.', 'success');
+          }
+        } else {
+          Swal.fire('Ralat', 'Format fail JSON tidak sah.', 'error');
+        }
+      } catch (err) {
+        Swal.fire('Ralat', 'Gagal membaca fail JSON.', 'error');
+      }
+    };
+  }
+};
+
 $('#deleteAll').onclick = async() => {
   const choice = await Swal.fire({
     title: 'Hapus Data',
