@@ -4,10 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistem Rekod Nikah Mukim</title>
+  
+  <!-- Skrip Luar -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
   <style>
     :root {
       --maroon: #550000;
@@ -17,14 +20,19 @@
       --bg: #f2f6fb;
       --line: #d9e2ec;
     }
-    * { box-sizing: border-box; }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       background: var(--bg);
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #17212b;
       font-size: 14px;
     }
+
     .app {
       min-height: 100vh;
       display: flex;
@@ -46,6 +54,7 @@
       flex-direction: column;
       gap: 15px;
     }
+
     .sidebar-logo {
       background: var(--maroon);
       color: #fff;
@@ -54,7 +63,9 @@
       padding: 16px 10px;
       font-size: 16px;
       font-weight: 700;
+      box-shadow: 0 4px 10px rgba(85, 0, 0, 0.2);
     }
+
     .sidebar-logo small {
       display: block;
       font-size: 11px;
@@ -62,11 +73,13 @@
       opacity: 0.9;
       margin-top: 3px;
     }
+
     .nav-menu {
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
+
     .nav-menu button {
       border: 0;
       background: var(--navy);
@@ -80,9 +93,11 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      transition: .2s;
+      transition: all 0.2s ease;
     }
-    .nav-menu button:hover, .nav-menu button.active {
+
+    .nav-menu button:hover,
+    .nav-menu button.active {
       background: var(--gold);
     }
 
@@ -97,13 +112,18 @@
       justify-content: space-between;
       box-shadow: 0 2px 8px #0003;
     }
-    .brand { font-size: 19px; font-weight: 700; }
-    .brand-sub { font-size: 12px; opacity: 0.9; margin-top: 2px; }
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 15px;
+
+    .brand {
+      font-size: 19px;
+      font-weight: 700;
     }
+
+    .brand-sub {
+      font-size: 12px;
+      opacity: 0.9;
+      margin-top: 2px;
+    }
+
     .date-pill {
       background: #ffffff22;
       border: 1px solid #ffffff55;
@@ -112,23 +132,20 @@
       font-size: 12px;
       font-weight: 600;
     }
-    .pc-notif {
-      cursor: pointer;
-      position: relative;
-      background: rgba(255,255,255,0.15);
-      padding: 8px 10px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
 
     main {
       margin-left: 240px;
       padding: 25px;
     }
-    .page { display: none; }
-    .page.active { display: block; }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
     .panel {
       background: #fff;
       border: 1px solid var(--line);
@@ -137,6 +154,7 @@
       box-shadow: 0 5px 15px #17324d0d;
       margin-bottom: 18px;
     }
+
     .page-title {
       margin: 0 0 16px;
       color: var(--maroon);
@@ -144,26 +162,34 @@
       font-weight: 700;
     }
 
-    .menu-grid { display: none; } 
-    .mobile-banner { display: none; }
+    .menu-grid {
+      display: none;
+    }
+
+    .mobile-banner {
+      display: none;
+    }
 
     .cards {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 14px;
     }
+
     .card {
       background: #fff;
       border: 1px solid #cbd8e5;
       border-radius: 12px;
       padding: 16px;
     }
+
     .card b {
       display: block;
       color: #53657a;
       margin-bottom: 6px;
       font-size: 13px;
     }
+
     .value {
       font-size: 28px;
       font-weight: 800;
@@ -171,33 +197,26 @@
     }
 
     .toolbar {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      display: flex;
       gap: 10px;
+      flex-wrap: wrap;
       margin-bottom: 14px;
-      align-items: center;
     }
-    .toolbar .btn-tab {
+
+    .toolbar .btn {
       background: var(--navy);
       color: #fff;
       border: 0;
-      padding: 9px 14px;
-      border-radius: 20px;
-      font-weight: bold;
-      font-size: 13px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 650;
       cursor: pointer;
-      box-shadow: 0 3px 8px rgba(8, 43, 87, 0.25);
-      transition: 0.2s;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      width: 100%;
+      font-size: 13px;
+      transition: background 0.2s;
     }
-    .toolbar .btn-tab:hover { background: #051b38; transform: translateY(-1px); }
-    .toolbar .btn-tab.active-tab {
-      background: var(--dark-gold) !important;
-      box-shadow: 0 3px 10px rgba(122, 90, 0, 0.35) !important;
+
+    .toolbar .btn:hover {
+      background: var(--gold);
     }
 
     .smart-search {
@@ -210,6 +229,7 @@
       border: 1px solid var(--line);
       border-radius: 10px;
     }
+
     .smart-search input {
       flex: 1;
       padding: 9px 12px;
@@ -217,6 +237,7 @@
       border-radius: 7px;
       font-size: 13px;
     }
+
     .clear-search {
       border: 0;
       background: #dfe8f2;
@@ -227,6 +248,7 @@
       cursor: pointer;
       font-size: 12px;
     }
+
     .search-count {
       color: #53657a;
       font-size: 12px;
@@ -238,13 +260,18 @@
       grid-template-columns: 1fr 1fr;
       gap: 14px;
     }
-    .field.full { grid-column: 1 / -1; }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
     label {
       display: block;
       font-weight: 650;
       margin: 0 0 6px;
       font-size: 13px;
     }
+
     input, select, textarea {
       width: 100%;
       padding: 10px;
@@ -253,47 +280,71 @@
       font: 14px 'Segoe UI', sans-serif;
       background: #fff;
     }
-    textarea { resize: vertical; }
-    .hidden { display: none !important; }
+
+    textarea {
+      resize: vertical;
+    }
+
+    .hidden {
+      display: none !important;
+    }
 
     .table-wrap {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
       font-family: 'Segoe UI', sans-serif;
-      font-size: 10px;
+      font-size: 11px;
     }
+
     th, td {
-      padding: 5px 8px;
+      padding: 8px 10px;
       border: 1px solid #bdc8d3;
       text-align: left;
       vertical-align: middle;
     }
+
     th {
       background: var(--navy);
       color: #fff;
       text-align: center;
       white-space: nowrap;
-      font-size: 10px;
+      font-size: 11px;
     }
-    th:first-child, td:first-child { text-align: center; width: 45px; }
-    th:last-child, td:last-child { text-align: center; }
 
-    .completed-row { color: #0056b3 !important; font-weight: 600; }
+    th:first-child, td:first-child {
+      text-align: center;
+      width: 45px;
+    }
 
-    .month-0 { background-color: #ffe6e6 !important; }
-    .month-1 { background-color: #e6f9ff !important; }
-    .month-2 { background-color: #e6ffed !important; }
-    .month-3 { background-color: #fffce6 !important; }
-    .month-4 { background-color: #f3e6ff !important; }
-    .month-5 { background-color: #fff0e6 !important; }
-    .month-6 { background-color: #e6fffb !important; }
-    .month-7 { background-color: #f4f4f4 !important; }
-    .month-8 { background-color: #ffe6f7 !important; }
-    .month-9 { background-color: #f0ffe6 !important; }
+    /* TINDAKAN BUTTONS CONTAINER */
+    .action-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .completed-row {
+      color: #0056b3 !important;
+      font-weight: 600;
+    }
+
+    .month-0  { background-color: #ffe6e6 !important; }
+    .month-1  { background-color: #e6f9ff !important; }
+    .month-2  { background-color: #e6ffed !important; }
+    .month-3  { background-color: #fffce6 !important; }
+    .month-4  { background-color: #f3e6ff !important; }
+    .month-5  { background-color: #fff0e6 !important; }
+    .month-6  { background-color: #e6fffb !important; }
+    .month-7  { background-color: #f4f4f4 !important; }
+    .month-8  { background-color: #ffe6f7 !important; }
+    .month-9  { background-color: #f0ffe6 !important; }
     .month-10 { background-color: #fff5e6 !important; }
     .month-11 { background-color: #eaeaea !important; }
 
@@ -302,6 +353,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 14px;
     }
+
     .bars {
       display: flex;
       align-items: flex-end;
@@ -310,12 +362,15 @@
       border-bottom: 1px solid #aaa;
       padding: 8px;
     }
+
     .bar {
       flex: 1;
       background: #587ba4;
       min-height: 2px;
       position: relative;
+      border-radius: 4px 4px 0 0;
     }
+
     .bar .bar-count {
       position: absolute;
       top: -20px;
@@ -324,6 +379,7 @@
       font-size: 11px;
       font-weight: 800;
     }
+
     .bar .bar-month {
       position: absolute;
       bottom: -24px;
@@ -331,24 +387,31 @@
       transform: translateX(-50%);
       font-size: 10px;
     }
+
     .btn-wa {
       background: #25D366;
       color: #fff;
       border: 0;
-      padding: 4px 8px;
+      padding: 5px 9px;
       border-radius: 5px;
       cursor: pointer;
       font-weight: bold;
-      font-size: 10px;
+      font-size: 11px;
       text-decoration: none;
       display: inline-block;
     }
-    .phone-link {
-      color: inherit;
+
+    .btn-cal {
+      background: #1e3a8a;
+      color: #fff;
+      border: 0;
+      padding: 5px 9px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 11px;
       text-decoration: none;
-    }
-    .phone-link:hover {
-      text-decoration: underline;
+      display: inline-block;
     }
 
     .btn-modern-danger {
@@ -361,63 +424,16 @@
       font-size: 14px;
       cursor: pointer;
       box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
-      transition: 0.2s;
+      transition: all 0.2s;
       display: inline-flex;
       align-items: center;
       gap: 8px;
     }
-    .btn-modern-danger:hover { background: #b71c1c; transform: translateY(-1px); }
 
-    .btn-update {
-      background: #082b57;
-      color: #fff;
-      border: 0;
-      padding: 12px 20px;
-      border-radius: 25px;
-      font-weight: bold;
-      font-size: 14px;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(8, 43, 87, 0.3);
-      transition: 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+    .btn-modern-danger:hover {
+      background: #b71c1c;
+      transform: translateY(-1px);
     }
-    .btn-update:hover { background: #051b38; transform: translateY(-1px); }
-
-    .btn-json-export {
-      background: #198754;
-      color: #fff;
-      border: 0;
-      padding: 12px 20px;
-      border-radius: 25px;
-      font-weight: bold;
-      font-size: 14px;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3);
-      transition: 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .btn-json-export:hover { background: #146c43; transform: translateY(-1px); }
-
-    .btn-json-import {
-      background: #495057;
-      color: #fff;
-      border: 0;
-      padding: 12px 20px;
-      border-radius: 25px;
-      font-weight: bold;
-      font-size: 14px;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(73, 80, 87, 0.3);
-      transition: 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .btn-json-import:hover { background: #343a40; transform: translateY(-1px); }
 
     /* RESPONSIF TELEFON */
     @media (max-width: 768px) {
@@ -426,6 +442,7 @@
       main { margin-left: 0; padding: 12px; }
       .cards, .chart-row, .grid { grid-template-columns: 1fr; }
       .mobile-banner { display: block; }
+
       .m-header {
         background: linear-gradient(135deg, #550000 0%, #330000 100%);
         color: #fff;
@@ -435,13 +452,20 @@
         box-shadow: 0 4px 12px #0003;
         margin-bottom: 14px;
       }
+
       .m-header h1 {
         margin: 0 0 4px;
         font-size: 20px;
         font-weight: 800;
         letter-spacing: 0.5px;
       }
-      .m-header p { margin: 0; font-size: 12px; opacity: 0.9; }
+
+      .m-header p {
+        margin: 0;
+        font-size: 12px;
+        opacity: 0.9;
+      }
+
       .m-sub-banner {
         background: linear-gradient(135deg, #7a1111 0%, #550000 100%);
         color: #fff;
@@ -452,8 +476,19 @@
         position: relative;
         overflow: hidden;
       }
-      .m-sub-banner h3 { margin: 0 0 2px; font-size: 16px; font-weight: 700; }
-      .m-sub-banner p { margin: 0 0 10px; font-size: 11px; opacity: 0.9; }
+
+      .m-sub-banner h3 {
+        margin: 0 0 2px;
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .m-sub-banner p {
+        margin: 0 0 10px;
+        font-size: 11px;
+        opacity: 0.9;
+      }
+
       .m-date-badge {
         display: inline-block;
         background: #ffffff28;
@@ -470,6 +505,7 @@
         gap: 10px;
         margin-bottom: 14px;
       }
+
       .menu-card {
         background: #fff;
         border: 1px solid #cbd8e5;
@@ -483,6 +519,7 @@
         cursor: pointer;
         box-shadow: 0 3px 10px #17324d08;
       }
+
       .menu-icon {
         width: 38px;
         height: 38px;
@@ -495,26 +532,42 @@
         font-size: 16px;
         flex-shrink: 0;
       }
-      .menu-info b { display: block; font-size: 12px; color: var(--navy); }
-      .menu-info span { font-size: 10px; color: #53657a; }
 
-      /* GAYA KUNING TUA GELAP BILA KAD MENU AKTIF */
+      .menu-info b {
+        display: block;
+        font-size: 12px;
+        color: var(--navy);
+      }
+
+      .menu-info span {
+        font-size: 10px;
+        color: #53657a;
+      }
+
       .menu-card.active {
         background: var(--dark-gold) !important;
         border-color: var(--gold) !important;
         box-shadow: 0 4px 12px rgba(122, 90, 0, 0.4) !important;
       }
+
       .menu-card.active .menu-icon {
         background: #fff !important;
         color: var(--dark-gold) !important;
       }
-      .menu-card.active .menu-info b { color: #fff !important; }
-      .menu-card.active .menu-info span { color: #f0e6c2 !important; }
+
+      .menu-card.active .menu-info b {
+        color: #fff !important;
+      }
+
+      .menu-card.active .menu-info span {
+        color: #f0e6c2 !important;
+      }
     }
   </style>
 </head>
 <body>
   <div class="app" id="app">
+    <!-- SIDEBAR PC -->
     <aside class="sidebar">
       <div class="sidebar-logo">
         SISTEM NIKAH
@@ -527,21 +580,17 @@
       </div>
     </aside>
 
+    <!-- HEADER PC -->
     <header class="header">
       <div>
         <div class="brand">SISTEM REKOD NIKAH MUKIM</div>
         <div class="brand-sub">Mukim Banggol Setol</div>
       </div>
-      <div class="header-right">
-        <div class="date-pill" id="todayPC">Tarikh: Memuatkan...</div>
-        <div class="pc-notif" onclick="showNotifications()">
-          <span style="font-size: 18px;">🔔</span>
-          <span id="notifBadgePC" style="position: absolute; top: -5px; right: -5px; background: #d32f2f; color: #fff; font-size: 10px; font-weight: bold; padding: 1px 5px; border-radius: 50%; display: none;">0</span>
-        </div>
-      </div>
+      <div class="date-pill" id="todayPC">Tarikh: Memuatkan...</div>
     </header>
 
     <main>
+      <!-- BANNER MOBILE -->
       <div class="mobile-banner">
         <div class="m-header">
           <h1>SISTEM NIKAH</h1>
@@ -561,16 +610,10 @@
             <div class="menu-info"><b>Tetapan</b><span>Urus Data</span></div>
           </div>
         </div>
-        <div class="m-sub-banner" style="display: flex; justify-content: space-between; align-items: flex-start;">
-          <div>
-            <h3>Mukim Banggol Setol</h3>
-            <p>Pengurusan Rekod Nikah Rasmi</p>
-            <div class="m-date-badge" id="todayMobile">16 Oktober 2026</div>
-          </div>
-          <div onclick="showNotifications()" style="cursor: pointer; position: relative; background: rgba(255,255,255,0.15); padding: 8px 10px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-            <span style="font-size: 18px;">🔔</span>
-            <span id="notifBadge" style="position: absolute; top: -5px; right: -5px; background: #d32f2f; color: #fff; font-size: 10px; font-weight: bold; padding: 1px 5px; border-radius: 50%; display: none;">0</span>
-          </div>
+        <div class="m-sub-banner">
+          <h3>Mukim Banggol Setol</h3>
+          <p>Pengurusan Rekod Nikah Rasmi</p>
+          <div class="m-date-badge" id="todayMobile">--</div>
         </div>
       </div>
 
@@ -579,11 +622,21 @@
         <div class="panel">
           <h2 class="page-title">Analisa Rekod Nikah</h2>
           <div class="cards">
-            <div class="card"><b>Jumlah Rekod Nikah</b><span class="value" id="total">0</span></div>
-            <div class="card"><b>Rekod Bulan Ini</b><span class="value" id="monthTotal">0</span></div>
-            <div class="card"><b>Jumlah Kampung</b><span class="value" id="villageTotal">0</span></div>
+            <div class="card">
+              <b>Jumlah Rekod Nikah</b>
+              <span class="value" id="total">0</span>
+            </div>
+            <div class="card">
+              <b>Rekod Bulan Ini</b>
+              <span class="value" id="monthTotal">0</span>
+            </div>
+            <div class="card">
+              <b>Jumlah Kampung</b>
+              <span class="value" id="villageTotal">0</span>
+            </div>
           </div>
         </div>
+
         <div class="chart-row">
           <div class="panel">
             <h3>Rekod Mengikut Bulan</h3>
@@ -595,31 +648,44 @@
           </div>
         </div>
       </section>
-      
+
       <!-- LAMAN REKOD NIKAH -->
       <section id="rekod" class="page">
         <div class="panel" id="rekodPanel">
           <h2 class="page-title">Pengurusan Rekod Nikah</h2>
           <div class="toolbar">
-            <button class="btn-tab active-tab" id="showForm" type="button">＋ Tambah Rekod</button>
-            <button class="btn-tab" id="showList" type="button">📋 Senarai Rekod</button>
-            <button class="btn-tab" id="pdfBtn" type="button">📥 Muat Turun PDF</button>
-            <select id="yearSelect" style="width: 100%; padding: 9px 12px; border-radius: 20px; border: 1px solid #bcc9d6; font-weight: 650; background: #fff; font-size: 13px;"></select>
+            <button class="btn" id="showForm" type="button">＋ Tambah Rekod</button>
+            <button class="btn" id="showList" type="button">📋 Senarai Rekod</button>
+            <button class="btn" id="pdfBtn" type="button">📥 Muat Turun PDF</button>
+            <select id="yearSelect" style="width:auto;padding:8px;border-radius:8px"></select>
           </div>
-          <div id="searchPanel" class="smart-search hidden">
+
+          <div id="searchPanel" class="smart-search">
             <input id="smartSearch" type="search" placeholder="Cari nama, kampung, tempat...">
             <button id="clearSearch" class="clear-search" type="button">Kosong</button>
             <span id="searchCount" class="search-count">0 rekod</span>
           </div>
-          
-          <div id="formPanel" class="form-shell" style="margin-top: 15px;">
+
+          <!-- BORANG REKOD NIKAH -->
+          <div id="formPanel" class="form-shell hidden" style="margin-top:15px">
             <form id="nikahForm">
-              <input type="hidden" name="editId" id="editId">
               <div class="grid">
-                <div class="field"><label>Tarikh Nikah</label><input type="date" name="tarikh" required></div>
-                <div class="field"><label>Hari</label><input name="hari" readonly required placeholder="Automatik"></div>
-                <div class="field"><label>Masa Nikah</label><input type="time" name="masa" required></div>
-                <div class="field"><label>Nama Pengantin</label><input name="nama" required placeholder="Nama penuh"></div>
+                <div class="field">
+                  <label>Tarikh Nikah</label>
+                  <input type="date" name="tarikh" required>
+                </div>
+                <div class="field">
+                  <label>Hari</label>
+                  <input name="hari" readonly required placeholder="Automatik">
+                </div>
+                <div class="field">
+                  <label>Masa Nikah</label>
+                  <input type="time" name="masa" required>
+                </div>
+                <div class="field">
+                  <label>Nama Pengantin</label>
+                  <input name="nama" required placeholder="Nama penuh">
+                </div>
                 <div class="field">
                   <label>Kampung</label>
                   <select name="kampung" id="kampung" required>
@@ -638,7 +704,10 @@
                     <option value="Lain-lain">Lain-lain</option>
                   </select>
                 </div>
-                <div class="field hidden" id="kLain"><label>Nama Kampung Lain</label><input name="kampung_lain"></div>
+                <div class="field hidden" id="kLain">
+                  <label>Nama Kampung Lain</label>
+                  <input name="kampung_lain">
+                </div>
                 <div class="field">
                   <label>Tempat Nikah</label>
                   <select name="tempat" id="tempat" required>
@@ -650,26 +719,37 @@
                     <option value="Lain-lain">Lain-lain</option>
                   </select>
                 </div>
-                <div class="field hidden" id="tLain"><label>Lokasi Lain</label><input name="tempat_lain"></div>
-                <div class="field"><label>No. Telefon (WhatsApp)</label><input type="tel" name="tel" required placeholder="019..."></div>
+                <div class="field hidden" id="tLain">
+                  <label>Lokasi Lain</label>
+                  <input name="tempat_lain">
+                </div>
+                <div class="field">
+                  <label>No. Telefon (WhatsApp)</label>
+                  <input type="tel" name="tel" required placeholder="019...">
+                </div>
                 <div class="field">
                   <label>Jenis Wali</label>
-                  <select name="wali" id="wali" required>
+                  <select name="wali" required>
                     <option value="">-- Sila Pilih --</option>
                     <option>Bapa</option>
                     <option>Datuk</option>
                     <option>Wali Sultan</option>
-                    <option value="Lain-lain">Lain-lain</option>
+                    <option>Lain-lain</option>
                   </select>
                 </div>
-                <div class="field hidden" id="wLain"><label>Jenis Wali Lain</label><input name="wali_lain"></div>
-                <div class="field full"><label>Catatan</label><textarea name="catatan" rows="3"></textarea></div>
+                <div class="field full">
+                  <label>Catatan</label>
+                  <textarea name="catatan" rows="3"></textarea>
+                </div>
               </div>
-              <button class="btn" type="submit" id="saveBtn" style="margin-top: 14px; background: var(--maroon); color: #fff; width: 100%; padding: 12px; font-weight: bold;">Simpan Rekod Nikah</button>
+              <button class="btn" type="submit" id="saveBtn" style="margin-top:14px;background:var(--maroon);color:#fff;width:100%;padding:12px;font-weight:bold;border-radius:8px;border:none;cursor:pointer">
+                Simpan Rekod Nikah
+              </button>
             </form>
           </div>
 
-          <div id="listPanel" class="table-wrap hidden" style="margin-top: 15px;">
+          <!-- JADUAL SENARAI REKOD -->
+          <div id="listPanel" class="table-wrap" style="margin-top:15px">
             <table>
               <thead>
                 <tr>
@@ -683,7 +763,7 @@
                   <th>Telefon</th>
                   <th>Wali</th>
                   <th>Catatan</th>
-                  <th>WhatsApp</th>
+                  <th>Tindakan</th>
                 </tr>
               </thead>
               <tbody id="rows"></tbody>
@@ -691,40 +771,17 @@
           </div>
         </div>
       </section>
-      
+
       <!-- LAMAN TETAPAN -->
       <section id="tetapan" class="page">
         <div class="panel" id="tetapanPanel">
           <h2 class="page-title">Tetapan Sistem</h2>
-          <div style="display: flex; flex-direction: column; gap: 16px;">
-            
-            <!-- Bahagian Kemaskini Data -->
-            <div style="padding: 15px; border: 1px solid #cbd8e5; border-radius: 10px;">
-              <b>Kemaskini Data Rekod</b>
-              <p style="font-size: 12px; color: #53657a; margin: 5px 0 10px;">Masukkan No Bil untuk mengemaskini maklumat rekod sedia ada.</p>
-              <button class="btn-update" id="updateDataBtn" type="button">✏️ Kemaskini Data</button>
-            </div>
-
-            <!-- Bahagian Sandaran JSON -->
-            <div style="padding: 15px; border: 1px solid #cbd8e5; border-radius: 10px;">
-              <div style="margin-bottom: 5px;">
-                <b style="font-size: 15px;">Sandaran JSON</b>
-              </div>
-              <p style="font-size: 12px; color: #53657a; margin: 0 0 12px;">Eksport atau import fail sandaran pangkalan data dalam format JSON.</p>
-              <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <button class="btn-json-export" id="exportJsonBtn" type="button">📥 Eksport JSON</button>
-                <button class="btn-json-import" id="importJsonBtn" type="button">📤 Import JSON</button>
-                <input type="file" id="importFile" accept=".json" style="display: none;">
-              </div>
-            </div>
-
-            <!-- Bahagian Hapus Semua Rekod -->
-            <div style="padding: 15px; border: 1px solid #cbd8e5; border-radius: 10px;">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="padding:15px;border:1px solid #cbd8e5;border-radius:10px">
               <b>Hapus Semua Rekod</b>
-              <p style="font-size: 12px; color: #53657a; margin: 5px 0 10px;">Tindakan ini akan memadam semua data di pangkalan data.</p>
+              <p style="font-size:12px;color:#53657a;margin:5px 0 10px">Tindakan ini akan memadam semua data di pangkalan data.</p>
               <button class="btn-modern-danger" id="deleteAll" type="button">🗑️ Hapus Semua Data</button>
             </div>
-
           </div>
         </div>
       </section>
@@ -732,6 +789,7 @@
   </div>
 
   <script>
+    // Tetapan Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyBflySl7ok21LE4urn0rKrSVxczRrZykQE",
       authDomain: "sistem-rekod-nikah.firebaseapp.com",
@@ -740,14 +798,17 @@
       messagingSenderId: "473243104741",
       appId: "1:473243104741:web:be6dcfbe86256753beeb0c"
     };
+
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+
     let records = [];
-    let upcomingNotifs = [];
-    const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+    const $ = s => document.querySelector(s);
+    const $$ = s => [...document.querySelectorAll(s)];
     const days = ['Ahad', 'Isnin', 'Selasa', 'Rabu', 'Khamis', 'Jumaat', 'Sabtu'];
     const months = ['Jan', 'Feb', 'Mac', 'Apr', 'Mei', 'Jun', 'Jul', 'Ogo', 'Sep', 'Okt', 'Nov', 'Dis'];
 
+    // Paparan Tarikh Hari Ini
     const formattedDate = new Intl.DateTimeFormat('ms-MY', { day: '2-digit', month: 'long', year: 'numeric' }).format(new Date());
     $('#todayPC').textContent = 'Tarikh: ' + formattedDate;
     $('#todayMobile').textContent = formattedDate;
@@ -756,17 +817,15 @@
 
     window.switchPage = function(id, fromBack = false) {
       currentPage = id;
-      
       $$('.page').forEach(p => p.classList.toggle('active', p.id === id));
-      
       $$('.sidebar .nav-menu button').forEach(b => {
         b.classList.toggle('active', b.getAttribute('onclick')?.includes(id));
       });
-
       $$('.menu-card').forEach(c => c.classList.remove('active'));
+
       const activeMobileBtn = $('#mbtn-' + id);
       if (activeMobileBtn) activeMobileBtn.classList.add('active');
-      
+
       if (id === 'rekod') renderRows();
 
       if (!fromBack) {
@@ -800,6 +859,7 @@
       history.replaceState({ page: 'utama' }, '', '#utama');
     });
 
+    // Otomatik Isi Hari Berdasarkan Tarikh
     const tarikhInput = document.querySelector('#nikahForm input[name="tarikh"]');
     if (tarikhInput) {
       tarikhInput.onchange = e => {
@@ -817,57 +877,31 @@
       input.required = on;
       if (!on) input.value = '';
     }
+
     $('#kampung').onchange = e => toggle(e.target, $('#kLain'), document.querySelector('#nikahForm input[name="kampung_lain"]'));
     $('#tempat').onchange = e => toggle(e.target, $('#tLain'), document.querySelector('#nikahForm input[name="tempat_lain"]'));
-    $('#wali').onchange = e => toggle(e.target, $('#wLain'), document.querySelector('#nikahForm input[name="wali_lain"]'));
-
-    function setActiveTab(activeBtn) {
-      $$('.toolbar .btn-tab').forEach(b => b.classList.remove('active-tab'));
-      activeBtn.classList.add('active-tab');
-    }
 
     $('#showForm').onclick = () => {
-      setActiveTab($('#showForm'));
       $('#formPanel').classList.remove('hidden');
       $('#listPanel').classList.add('hidden');
       $('#searchPanel').classList.add('hidden');
     };
-    
+
     $('#showList').onclick = () => {
-      setActiveTab($('#showList'));
       $('#formPanel').classList.add('hidden');
       $('#listPanel').classList.remove('hidden');
       $('#searchPanel').classList.remove('hidden');
       renderRows();
     };
 
-    $('#pdfBtn').onclick = () => {
-      setActiveTab($('#pdfBtn'));
-      const y = $('#yearSelect').value, data = records.filter(r => (r.tarikh || '').startsWith(y)), { jsPDF } = window.jspdf, pdf = new jsPDF('l', 'mm', 'a4');
-      pdf.setFont('helvetica', 'bold'); pdf.setFontSize(14);
-      pdf.text('REKOD NIKAH MUKIM TAHUN ' + y, 14, 15);
-      pdf.setFont('helvetica', 'normal'); pdf.setFontSize(9);
-      let yy = 25;
-      data.forEach((r, i) => {
-        if (yy > 180) { pdf.addPage(); yy = 15; }
-        let dFormatted = r.tarikh || '';
-        if (dFormatted && dFormatted.includes('-')) {
-          const p = dFormatted.split('-');
-          if (p.length === 3) dFormatted = `${p[2]}-${p[1]}-${p[0]}`;
-        }
-        pdf.text(`${i + 1}. ${dFormatted} | ${r.hari} | ${r.nama} | Kampung: ${r.kampung} | Tempat: ${r.tempat} | Tel: ${r.tel}`, 14, yy);
-        yy += 7;
-      });
-      pdf.save('Rekod Nikah ' + y + '.pdf');
-    };
-
+    // Hantar Borang Nikah
     $('#nikahForm').onsubmit = async e => {
       e.preventDefault();
       const f = Object.fromEntries(new FormData(e.target));
       $('#saveBtn').disabled = true;
+
       try {
-        const editId = $('#editId').value;
-        const recordData = {
+        await db.collection('rekod_nikah').add({
           tarikh: f.tarikh,
           hari: f.hari,
           masa: f.masa,
@@ -875,355 +909,161 @@
           kampung: f.kampung === 'Lain-lain' ? f.kampung_lain.trim() : f.kampung,
           tempat: f.tempat === 'Lain-lain' ? f.tempat_lain.trim() : f.tempat,
           tel: f.tel.trim(),
-          wali: f.wali === 'Lain-lain' ? f.wali_lain.trim() : f.wali,
-          catatan: f.catatan.trim()
-        };
-
-        if(editId) {
-          await db.collection('rekod_nikah').doc(editId).update(recordData);
-          $('#editId').value = '';
-          $('#saveBtn').textContent = 'Simpan Rekod Nikah';
-          Swal.fire('Berjaya', 'Rekod nikah telah dikemaskini.', 'success');
-        } else {
-          recordData.diciptaPada = firebase.firestore.FieldValue.serverTimestamp();
-          await db.collection('rekod_nikah').add(recordData);
-          Swal.fire('Berjaya', 'Rekod nikah telah disimpan.', 'success');
-        }
+          wali: f.wali,
+          catatan: f.catatan.trim(),
+          diciptaPada: firebase.firestore.FieldValue.serverTimestamp()
+        });
 
         e.target.reset();
         $('#kLain').classList.add('hidden');
         $('#tLain').classList.add('hidden');
-        $('#wLain').classList.add('hidden');
         await load();
+        Swal.fire('Berjaya', 'Rekod nikah telah disimpan.', 'success');
         switchPage('rekod');
-      } catch(err) {
+      } catch (err) {
         Swal.fire('Ralat', err.message, 'error');
       } finally {
         $('#saveBtn').disabled = false;
       }
     };
 
+    // Muat Turun Data dari Firestore
     async function load() {
       try {
         const s = await db.collection('rekod_nikah').get();
-        records = s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (a.tarikh || '').localeCompare(b.tarikh || ''));
         
+        /* SUSUNAN MENURUN (Terkini/Tarikh Terbaharu di Atas) */
+        records = s.docs
+          .map(d => ({ id: d.id, ...d.data() }))
+          .sort((a, b) => (b.tarikh || '').localeCompare(a.tarikh || ''));
+
         $('#total').textContent = records.length;
-        const now = new Date(), ym = now.toISOString().slice(0, 7);
+        const now = new Date();
+        const ym = now.toISOString().slice(0, 7);
         $('#monthTotal').textContent = records.filter(r => (r.tarikh || '').startsWith(ym)).length;
+
         const vill = {};
-        records.forEach(r => { if (r.kampung) vill[r.kampung] = (vill[r.kampung] || 0) + 1; });
+        records.forEach(r => {
+          if (r.kampung) vill[r.kampung] = (vill[r.kampung] || 0) + 1;
+        });
         $('#villageTotal').textContent = Object.keys(vill).length;
-        $('#villageList').innerHTML = Object.entries(vill).sort((a, b) => b[1] - a[1]).map(([k, v]) => `<p style="margin: 4px 0">${k}: <b>${v}</b></p>`).join('') || '<p style="color: #667">Tiada data</p>';
-        
+        $('#villageList').innerHTML = Object.entries(vill)
+          .sort((a, b) => b[1] - a[1])
+          .map(([k, v]) => `<p style="margin:4px 0">${k}: <b>${v}</b></p>`)
+          .join('') || '<p style="color:#667">Tiada data</p>';
+
         const mc = Array(12).fill(0);
-        records.forEach(r => { if (r.tarikh) mc[new Date(r.tarikh + 'T00:00:00').getMonth()]++; });
+        records.forEach(r => {
+          if (r.tarikh) mc[new Date(r.tarikh + 'T00:00:00').getMonth()]++;
+        });
         const max = Math.max(...mc, 1);
-        $('#monthBars').innerHTML = mc.map((v, i) => `<div class="bar" style="height:${Math.max(2, v / max * 130)}px"><span class="bar-count">${v}</span><span class="bar-month">${months[i]}</span></div>`).join('');
-        
-        const ys = [...new Set(records.map(r => (r.tarikh || '').slice(0, 4)).filter(Boolean))].sort();
+        $('#monthBars').innerHTML = mc
+          .map((v, i) => `<div class="bar" style="height:${Math.max(2, (v / max) * 130)}px"><span class="bar-count">${v}</span><span class="bar-month">${months[i]}</span></div>`)
+          .join('');
+
+        const ys = [...new Set(records.map(r => (r.tarikh || '').slice(0, 4)).filter(Boolean))].sort((a, b) => b.localeCompare(a));
         $('#yearSelect').innerHTML = ys.map(y => `<option>${y}</option>`).join('') || `<option>${now.getFullYear()}</option>`;
-        
-        checkNotifications();
+
         renderRows();
-      } catch(err) {
+      } catch (err) {
         console.error("Ralat data:", err);
       }
     }
 
-    function checkNotifications() {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      upcomingNotifs = [];
-      records.forEach(r => {
-        if (r.tarikh) {
-          const eventDate = new Date(r.tarikh + 'T00:00:00');
-          const diffTime = eventDate - today;
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-          if (diffDays >= 0 && diffDays <= 3) {
-            upcomingNotifs.push({ ...r, daysLeft: diffDays });
-          }
-        }
-      });
-      const badge = $('#notifBadge');
-      const badgePC = $('#notifBadgePC');
-      if (upcomingNotifs.length > 0) {
-        if(badge) { badge.textContent = upcomingNotifs.length; badge.style.display = 'inline-block'; }
-        if(badgePC) { badgePC.textContent = upcomingNotifs.length; badgePC.style.display = 'inline-block'; }
-      } else {
-        if(badge) badge.style.display = 'none';
-        if(badgePC) badgePC.style.display = 'none';
-      }
-    }
-
-    window.showNotifications = function() {
-      if (upcomingNotifs.length === 0) {
-        Swal.fire('Notifikasi', 'Tiada majlis nikah dalam masa terdekat (3 hari).', 'info');
-        return;
-      }
-      let html = '<div style="text-align: left; max-height: 250px; overflow-y: auto;">';
-      upcomingNotifs.forEach((n, idx) => {
-        let dText = n.daysLeft === 0 ? 'Hari ini!' : (n.daysLeft === 1 ? 'Esok' : `Dalam ${n.daysLeft} hari`);
-        let formattedD = n.tarikh;
-        if(n.tarikh && n.tarikh.includes('-')){
-          const p = n.tarikh.split('-');
-          if(p.length === 3) formattedD = `${p[2]}-${p[1]}-${p[0]}`;
-        }
-        
-        let formattedMasa = n.masa || '';
-        if (formattedMasa && formattedMasa.includes(':')) {
-          const parts = formattedMasa.split(':');
-          let hh = parseInt(parts[0], 10);
-          const mm = parts[1];
-          let suffix = 'pagi';
-          if (hh >= 12) {
-            suffix = 'petang';
-            if (hh > 12) hh -= 12;
-          }
-          if (hh >= 19 || (hh >= 1 && hh < 4 && suffix === 'petang')) {
-            if (hh >= 7 && suffix === 'petang') suffix = 'malam';
-          }
-          if (hh === 0) hh = 12;
-          formattedMasa = `${String(hh).padStart(2, '0')}:${mm} ${suffix}`;
-        }
-
-        html += `<div style="border-bottom: 1px solid #ddd; padding: 6px 0; font-size: 12px;"><b>${idx + 1}. ${n.nama}</b><br>Tarikh: ${formattedD} (${dText})<br>Masa: ${formattedMasa}<br>Tempat: ${n.tempat}</div>`;
-      });
-      html += '</div>';
-      Swal.fire({
-        title: `<span style="font-size: 18px;">🔔 Notifikasi Nikah (${upcomingNotifs.length})</span>`,
-        html: html,
-        width: '340px',
-        confirmButtonText: 'Tutup'
-      });
-    };
-
+    // Fungsi WhatsApp
     window.sendWhatsapp = function(name, tel, tarikh, hari, masa, kampung, tempat, wali, catatan) {
       let cleanTel = tel.replace(/[^\d]/g, '');
       if (cleanTel.startsWith('0')) cleanTel = '60' + cleanTel.slice(1);
-      
+
       let formattedTarikh = tarikh;
       if (tarikh && tarikh.includes('-')) {
         const p = tarikh.split('-');
         if (p.length === 3) formattedTarikh = `${p[2]}-${p[1]}-${p[0]}`;
       }
 
-      let formattedMasa = masa;
-      if (masa && masa.includes(':')) {
-        const parts = masa.split(':');
-        let hh = parseInt(parts[0], 10);
-        const mm = parts[1];
-        let suffix = 'pagi';
-        if (hh >= 12) {
-          suffix = 'petang';
-          if (hh > 12) hh -= 12;
-        }
-        if (hh >= 19 || (hh >= 1 && hh < 4 && suffix === 'petang')) {
-          if (hh >= 7 && suffix === 'petang') suffix = 'malam';
-        }
-        if (hh === 0) hh = 12;
-        formattedMasa = `${String(hh).padStart(2, '0')}:${mm} ${suffix}`;
-      }
-
-      const textMsg = `*Sistem Nikah Anak Mukim*\n*Maklumat Nikah :*\n1. Nama : ${name}\n2. Tarikh : ${formattedTarikh} (${hari})\n3. Masa : ${formattedMasa}\n4. Kampung: ${kampung}\n5. Tempat Nikah : ${tempat}\n6. Wali : ${wali}\n7. Catatan : ${catatan || '-'}\n8. Pertanyaan sila hubungi :\n   Imam : 019-9467894`;
-      
+      const textMsg = `*Sistem Nikah Anak Mukim*\n*Maklumat Nikah :*\n1. Nama : ${name}\n2. Tarikh : ${formattedTarikh} (${hari})\n3. Masa : ${masa}\n4. Kampung: ${kampung}\n5. Tempat Nikah : ${tempat}\n6. Wali : ${wali}\n7. Catatan : ${catatan || '-'}\n8. Pertanyaan sila hubungi :\n Imam : 019-9467894`;
       window.open(`https://wa.me/${cleanTel}?text=${encodeURIComponent(textMsg)}`, '_blank');
     };
 
+    // Fungsi Google Calendar
+    window.simpanKeKalendar = function(nama, tarikh, masa, kampung, catatan) {
+      if (!tarikh || !masa) {
+        Swal.fire('Ralat', 'Tarikh atau masa nikah tidak lengkap untuk disimpan ke kalendar.', 'warning');
+        return;
+      }
+
+      const [jam, minit] = masa.split(':');
+      let dStart = new Date(`${tarikh}T${jam}:${minit}:00`);
+      let dEnd = new Date(dStart.getTime() + (2 * 60 * 60 * 1000));
+
+      const fmt = d => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+      const waktuMula = fmt(dStart);
+      const waktuTamat = fmt(dEnd);
+
+      const tajuk = encodeURIComponent(`Peringatan Saya: Majlis Nikah ${nama}`);
+      const lokasi = encodeURIComponent(`Kampung ${kampung}`);
+      const huraian = encodeURIComponent(`Nota Penting: Sila uruskan semua dokumen pendaftaran bagi majlis ${nama} pada tarikh ini. Jangan lupa bawa slip pendaftaran. ${catatan ? 'Catatan: ' + catatan : ''}`);
+
+      const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${tajuk}&dates=${waktuMula}/${waktuTamat}&details=${huraian}&location=${lokasi}`;
+      window.open(googleCalendarUrl, '_blank');
+    };
+
+    // Bina Baris Jadual
     function renderRows() {
       const q = ($('#smartSearch')?.value || '').toLowerCase();
-      const filtered = !q ? records : records.filter(r => [r.nama, r.kampung, r.tempat, r.tarikh].some(v => (v || '').toLowerCase().includes(q)));
-      
+      const filtered = !q
+        ? records
+        : records.filter(r => [r.nama, r.kampung, r.tempat, r.tarikh].some(v => (v || '').toLowerCase().includes(q)));
+
       const todayStr = new Date().toISOString().slice(0, 10);
 
       $('#rows').innerHTML = filtered.map((r, i) => {
         const monthIndex = r.tarikh ? new Date(r.tarikh + 'T00:00:00').getMonth() : 0;
         const isCompleted = r.tarikh && r.tarikh < todayStr;
         const rowClass = `month-${monthIndex} ${isCompleted ? 'completed-row' : ''}`;
-        
-        let displayDate = r.tarikh || '';
-        if (displayDate && displayDate.includes('-')) {
-          const p = displayDate.split('-');
-          if (p.length === 3) displayDate = `${p[2]}-${p[1]}-${p[0]}`;
-        }
-        
-        let phoneHtml = r.tel || '';
-        if (r.tel && r.tel !== '-' && r.tel.trim() !== '') {
-          phoneHtml = `<a href="tel:${r.tel}" class="phone-link">${r.tel}</a>`;
-        }
-        
-        return `<tr class="${rowClass}">
-          <td style="text-align: center">${i + 1}</td>
-          <td>${displayDate}</td>
-          <td>${r.hari || ''}</td>
-          <td>${r.masa || ''}</td>
-          <td><b>${r.nama || ''}</b></td>
-          <td>${r.kampung || ''}</td>
-          <td>${r.tempat || ''}</td>
-          <td>${phoneHtml}</td>
-          <td>${r.wali || ''}</td>
-          <td>${r.catatan || ''}</td>
-          <td style="text-align: center"><button class="btn-wa" onclick="sendWhatsapp('${r.nama}','${r.tel}','${r.tarikh}','${r.hari}','${r.masa}','${r.kampung}','${r.tempat}','${r.wali}','${r.catatan}')">WhatsApp</button></td>
-        </tr>`;
-      }).join('') || '<tr><td colspan="11" style="text-align: center; padding: 20px;">Tiada rekod sepadan</td></tr>';
+
+        return `
+          <tr class="${rowClass}">
+            <td style="text-align:center">${i + 1}</td>
+            <td>${r.tarikh || ''}</td>
+            <td>${r.hari || ''}</td>
+            <td>${r.masa || ''}</td>
+            <td><b>${r.nama || ''}</b></td>
+            <td>${r.kampung || ''}</td>
+            <td>${r.tempat || ''}</td>
+            <td>${r.tel || ''}</td>
+            <td>${r.wali || ''}</td>
+            <td>${r.catatan || ''}</td>
+            <td>
+              <div class="action-group">
+                <button class="btn-cal" onclick="simpanKeKalendar('${r.nama}','${r.tarikh}','${r.masa}','${r.kampung}','${r.catatan}')" title="Simpan ke Google Calendar">📅</button>
+                <button class="btn-wa" onclick="sendWhatsapp('${r.nama}','${r.tel}','${r.tarikh}','${r.hari}','${r.masa}','${r.kampung}','${r.tempat}','${r.wali}','${r.catatan}')">WhatsApp</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('') || '<tr><td colspan="11" style="text-align:center;padding:20px">Tiada rekod sepadan</td></tr>';
+
       $('#searchCount').textContent = `${filtered.length} daripada ${records.length} rekod`;
     }
 
     $('#smartSearch').oninput = renderRows;
-    $('#clearSearch').onclick = () => { $('#smartSearch').value = ''; renderRows(); };
-
-    // FUNGSI KEMASKINI DATA
-    $('#updateDataBtn').onclick = async () => {
-      const { value: targetBil } = await Swal.fire({
-        title: 'Kemaskini Data',
-        input: 'text',
-        inputLabel: 'Masukkan No Bil yang ingin dikemaskini:',
-        width: '380px',
-        showCancelButton: true,
-        cancelButtonText: 'Batal',
-        inputValidator: (value) => { if (!value) return 'Sila masukkan No Bil!'; }
-      });
-
-      if (targetBil) {
-        const index = parseInt(targetBil) - 1;
-        if (index >= 0 && index < records.length) {
-          const r = records[index];
-          $('#editId').value = r.id;
-          document.querySelector('#nikahForm input[name="tarikh"]').value = r.tarikh || '';
-          document.querySelector('#nikahForm input[name="hari"]').value = r.hari || '';
-          document.querySelector('#nikahForm input[name="masa"]').value = r.masa || '';
-          document.querySelector('#nikahForm input[name="nama"]').value = r.nama || '';
-          
-          const kSelect = $('#kampung');
-          let foundK = false;
-          for(let opt of kSelect.options){
-            if(opt.value === r.kampung){ kSelect.value = r.kampung; foundK = true; break; }
-          }
-          if(!foundK && r.kampung){
-            kSelect.value = 'Lain-lain';
-            $('#kLain').classList.remove('hidden');
-            document.querySelector('#nikahForm input[name="kampung_lain"]').value = r.kampung;
-            document.querySelector('#nikahForm input[name="kampung_lain"]').required = true;
-          } else {
-            $('#kLain').classList.add('hidden');
-          }
-
-          const tSelect = $('#tempat');
-          let foundT = false;
-          for(let opt of tSelect.options){
-            if(opt.value === r.tempat){ tSelect.value = r.tempat; foundT = true; break; }
-          }
-          if(!foundT && r.tempat){
-            tSelect.value = 'Lain-lain';
-            $('#tLain').classList.remove('hidden');
-            document.querySelector('#nikahForm input[name="tempat_lain"]').value = r.tempat;
-            document.querySelector('#nikahForm input[name="tempat_lain"]').required = true;
-          } else {
-            $('#tLain').classList.add('hidden');
-          }
-
-          const wSelect = $('#wali');
-          let foundW = false;
-          for(let opt of wSelect.options){
-            if(opt.value === r.wali){ wSelect.value = r.wali; foundW = true; break; }
-          }
-          if(!foundW && r.wali){
-            wSelect.value = 'Lain-lain';
-            $('#wLain').classList.remove('hidden');
-            document.querySelector('#nikahForm input[name="wali_lain"]').value = r.wali;
-            document.querySelector('#nikahForm input[name="wali_lain"]').required = true;
-          } else {
-            $('#wLain').classList.add('hidden');
-          }
-
-          document.querySelector('#nikahForm input[name="tel"]').value = r.tel || '';
-          document.querySelector('#nikahForm textarea[name="catatan"]').value = r.catatan || '';
-          
-          $('#saveBtn').textContent = 'Kemaskini Rekod Nikah';
-          
-          switchPage('rekod');
-          setActiveTab($('#showForm'));
-          $('#formPanel').classList.remove('hidden');
-          $('#listPanel').classList.add('hidden');
-          $('#searchPanel').classList.add('hidden');
-          
-          if(window.innerWidth <= 768){
-            $('#formPanel').scrollIntoView({behavior: 'smooth', block: 'start'});
-          }
-        } else {
-          Swal.fire('Ralat', 'No Bil tidak sah / tiada dalam senarai.', 'error');
-        }
-      }
+    $('#clearSearch').onclick = () => {
+      $('#smartSearch').value = '';
+      renderRows();
     };
 
-    // FUNGSI SANDARAN JSON (EKSPORT & IMPORT)
-    $('#exportJsonBtn').onclick = () => {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(records, null, 2));
-      const dlAnchorElem = document.createElement('a');
-      dlAnchorElem.setAttribute("href", dataStr);
-      dlAnchorElem.setAttribute("download", "sandaran_rekod_nikah.json");
-      document.body.appendChild(dlAnchorElem);
-      dlAnchorElem.click();
-      dlAnchorElem.remove();
-      Swal.fire('Berjaya', 'Fail sandaran JSON telah dimuat turun.', 'success');
-    };
-
-    $('#importJsonBtn').onclick = () => {
-      $('#importFile').click();
-    };
-
-    $('#importFile').onchange = (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = async (event) => {
-        try {
-          const importedData = JSON.parse(event.target.result);
-          if(!Array.isArray(importedData)) throw new Error('Format JSON tidak sah.');
-          
-          const confirmImp = await Swal.fire({
-            title: 'Import JSON',
-            text: `Jumpa ${importedData.length} rekod. Teruskan import ke pangkalan data?`,
-            width: '380px',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, Import',
-            cancelButtonText: 'Batal'
-          });
-
-          if(confirmImp.isConfirmed){
-            const batch = db.batch();
-            importedData.forEach(r => {
-              const newRef = db.collection('rekod_nikah').doc();
-              const { id, ...dataWithoutId } = r;
-              batch.set(newRef, dataWithoutId);
-            });
-            await batch.commit();
-            await load();
-            Swal.fire('Berjaya', 'Data JSON berjaya diimport.', 'success');
-          }
-        } catch(err) {
-          Swal.fire('Ralat', 'Gagal membaca fail JSON: ' + err.message, 'error');
-        }
-        e.target.value = '';
-      };
-      reader.readAsText(file);
-    };
-
+    // Padam Rekod
     $('#deleteAll').onclick = async () => {
       const choice = await Swal.fire({
         title: 'Hapus Data',
         text: 'Sila pilih kaedah penghapusan:',
-        width: '380px',
         icon: 'warning',
-        showDenyButton: true,
         showCancelButton: true,
         confirmButtonText: 'Hapus Ikut Tahun',
-        denyButtonText: 'Hapus No Bil',
-        cancelButtonText: 'Batal',
+        cancelButtonText: 'Hapus No Bil',
         confirmButtonColor: '#d32f2f',
-        denyButtonColor: '#082b57',
-        cancelButtonColor: '#6c757d'
+        cancelButtonColor: '#082b57'
       });
 
       if (choice.isConfirmed) {
@@ -1231,10 +1071,10 @@
           title: 'Hapus Ikut Tahun',
           input: 'text',
           inputLabel: 'Masukkan Tahun (contoh: 2026)',
-          width: '380px',
           showCancelButton: true,
-          cancelButtonText: 'Batal',
-          inputValidator: (value) => { if (!value) return 'Sila masukkan tahun!'; }
+          inputValidator: (value) => {
+            if (!value) return 'Sila masukkan tahun!';
+          }
         });
 
         if (targetYear) {
@@ -1242,9 +1082,7 @@
             title: `Hapus semua data tahun ${targetYear}?`,
             input: 'text',
             inputLabel: 'Taip HAPUS TAHUN untuk mengesahkan',
-            width: '380px',
             showCancelButton: true,
-            cancelButtonText: 'Batal',
             preConfirm: v => v === 'HAPUS TAHUN'
           });
 
@@ -1257,15 +1095,15 @@
             Swal.fire('Selesai', `Semua rekod tahun ${targetYear} telah dipadam.`, 'success');
           }
         }
-      } else if (choice.isDenied) {
+      } else if (choice.dismiss === Swal.DismissReason.cancel) {
         const { value: targetBil } = await Swal.fire({
           title: 'Hapus No Bil',
           input: 'text',
           inputLabel: 'Masukkan No Bil yang ingin dipadam',
-          width: '380px',
           showCancelButton: true,
-          cancelButtonText: 'Batal',
-          inputValidator: (value) => { if (!value) return 'Sila masukkan No Bil!'; }
+          inputValidator: (value) => {
+            if (!value) return 'Sila masukkan No Bil!';
+          }
         });
 
         if (targetBil) {
@@ -1274,9 +1112,7 @@
             const targetRec = records[index];
             const confirmDel = await Swal.fire({
               title: `Hapus rekod Bil ${targetBil} (${targetRec.nama})?`,
-              width: '380px',
               showCancelButton: true,
-              cancelButtonText: 'Batal',
               confirmButtonText: 'Ya, Padam',
               confirmButtonColor: '#d32f2f'
             });
@@ -1293,6 +1129,34 @@
       }
     };
 
+    // Muat Turun PDF
+    $('#pdfBtn').onclick = () => {
+      const y = $('#yearSelect').value;
+      const data = records.filter(r => (r.tarikh || '').startsWith(y));
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF('l', 'mm', 'a4');
+
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(14);
+      pdf.text('REKOD NIKAH MUKIM TAHUN ' + y, 14, 15);
+
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(9);
+      let yy = 25;
+
+      data.forEach((r, i) => {
+        if (yy > 180) {
+          pdf.addPage();
+          yy = 15;
+        }
+        pdf.text(`${i + 1}. ${r.tarikh} | ${r.hari} | ${r.nama} | Kampung: ${r.kampung} | Tempat: ${r.tempat} | Tel: ${r.tel}`, 14, yy);
+        yy += 7;
+      });
+
+      pdf.save('Rekod Nikah ' + y + '.pdf');
+    };
+
+    // Jalankan Sistem
     load();
   </script>
 </body>
