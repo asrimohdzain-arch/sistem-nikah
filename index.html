@@ -308,7 +308,7 @@ main{margin-left:0;padding:12px}
           </div>
           <div style="padding:15px;border:1px solid #cbd8e5;border-radius:10px">
             <b>Sandaran JSON</b>
-            <p style="font-size:12px;color:#53657a;margin:5px 0 10px">Eksport data kefail JSON atau import semula fail sandaran.</p>
+            <p style="font-size:12px;color:#53657a;margin:5px 0 10px">Eksport data ke fail JSON atau import semula fail sandaran.</p>
             <div style="display:flex;gap:10px;flex-wrap:wrap">
               <button class="btn-modern-primary" id="exportJson" type="button">📤 Eksport JSON</button>
               <button class="btn-modern-primary" id="importJsonBtn" type="button">📥 Import JSON</button>
@@ -478,19 +478,14 @@ window.sendWhatsapp = function(name, tel, tarikh, hari, masa, kampung, tempat, w
 };
 
 window.addToCalendar = function(name, tarikh, masa, kampung, tempat, catatan){
-  if(!tarikh || !masa) {
-    Swal.fire('Ralat', 'Tarikh dan masa nikah diperlukan untuk dimasukkan ke kalendar.', 'error');
+  if(!tarikh) {
+    Swal.fire('Ralat', 'Tarikh nikah diperlukan untuk dimasukkan ke kalendar.', 'error');
     return;
   }
   const cleanDate = tarikh.replace(/-/g, '');
-  const cleanTime = masa.replace(/:/g, '') + '00';
-  const startDateTime = `${cleanDate}T${cleanTime}`;
-  
-  let [hours, minutes] = masa.split(':').map(Number);
-  hours = (hours + 2) % 24;
-  const endHours = String(hours).padStart(2, '0');
-  const endMinutes = String(minutes).padStart(2, '0');
-  const endDateTime = `${cleanDate}T${endHours}${endMinutes}00`;
+  // Sentiasa setkan masa mula pada 8:00 AM (080000) dan tamat pada 10:00 AM (100000)
+  const startDateTime = `${cleanDate}T080000`;
+  const endDateTime = `${cleanDate}T100000`;
   
   const title = `Majlis Nikah: ${name}`;
   const details = `Nama : ${name}\nKampung: ${kampung}\nMasa Nikah : ${masa}\nTempat Nikah : ${tempat}\n\nPengurusan Rekod Nikah Mukim.\nCatatan: ${catatan || '-'}`;
@@ -543,7 +538,6 @@ function renderRows(){
 $('#smartSearch').oninput = renderRows;
 $('#clearSearch').onclick = () => { $('#smartSearch').value = ''; renderRows(); };
 
-// Fungsian Kemaskini Rekod mengikut No Bil
 $('#updateRecordBtn').onclick = async() => {
   const { value: targetBil } = await Swal.fire({
     title: 'Kemaskini Rekod',
@@ -602,7 +596,6 @@ $('#updateRecordBtn').onclick = async() => {
   }
 };
 
-// Sandaran JSON: Eksport dan Import
 $('#exportJson').onclick = () => {
   const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(records, null, 2));
   const dlAnchorElem = document.createElement('a');
