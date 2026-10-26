@@ -77,7 +77,50 @@ th:last-child, td:last-child { text-align:center; }
 .bar{width:75%;max-width:24px;background:var(--navy);border-radius:12px 12px 0 0;min-height:2px;position:relative;transition:height 0.3s;}
 .bar-count{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;color:#17212b;}
 .bar-month{position:absolute;bottom:-25px;left:50%;transform:translateX(-50%);font-size:10px;color:#53657a;white-space:nowrap;font-weight:600;}
-.btn-wa{background:#25D366;color:#fff;border:0;padding:4px 8px;border-radius:5px;cursor:pointer;font-weight:bold;font-size:10px;text-decoration:none;display:inline-block}
+
+/* GAYA IKON TINDAKAN (KALENDAR & WHATSAPP) */
+.action-btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.btn-calendar {
+  background: #1976d2;
+  color: #fff;
+  border: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  box-shadow: 0 2px 5px rgba(25, 118, 210, 0.3);
+  transition: 0.2s;
+  text-decoration: none;
+}
+.btn-calendar:hover { background: #115293; }
+
+.btn-whatsapp-icon {
+  background: #25D366;
+  color: #fff;
+  border: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  box-shadow: 0 2px 5px rgba(37, 211, 102, 0.3);
+  transition: 0.2s;
+  text-decoration: none;
+}
+.btn-whatsapp-icon:hover { background: #1ebe57; }
+
 .btn-modern-danger {
   background: #d32f2f;
   color: #fff;
@@ -109,6 +152,7 @@ th:last-child, td:last-child { text-align:center; }
   gap: 8px;
 }
 .btn-modern-primary:hover { background: var(--gold); }
+
 /* RESPONSIF TELEFON */
 @media(max-width:768px){
 .sidebar{display:none}
@@ -284,7 +328,7 @@ main{margin-left:0;padding:12px}
           <table>
             <thead>
               <tr>
-                <th>Bil</th><th>Tarikh</th><th>Hari</th><th>Masa</th><th>Nama</th><th>Kampung</th><th>Tempat</th><th>Telefon</th><th>Wali</th><th>Catatan</th><th>WhatsApp</th>
+                <th>Bil</th><th>Tarikh</th><th>Hari</th><th>Masa</th><th>Nama</th><th>Kampung</th><th>Tempat</th><th>Telefon</th><th>Wali</th><th>Catatan</th><th>Tindakan</th>
               </tr>
             </thead>
             <tbody id="rows"></tbody>
@@ -475,19 +519,40 @@ async function load(){
     console.error("Ralat data:", err);
   }
 }
+
+// Fungsi Format Tarikh kepada dd-mm-yyyy
+function formatDateDMY(dateStr) {
+  if(!dateStr) return '';
+  const parts = dateStr.split('-');
+  if(parts.length === 3) {
+    return `${parts[2]}-${parts[1]}-${parts[0]}`;
+  }
+  return dateStr;
+}
+
+// Fungsi Tambah ke Kalendar (Google Calendar / ICS)
+window.addToCalendar = function(name, tarikh, masa, tempat, kampung){
+  let formattedDate = tarikh.replace(/-/g, '');
+  let timeStr = masa ? masa.replace(':', '') + '00' : '090000';
+  let title = encodeURIComponent(`Majlis Nikah: ${name}`);
+  let details = encodeURIComponent(`Tempat: ${tempat}, Kampung: ${kampung}`);
+  let location = encodeURIComponent(`${tempat}, ${kampung}, Mukim Banggol Setol`);
+  
+  // URL Google Calendar
+  const gCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${formattedDate}T${timeStr}/${formattedDate}T${timeStr}&details=${details}&location=${location}`;
+  window.open(gCalUrl, '_blank');
+};
+
 window.sendWhatsapp = function(name, tel, tarikh, hari, masa, kampung, tempat, wali, catatan){
   let cleanTel = tel.replace(/[^\d]/g, '');
   if(cleanTel.startsWith('0')) cleanTel = '60' + cleanTel.slice(1);
   
-  let formattedTarikh = tarikh;
-  if(tarikh && tarikh.includes('-')){
-    const p = tarikh.split('-');
-    if(p.length === 3) formattedTarikh = `${p[2]}-${p[1]}-${p[0]}`;
-  }
+  let formattedTarikh = formatDateDMY(tarikh);
   const textMsg = `*Sistem Nikah Anak Mukim*\n*Maklumat Nikah :*\n1. Nama : ${name}\n2. Tarikh : ${formattedTarikh} (${hari})\n3. Masa : ${masa}\n4. Kampung: ${kampung}\n5. Tempat Nikah : ${tempat}\n6. Wali : ${wali}\n7. Catatan : ${catatan||'-'}\n8. Pertanyaan sila hubungi :\n   Imam : 019-9467894`;
   
   window.open(`https://wa.me/${cleanTel}?text=${encodeURIComponent(textMsg)}`, '_blank');
 };
+
 function renderRows(){
   const q = ($('#smartSearch')?.value || '').toLowerCase();
   const filtered = !q ? records : records.filter(r => [r.nama,r.kampung,r.tempat,r.tarikh].some(v => (v||'').toLowerCase().includes(q)));
@@ -497,10 +562,11 @@ function renderRows(){
     const monthIndex = r.tarikh ? new Date(r.tarikh + 'T00:00:00').getMonth() : 0;
     const isCompleted = r.tarikh && r.tarikh < todayStr;
     const rowClass = `month-${monthIndex} ${isCompleted ? 'completed-row' : ''}`;
+    const displayDate = formatDateDMY(r.tarikh);
     
     return `<tr class="${rowClass}">
       <td style="text-align:center">${i+1}</td>
-      <td>${r.tarikh||''}</td>
+      <td>${displayDate}</td>
       <td>${r.hari||''}</td>
       <td>${r.masa||''}</td>
       <td><b>${r.nama||''}</b></td>
@@ -509,7 +575,12 @@ function renderRows(){
       <td>${r.tel||''}</td>
       <td>${r.wali||''}</td>
       <td>${r.catatan||''}</td>
-      <td style="text-align:center"><button class="btn-wa" onclick="sendWhatsapp('${r.nama}','${r.tel}','${r.tarikh}','${r.hari}','${r.masa}','${r.kampung}','${r.tempat}','${r.wali}','${r.catatan}')">WhatsApp</button></td>
+      <td style="text-align:center">
+        <div class="action-btns">
+          <button class="btn-calendar" title="Tambah ke Kalendar" onclick="addToCalendar('${r.nama}','${r.tarikh}','${r.masa}','${r.tempat}','${r.kampung}')">📅</button>
+          <button class="btn-whatsapp-icon" title="WhatsApp" onclick="sendWhatsapp('${r.nama}','${r.tel}','${r.tarikh}','${r.hari}','${r.masa}','${r.kampung}','${r.tempat}','${r.wali}','${r.catatan}')">💬</button>
+        </div>
+      </td>
     </tr>`;
   }).join('') || '<tr><td colspan="11" style="text-align:center;padding:20px">Tiada rekod sepadan</td></tr>';
   $('#searchCount').textContent = `${filtered.length} daripada ${records.length} rekod`;
@@ -532,7 +603,6 @@ $('#editByBilBtn').onclick = async () => {
       const r = records[index];
       $('#editId').value = r.id;
       
-      // Papar borang dan isi nilai
       $('#formPanel').classList.remove('hidden');
       $('#listPanel').classList.add('hidden');
       $('#searchPanel').classList.add('hidden');
@@ -697,7 +767,7 @@ $('#pdfBtn').onclick = () => {
   let yy = 25;
   data.forEach((r,i) => {
     if(yy > 180){ pdf.addPage(); yy = 15; }
-    pdf.text(`${i+1}. ${r.tarikh} | ${r.hari} | ${r.nama} | Kampung: ${r.kampung} | Tempat: ${r.tempat} | Tel: ${r.tel}`, 14, yy);
+    pdf.text(`${i+1}. ${formatDateDMY(r.tarikh)} | ${r.hari} | ${r.nama} | Kampung: ${r.kampung} | Tempat: ${r.tempat} | Tel: ${r.tel}`, 14, yy);
     yy += 7;
   });
   pdf.save('Rekod Nikah '+y+'.pdf');
