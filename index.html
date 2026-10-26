@@ -68,7 +68,6 @@ th:last-child, td:last-child { text-align:center; }
 .month-10{background-color:#fff5e6!important}
 .month-11{background-color:#eaeaea!important}
 .chart-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-
 /* REKA BENTUK CARTA BAR 100% MENGIKUT RUJUKAN GAMBAR */
 .chart-container{position:relative;height:210px;background:#fff;border-bottom:1px solid #e2e8f0;padding:25px 10px 30px 10px;display:flex;flex-direction:column;justify-content:flex-end;}
 .chart-grid-lines{position:absolute;top:20px;left:10px;right:10px;bottom:30px;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none;z-index:1;}
@@ -78,16 +77,15 @@ th:last-child, td:last-child { text-align:center; }
 .bar{width:75%;max-width:24px;background:var(--navy);border-radius:12px 12px 0 0;min-height:2px;position:relative;transition:height 0.3s;}
 .bar-count{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;color:#17212b;}
 .bar-month{position:absolute;bottom:-25px;left:50%;transform:translateX(-50%);font-size:10px;color:#53657a;white-space:nowrap;font-weight:600;}
-
 .btn-wa{background:#25D366;color:#fff;border:0;padding:4px 8px;border-radius:5px;cursor:pointer;font-weight:bold;font-size:10px;text-decoration:none;display:inline-block}
 .btn-modern-danger {
   background: #d32f2f;
   color: #fff;
   border: 0;
-  padding: 12px 20px;
-  border-radius: 25px;
+  padding: 10px 18px;
+  border-radius: 8px;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
   transition: 0.2s;
@@ -96,6 +94,21 @@ th:last-child, td:last-child { text-align:center; }
   gap: 8px;
 }
 .btn-modern-danger:hover { background: #b71c1c; transform: translateY(-1px); }
+.btn-modern-primary {
+  background: var(--navy);
+  color: #fff;
+  border: 0;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-modern-primary:hover { background: var(--gold); }
 /* RESPONSIF TELEFON */
 @media(max-width:768px){
 .sidebar{display:none}
@@ -214,6 +227,7 @@ main{margin-left:0;padding:12px}
         
         <div id="formPanel" class="form-shell hidden" style="margin-top:15px">
           <form id="nikahForm">
+            <input type="hidden" name="editId" id="editId">
             <div class="grid">
               <div class="field"><label>Tarikh Nikah</label><input type="date" name="tarikh" required></div>
               <div class="field"><label>Hari</label><input name="hari" readonly required placeholder="Automatik"></div>
@@ -283,12 +297,33 @@ main{margin-left:0;padding:12px}
     <section id="tetapan" class="page">
       <div class="panel" id="tetapanPanel">
         <h2 class="page-title">Tetapan Sistem</h2>
-        <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;flex-direction:column;gap:15px">
+          
+          <!-- KEMASKINI REKOD IKUT NO BIL -->
           <div style="padding:15px;border:1px solid #cbd8e5;border-radius:10px">
-            <b>Hapus Semua Rekod</b>
-            <p style="font-size:12px;color:#53657a;margin:5px 0 10px">Tindakan ini akan memadam semua data di pangkalan data.</p>
-            <button class="btn-modern-danger" id="deleteAll" type="button">🗑️ Hapus Semua Data</button>
+            <b>Kemaskini Rekod Nikah</b>
+            <p style="font-size:12px;color:#53657a;margin:5px 0 10px">Masukkan No. Bil rekod yang ingin dikemaskini maklumatnya.</p>
+            <button class="btn-modern-primary" id="editByBilBtn" type="button">✏️ Kemaskini Ikut No Bil</button>
           </div>
+
+          <!-- SANDARAN JSON (EKSPOR & IMPOR) -->
+          <div style="padding:15px;border:1px solid #cbd8e5;border-radius:10px">
+            <b>Sandaran Data (JSON)</b>
+            <p style="font-size:12px;color:#53657a;margin:5px 0 10px">Ekspor data ke fail JSON atau impor semula data simpanan.</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <button class="btn-modern-primary" id="exportJson" type="button">📤 Ekspor JSON</button>
+              <button class="btn-modern-primary" id="importJsonBtn" type="button">📥 Impor JSON</button>
+              <input type="file" id="importFile" accept=".json" class="hidden">
+            </div>
+          </div>
+
+          <!-- PENGURUSAN HAPUS REKOD -->
+          <div style="padding:15px;border:1px solid #cbd8e5;border-radius:10px">
+            <b>Pengurusan Hapus Rekod</b>
+            <p style="font-size:12px;color:#53657a;margin:5px 0 10px">Padam rekod secara terpilih mengikut No. Bil atau hapus semua data.</p>
+            <button class="btn-modern-danger" id="deleteAll" type="button">🗑️ Hapus Data (Ikut Bil / Semua)</button>
+          </div>
+
         </div>
       </div>
     </section>
@@ -357,14 +392,22 @@ function toggle(sel, box, input){
 }
 $('#kampung').onchange = e => toggle(e.target, $('#kLain'), document.querySelector('#nikahForm input[name="kampung_lain"]'));
 $('#tempat').onchange = e => toggle(e.target, $('#tLain'), document.querySelector('#nikahForm input[name="tempat_lain"]'));
-$('#showForm').onclick = () => { $('#formPanel').classList.remove('hidden'); $('#listPanel').classList.add('hidden'); $('#searchPanel').classList.add('hidden'); };
+$('#showForm').onclick = () => { 
+  $('#editId').value = '';
+  $('#nikahForm').reset();
+  $('#saveBtn').textContent = 'Simpan Rekod Nikah';
+  $('#formPanel').classList.remove('hidden'); 
+  $('#listPanel').classList.add('hidden'); 
+  $('#searchPanel').classList.add('hidden'); 
+};
 $('#showList').onclick = () => { $('#formPanel').classList.add('hidden'); $('#listPanel').classList.remove('hidden'); $('#searchPanel').classList.remove('hidden'); renderRows(); };
 $('#nikahForm').onsubmit = async e => {
   e.preventDefault();
   const f = Object.fromEntries(new FormData(e.target));
+  const editId = $('#editId').value;
   $('#saveBtn').disabled = true;
   try{
-    await db.collection('rekod_nikah').add({
+    const payload = {
       tarikh: f.tarikh,
       hari: f.hari,
       masa: f.masa,
@@ -373,14 +416,24 @@ $('#nikahForm').onsubmit = async e => {
       tempat: f.tempat === 'Lain-lain' ? f.tempat_lain.trim() : f.tempat,
       tel: f.tel.trim(),
       wali: f.wali,
-      catatan: f.catatan.trim(),
-      diciptaPada: firebase.firestore.FieldValue.serverTimestamp()
-    });
+      catatan: f.catatan.trim()
+    };
+
+    if(editId){
+      await db.collection('rekod_nikah').doc(editId).update(payload);
+      Swal.fire('Berjaya','Rekod nikah telah dikemaskini.','success');
+    } else {
+      payload.diciptaPada = firebase.firestore.FieldValue.serverTimestamp();
+      await db.collection('rekod_nikah').add(payload);
+      Swal.fire('Berjaya','Rekod nikah telah disimpan.','success');
+    }
+
     e.target.reset();
+    $('#editId').value = '';
     $('#kLain').classList.add('hidden');
     $('#tLain').classList.add('hidden');
+    $('#saveBtn').textContent = 'Simpan Rekod Nikah';
     await load();
-    Swal.fire('Berjaya','Rekod nikah telah disimpan.','success');
     switchPage('rekod');
   }catch(err){
     Swal.fire('Ralat',err.message,'error');
@@ -388,6 +441,7 @@ $('#nikahForm').onsubmit = async e => {
     $('#saveBtn').disabled = false;
   }
 };
+
 async function load(){
   try {
     const s = await db.collection('rekod_nikah').get();
@@ -462,49 +516,139 @@ function renderRows(){
 }
 $('#smartSearch').oninput = renderRows;
 $('#clearSearch').onclick = () => { $('#smartSearch').value = ''; renderRows(); };
+
+/* KEMASKINI REKOD IKUT NO BIL */
+$('#editByBilBtn').onclick = async () => {
+  const { value: targetBil } = await Swal.fire({
+    title: 'Kemaskini Rekod',
+    input: 'text',
+    inputLabel: 'Masukkan No. Bil rekod yang ingin dikemaskini',
+    showCancelButton: true,
+    inputValidator: (value) => { if (!value) return 'Sila masukkan No. Bil!'; }
+  });
+  if (targetBil) {
+    const index = parseInt(targetBil) - 1;
+    if (index >= 0 && index < records.length) {
+      const r = records[index];
+      $('#editId').value = r.id;
+      
+      // Papar borang dan isi nilai
+      $('#formPanel').classList.remove('hidden');
+      $('#listPanel').classList.add('hidden');
+      $('#searchPanel').classList.add('hidden');
+      
+      const form = $('#nikahForm');
+      form.elements['tarikh'].value = r.tarikh || '';
+      form.elements['hari'].value = r.hari || '';
+      form.elements['masa'].value = r.masa || '';
+      form.elements['nama'].value = r.nama || '';
+      
+      const kampungSel = form.elements['kampung'];
+      const standardKampung = [...kampungSel.options].some(opt => opt.value === r.kampung);
+      if(standardKampung){
+        kampungSel.value = r.kampung;
+        $('#kLain').classList.add('hidden');
+      } else {
+        kampungSel.value = 'Lain-lain';
+        $('#kLain').classList.remove('hidden');
+        form.elements['kampung_lain'].value = r.kampung || '';
+      }
+      
+      const tempatSel = form.elements['tempat'];
+      const standardTempat = [...tempatSel.options].some(opt => opt.value === r.tempat);
+      if(standardTempat){
+        tempatSel.value = r.tempat;
+        $('#tLain').classList.add('hidden');
+      } else {
+        tempatSel.value = 'Lain-lain';
+        $('#tLain').classList.remove('hidden');
+        form.elements['tempat_lain'].value = r.tempat || '';
+      }
+      
+      form.elements['tel'].value = r.tel || '';
+      form.elements['wali'].value = r.wali || '';
+      form.elements['catatan'].value = r.catatan || '';
+      $('#saveBtn').textContent = 'Kemaskini Rekod Nikah';
+      
+      switchPage('rekod');
+    } else {
+      Swal.fire('Ralat', 'No. Bil tidak sah atau tiada dalam senarai.', 'error');
+    }
+  }
+};
+
+/* SANDARAN JSON: EKSPOR */
+$('#exportJson').onclick = () => {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(records, null, 2));
+  const dlAnchorElem = document.createElement('a');
+  dlAnchorElem.setAttribute("href", dataStr);
+  dlAnchorElem.setAttribute("download", "sandaran_rekod_nikah.json");
+  document.body.appendChild(dlAnchorElem);
+  dlAnchorElem.click();
+  dlAnchorElem.remove();
+  Swal.fire('Berjaya', 'Fail sandaran JSON telah berjaya dieksport.', 'success');
+};
+
+/* SANDARAN JSON: IMPOR */
+$('#importJsonBtn').onclick = () => { $('#importFile').click(); };
+$('#importFile').onchange = (e) => {
+  const fileReader = new FileReader();
+  if(e.target.files[0]){
+    fileReader.readAsText(e.target.files[0], "UTF-8");
+    fileReader.onload = async (event) => {
+      try {
+        const importedData = JSON.parse(event.target.result);
+        if(Array.isArray(importedData)){
+          const confirmImp = await Swal.fire({
+            title: 'Impor Data JSON?',
+            text: `Jumpa ${importedData.length} rekod. Teruskan import ke pangkalan data?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Impor'
+          });
+          if(confirmImp.isConfirmed){
+            const batch = db.batch();
+            importedData.forEach(r => {
+              const newRef = db.collection('rekod_nikah').doc();
+              const { id, ...dataWithoutId } = r;
+              batch.set(newRef, dataWithoutId);
+            });
+            await batch.commit();
+            await load();
+            Swal.fire('Berjaya', 'Data JSON telah berjaya diimpor.', 'success');
+          }
+        } else {
+          Swal.fire('Ralat', 'Format fail JSON tidak sah.', 'error');
+        }
+      } catch(err) {
+        Swal.fire('Ralat', 'Gagal membaca fail JSON.', 'error');
+      }
+    };
+  }
+};
+
+/* PENGURUSAN HAPUS REKOD: IKUT BIL ATAU HAPUS SEMUA */
 $('#deleteAll').onclick = async() => {
   const choice = await Swal.fire({
-    title: 'Hapus Data',
-    text: 'Sila pilih kaedah penghapusan:',
+    title: 'Pengurusan Hapus Rekod',
+    text: 'Sila pilih kaedah penghapusan data:',
     icon: 'warning',
+    showDenyButton: true,
     showCancelButton: true,
-    confirmButtonText: 'Hapus Ikut Tahun',
-    cancelButtonText: 'Hapus No Bil',
-    confirmButtonColor: '#d32f2f',
-    cancelButtonColor: '#082b57'
+    confirmButtonText: 'Hapus Ikut No Bil',
+    denyButtonText: 'Hapus Semua Data',
+    cancelButtonText: 'Batal',
+    confirmButtonColor: '#082b57',
+    denyButtonColor: '#d32f2f'
   });
+
   if (choice.isConfirmed) {
-    const { value: targetYear } = await Swal.fire({
-      title: 'Hapus Ikut Tahun',
-      input: 'text',
-      inputLabel: 'Masukkan Tahun (contoh: 2026)',
-      showCancelButton: true,
-      inputValidator: (value) => { if (!value) return 'Sila masukkan tahun!'; }
-    });
-    if (targetYear) {
-      const confirmText = await Swal.fire({
-        title: `Hapus semua data tahun ${targetYear}?`,
-        input: 'text',
-        inputLabel: 'Taip HAPUS TAHUN untuk mengesahkan',
-        showCancelButton: true,
-        preConfirm: v => v === 'HAPUS TAHUN'
-      });
-      if (confirmText.isConfirmed) {
-        const batch = db.batch();
-        const targetRecs = records.filter(r => (r.tarikh || '').startsWith(targetYear));
-        targetRecs.forEach(r => batch.delete(db.collection('rekod_nikah').doc(r.id)));
-        await batch.commit();
-        await load();
-        Swal.fire('Selesai', `Semua rekod tahun ${targetYear} telah dipadam.`, 'success');
-      }
-    }
-  } else if (choice.dismiss === Swal.DismissReason.cancel) {
     const { value: targetBil } = await Swal.fire({
-      title: 'Hapus No Bil',
+      title: 'Hapus Ikut No Bil',
       input: 'text',
-      inputLabel: 'Masukkan No Bil yang ingin dipadam',
+      inputLabel: 'Masukkan No. Bil yang ingin dipadam',
       showCancelButton: true,
-      inputValidator: (value) => { if (!value) return 'Sila masukkan No Bil!'; }
+      inputValidator: (value) => { if (!value) return 'Sila masukkan No. Bil!'; }
     });
     if (targetBil) {
       const index = parseInt(targetBil) - 1;
@@ -522,11 +666,29 @@ $('#deleteAll').onclick = async() => {
           Swal.fire('Selesai', `Rekod Bil ${targetBil} telah dipadam.`, 'success');
         }
       } else {
-        Swal.fire('Ralat', 'No Bil tidak sah / tiada dalam senarai.', 'error');
+        Swal.fire('Ralat', 'No. Bil tidak sah / tiada dalam senarai.', 'error');
       }
+    }
+  } else if (choice.isDenied) {
+    const confirmText = await Swal.fire({
+      title: 'Hapus SEMUA rekod?',
+      text: 'Tindakan ini akan memadam seluruh data secara kekal.',
+      input: 'text',
+      inputLabel: 'Taip HAPUS SEMUA untuk mengesahkan',
+      showCancelButton: true,
+      confirmButtonColor: '#d32f2f',
+      preConfirm: v => v === 'HAPUS SEMUA'
+    });
+    if (confirmText.isConfirmed) {
+      const batch = db.batch();
+      records.forEach(r => batch.delete(db.collection('rekod_nikah').doc(r.id)));
+      await batch.commit();
+      await load();
+      Swal.fire('Selesai', 'Semua rekod telah dipadam.', 'success');
     }
   }
 };
+
 $('#pdfBtn').onclick = () => {
   const y = $('#yearSelect').value, data = records.filter(r => (r.tarikh || '').startsWith(y)), {jsPDF} = window.jspdf, pdf = new jsPDF('l','mm','a4');
   pdf.setFont('helvetica','bold'); pdf.setFontSize(14);
