@@ -18,7 +18,7 @@ body{margin:0;background:var(--bg);font-family:'Segoe UI',sans-serif;color:#1721
 .sidebar-logo{background:var(--maroon);color:#fff;text-align:center;border-radius:12px;padding:16px 10px;font-size:16px;font-weight:700}
 .sidebar-logo small{display:block;font-size:11px;font-weight:normal;opacity:0.9;margin-top:3px}
 .nav-menu{display:flex;flex-direction:column;gap:8px}
-.nav-menu button{border:0;background:var(--navy);color:#fff;border-radius:8px;padding:12px 14px;font-family:inherit;font-weight:650;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;transition:.2s}
+.nav-menu button{border:0;background:var(--navy);color:#fff;border-radius:50px;padding:12px 18px;font-family:inherit;font-weight:650;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;transition:.2s}
 .nav-menu button:hover,.nav-menu button.active{background:var(--gold)}
 /* HEADER UTAMA PC */
 .header{background:var(--maroon);color:#fff;padding:18px 25px;margin-left:240px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px #0003}
@@ -37,10 +37,10 @@ main{margin-left:240px;padding:25px}
 .card b{display:block;color:#53657a;margin-bottom:6px;font-size:13px}
 .value{font-size:28px;font-weight:800;color:var(--navy)}
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-.toolbar .btn{background:var(--navy);color:#fff;border:0;padding:10px 14px;border-radius:8px;font-weight:650;cursor:pointer;font-size:13px}
+.toolbar .btn{background:var(--navy);color:#fff;border:0;padding:10px 18px;border-radius:50px;font-weight:650;cursor:pointer;font-size:13px}
 .smart-search{display:flex;align-items:center;gap:10px;margin:0 0 14px;padding:10px;background:#f6f9fc;border:1px solid var(--line);border-radius:10px}
 .smart-search input{flex:1;padding:9px 12px;border:1px solid #bcc9d6;border-radius:7px;font-size:13px}
-.clear-search{border:0;background:#dfe8f2;color:#082b57;border-radius:7px;padding:9px 12px;font-weight:700;cursor:pointer;font-size:12px}
+.clear-search{border:0;background:#dfe8f2;color:#082b57;border-radius:50px;padding:9px 16px;font-weight:700;cursor:pointer;font-size:12px}
 .search-count{color:#53657a;font-size:12px;white-space:nowrap}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .field.full{grid-column:1/-1}
@@ -77,7 +77,6 @@ th:last-child, td:last-child { text-align:center; }
 .bar{width:75%;max-width:24px;background:var(--navy);border-radius:12px 12px 0 0;min-height:2px;position:relative;transition:height 0.3s;}
 .bar-count{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;color:#17212b;}
 .bar-month{position:absolute;bottom:-25px;left:50%;transform:translateX(-50%);font-size:10px;color:#53657a;white-space:nowrap;font-weight:600;}
-
 /* GAYA IKON TINDAKAN (KALENDAR & WHATSAPP) */
 .action-btns {
   display: flex;
@@ -91,7 +90,7 @@ th:last-child, td:last-child { text-align:center; }
   border: 0;
   width: 28px;
   height: 28px;
-  border-radius: 6px;
+  border-radius: 50px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -102,14 +101,13 @@ th:last-child, td:last-child { text-align:center; }
   text-decoration: none;
 }
 .btn-calendar:hover { background: #115293; }
-
 .btn-whatsapp-icon {
   background: #25D366;
   color: #fff;
   border: 0;
   width: 28px;
   height: 28px;
-  border-radius: 6px;
+  border-radius: 50px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -120,13 +118,12 @@ th:last-child, td:last-child { text-align:center; }
   text-decoration: none;
 }
 .btn-whatsapp-icon:hover { background: #1ebe57; }
-
 .btn-modern-danger {
   background: #d32f2f;
   color: #fff;
   border: 0;
-  padding: 10px 18px;
-  border-radius: 8px;
+  padding: 10px 22px;
+  border-radius: 50px;
   font-weight: bold;
   font-size: 13px;
   cursor: pointer;
@@ -141,8 +138,8 @@ th:last-child, td:last-child { text-align:center; }
   background: var(--navy);
   color: #fff;
   border: 0;
-  padding: 10px 18px;
-  border-radius: 8px;
+  padding: 10px 22px;
+  border-radius: 50px;
   font-weight: bold;
   font-size: 13px;
   cursor: pointer;
@@ -152,7 +149,6 @@ th:last-child, td:last-child { text-align:center; }
   gap: 8px;
 }
 .btn-modern-primary:hover { background: var(--gold); }
-
 /* RESPONSIF TELEFON */
 @media(max-width:768px){
 .sidebar{display:none}
@@ -261,7 +257,7 @@ main{margin-left:0;padding:12px}
           <button class="btn" id="showForm" type="button">＋ Tambah Rekod</button>
           <button class="btn" id="showList" type="button">📋 Senarai Rekod</button>
           <button class="btn" id="pdfBtn" type="button">📥 Muat Turun PDF</button>
-          <select id="yearSelect" style="width:auto;padding:8px;border-radius:8px"></select>
+          <select id="yearSelect" style="width:auto;padding:8px;border-radius:50px"></select>
         </div>
         <div id="searchPanel" class="smart-search">
           <input id="smartSearch" type="search" placeholder="Cari nama, kampung, tempat...">
@@ -321,7 +317,7 @@ main{margin-left:0;padding:12px}
               </div>
               <div class="field full"><label>Catatan</label><textarea name="catatan" rows="3"></textarea></div>
             </div>
-            <button class="btn" type="submit" id="saveBtn" style="margin-top:14px;background:var(--maroon);color:#fff;width:100%;padding:12px;font-weight:bold">Simpan Rekod Nikah</button>
+            <button class="btn" type="submit" id="saveBtn" style="margin-top:14px;background:var(--maroon);color:#fff;width:100%;padding:12px;font-weight:bold;border-radius:50px">Simpan Rekod Nikah</button>
           </form>
         </div>
         <div id="listPanel" class="table-wrap" style="margin-top:15px">
@@ -349,7 +345,6 @@ main{margin-left:0;padding:12px}
             <p style="font-size:12px;color:#53657a;margin:5px 0 10px">Masukkan No. Bil rekod yang ingin dikemaskini maklumatnya.</p>
             <button class="btn-modern-primary" id="editByBilBtn" type="button">✏️ Kemaskini Ikut No Bil</button>
           </div>
-
           <!-- SANDARAN JSON (EKSPOR & IMPOR) -->
           <div style="padding:15px;border:1px solid #cbd8e5;border-radius:10px">
             <b>Sandaran Data (JSON)</b>
@@ -360,14 +355,12 @@ main{margin-left:0;padding:12px}
               <input type="file" id="importFile" accept=".json" class="hidden">
             </div>
           </div>
-
           <!-- PENGURUSAN HAPUS REKOD -->
           <div style="padding:15px;border:1px solid #cbd8e5;border-radius:10px">
             <b>Pengurusan Hapus Rekod</b>
             <p style="font-size:12px;color:#53657a;margin:5px 0 10px">Padam rekod secara terpilih mengikut No. Bil atau hapus semua data.</p>
             <button class="btn-modern-danger" id="deleteAll" type="button">🗑️ Hapus Data (Ikut Bil / Semua)</button>
           </div>
-
         </div>
       </div>
     </section>
@@ -462,7 +455,6 @@ $('#nikahForm').onsubmit = async e => {
       wali: f.wali,
       catatan: f.catatan.trim()
     };
-
     if(editId){
       await db.collection('rekod_nikah').doc(editId).update(payload);
       Swal.fire('Berjaya','Rekod nikah telah dikemaskini.','success');
@@ -471,7 +463,6 @@ $('#nikahForm').onsubmit = async e => {
       await db.collection('rekod_nikah').add(payload);
       Swal.fire('Berjaya','Rekod nikah telah disimpan.','success');
     }
-
     e.target.reset();
     $('#editId').value = '';
     $('#kLain').classList.add('hidden');
@@ -485,7 +476,6 @@ $('#nikahForm').onsubmit = async e => {
     $('#saveBtn').disabled = false;
   }
 };
-
 async function load(){
   try {
     const s = await db.collection('rekod_nikah').get();
@@ -519,7 +509,6 @@ async function load(){
     console.error("Ralat data:", err);
   }
 }
-
 // Fungsi Format Tarikh kepada dd-mm-yyyy (Contoh: 21-11-2026)
 function formatDateDMY(dateStr) {
   if(!dateStr) return '';
@@ -529,7 +518,6 @@ function formatDateDMY(dateStr) {
   }
   return dateStr;
 }
-
 // Fungsi Tambah ke Kalendar dengan Masa 8-10 am dan Format Teks Tepat Pilihan Anda
 window.addToCalendar = function(name, tarikh, masa, tempat, kampung, catatan){
   let formattedDate = tarikh.replace(/-/g, '');
@@ -544,7 +532,6 @@ window.addToCalendar = function(name, tarikh, masa, tempat, kampung, catatan){
   const gCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${formattedDate}T${startTime}/${formattedDate}T${endTime}&details=${details}&location=${location}`;
   window.open(gCalUrl, '_blank');
 };
-
 window.sendWhatsapp = function(name, tel, tarikh, hari, masa, kampung, tempat, wali, catatan){
   let cleanTel = tel.replace(/[^\d]/g, '');
   if(cleanTel.startsWith('0')) cleanTel = '60' + cleanTel.slice(1);
@@ -554,7 +541,6 @@ window.sendWhatsapp = function(name, tel, tarikh, hari, masa, kampung, tempat, w
   
   window.open(`https://wa.me/${cleanTel}?text=${encodeURIComponent(textMsg)}`, '_blank');
 };
-
 function renderRows(){
   const q = ($('#smartSearch')?.value || '').toLowerCase();
   const filtered = !q ? records : records.filter(r => [r.nama,r.kampung,r.tempat,r.tarikh].some(v => (v||'').toLowerCase().includes(q)));
@@ -589,7 +575,6 @@ function renderRows(){
 }
 $('#smartSearch').oninput = renderRows;
 $('#clearSearch').onclick = () => { $('#smartSearch').value = ''; renderRows(); };
-
 /* KEMASKINI REKOD IKUT NO BIL */
 $('#editByBilBtn').onclick = async () => {
   const { value: targetBil } = await Swal.fire({
@@ -648,7 +633,6 @@ $('#editByBilBtn').onclick = async () => {
     }
   }
 };
-
 /* SANDARAN JSON: EKSPOR */
 $('#exportJson').onclick = () => {
   const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(records, null, 2));
@@ -660,7 +644,6 @@ $('#exportJson').onclick = () => {
   dlAnchorElem.remove();
   Swal.fire('Berjaya', 'Fail sandaran JSON telah berjaya dieksport.', 'success');
 };
-
 /* SANDARAN JSON: IMPOR */
 $('#importJsonBtn').onclick = () => { $('#importFile').click(); };
 $('#importFile').onchange = (e) => {
@@ -698,7 +681,6 @@ $('#importFile').onchange = (e) => {
     };
   }
 };
-
 /* PENGURUSAN HAPUS REKOD: IKUT BIL ATAU HAPUS SEMUA */
 $('#deleteAll').onclick = async() => {
   const choice = await Swal.fire({
@@ -713,7 +695,6 @@ $('#deleteAll').onclick = async() => {
     confirmButtonColor: '#082b57',
     denyButtonColor: '#d32f2f'
   });
-
   if (choice.isConfirmed) {
     const { value: targetBil } = await Swal.fire({
       title: 'Hapus Ikut No Bil',
@@ -760,7 +741,6 @@ $('#deleteAll').onclick = async() => {
     }
   }
 };
-
 $('#pdfBtn').onclick = () => {
   const y = $('#yearSelect').value, data = records.filter(r => (r.tarikh || '').startsWith(y)), {jsPDF} = window.jspdf, pdf = new jsPDF('l','mm','a4');
   pdf.setFont('helvetica','bold'); pdf.setFontSize(14);
