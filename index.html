@@ -9,7 +9,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <style>
-/* KEMASKINI TEMA WARNA & GAYA BUTANG 100% MENGIKUT RUJUKAN */
+/* TEMA WARNA & GAYA BUTANG 100% MENGIKUT RUJUKAN */
 :root {
   --navy: #0e122b;
   --bg: #f5f6fa;
@@ -28,12 +28,11 @@ body{margin:0;background:var(--bg);font-family:'Segoe UI',sans-serif;color:var(-
 .sidebar-logo small{display:block;font-size:11px;font-weight:normal;opacity:0.9;margin-top:3px}
 .nav-menu{display:flex;flex-direction:column;gap:8px}
 
-/* GAYA BUTANG SIDEBAR MENGIKUT RUJUKAN (PILL BULAT PENUH, WARNA LATAR GELAP BILA AKTIF, DLL) */
 .nav-menu button{
   border: 0;
   background: #fff;
   color: var(--text-main);
-  border-radius: 9999px; /* Bulat penuh (Pill shape) */
+  border-radius: 9999px;
   padding: 12px 18px;
   font-family: inherit;
   font-weight: 650;
@@ -72,15 +71,17 @@ main{margin-left:240px;padding:25px}
 .card b{display:block;color:#53657a;margin-bottom:6px;font-size:13px}
 .value{font-size:28px;font-weight:800;color:var(--navy)}
 
-/* TOOLBAR & SEMUA BUTANG UTAMA MENGIKUT RUJUKAN GAMBAR (PILL BULAT PENUH, WARNA LATAR VAR(--navy), TEKS PUTIH) */
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+/* TOOLBAR SUSUNAN BUTANG BARU */
+.toolbar{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.toolbar-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
 .toolbar .btn,
 .btn-modern-primary {
   background: var(--navy);
   color: var(--text-on-dark);
   border: 0;
   padding: 12px 24px;
-  border-radius: 9999px; /* Bentuk pil bulat penuh sama 100% seperti rujukan */
+  border-radius: 9999px;
   font-weight: 650;
   cursor: pointer;
   font-size: 13px;
@@ -100,7 +101,6 @@ main{margin-left:240px;padding:25px}
 .smart-search{display:flex;align-items:center;gap:10px;margin:0 0 14px;padding:10px;background:#f6f9fc;border:1px solid var(--line);border-radius:10px}
 .smart-search input{flex:1;padding:9px 12px;border:1px solid #bcc9d6;border-radius:7px;font-size:13px}
 
-/* BUTANG KOSONG (PENCARIAN) DIKEMASKINI KEPADA BENTUK PIL BULAT */
 .clear-search{
   border: 0;
   background: #dfe8f2;
@@ -150,7 +150,6 @@ th:last-child, td:last-child { text-align:center; }
 .bar-count{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;color:var(--text-main);}
 .bar-month{position:absolute;bottom:-25px;left:50%;transform:translateX(-50%);font-size:10px;color:#53657a;white-space:nowrap;font-weight:600;}
 
-/* IKON TINDAKAN & BUTANG BAHAYA (DIKEMASKINI KEPADA BENTUK PIL/SEPADAN) */
 .action-btns {
   display: flex;
   align-items: center;
@@ -197,7 +196,7 @@ th:last-child, td:last-child { text-align:center; }
   color: #fff;
   border: 0;
   padding: 12px 24px;
-  border-radius: 9999px; /* Bentuk pil bulat penuh rujukan */
+  border-radius: 9999px;
   font-weight: bold;
   font-size: 13px;
   cursor: pointer;
@@ -313,12 +312,21 @@ main{margin-left:0;padding:12px}
     <section id="rekod" class="page">
       <div class="panel" id="rekodPanel">
         <h2 class="page-title">Pengurusan Rekod Nikah</h2>
+        
+        <!-- SUSUNAN BARISAN BUTANG YANG DIKEMASKINI -->
         <div class="toolbar">
-          <button class="btn" id="showForm" type="button">＋ Tambah Rekod</button>
-          <button class="btn" id="showList" type="button">📋 Senarai Rekod</button>
-          <button class="btn" id="pdfBtn" type="button">📥 Muat Turun PDF</button>
-          <select id="yearSelect" style="width:auto;padding:8px;border-radius:9999px"></select>
+          <!-- BARIS 1: TAMBAH REKOD & SENARAI REKOD -->
+          <div class="toolbar-row">
+            <button class="btn" id="showForm" type="button">＋ Tambah Rekod</button>
+            <button class="btn" id="showList" type="button">📋 Senarai Rekod</button>
+          </div>
+          <!-- BARIS 2: MUAT TURUN PDF & KOTAK PILIHAN TAHUN -->
+          <div class="toolbar-row">
+            <button class="btn" id="pdfBtn" type="button">📥 Muat Turun PDF</button>
+            <select id="yearSelect" style="width:auto;padding:10px 16px;border-radius:9999px;border:1px solid #bcc9d6;font-weight:600;font-size:13px;background:#fff"></select>
+          </div>
         </div>
+
         <div id="searchPanel" class="smart-search">
           <input id="smartSearch" type="search" placeholder="Cari nama, kampung, tempat...">
           <button id="clearSearch" class="clear-search" type="button">Kosong</button>
