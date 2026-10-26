@@ -520,7 +520,7 @@ async function load(){
   }
 }
 
-// Fungsi Format Tarikh kepada dd-mm-yyyy
+// Fungsi Format Tarikh kepada dd-mm-yyyy (Contoh: 21-11-2026)
 function formatDateDMY(dateStr) {
   if(!dateStr) return '';
   const parts = dateStr.split('-');
@@ -530,16 +530,18 @@ function formatDateDMY(dateStr) {
   return dateStr;
 }
 
-// Fungsi Tambah ke Kalendar (Google Calendar / ICS)
-window.addToCalendar = function(name, tarikh, masa, tempat, kampung){
+// Fungsi Tambah ke Kalendar dengan Masa 8-10 am dan Format Teks Tersusun
+window.addToCalendar = function(name, tarikh, masa, tempat, kampung, catatan){
   let formattedDate = tarikh.replace(/-/g, '');
-  let timeStr = masa ? masa.replace(':', '') + '00' : '090000';
+  // Masa tetap 8:00 pagi hingga 10:00 pagi (080000 / 100000)
+  let startTime = '080000';
+  let endTime = '100000';
+  
   let title = encodeURIComponent(`Majlis Nikah: ${name}`);
-  let details = encodeURIComponent(`Tempat: ${tempat}, Kampung: ${kampung}`);
+  let details = encodeURIComponent(`Nama : ${name}\nMasa Nikah : ${masa || '8:00 AM - 10:00 AM'}\nTempat Nikah : ${tempat}, ${kampung}\nCatatan: ${catatan || '-'}`);
   let location = encodeURIComponent(`${tempat}, ${kampung}, Mukim Banggol Setol`);
   
-  // URL Google Calendar
-  const gCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${formattedDate}T${timeStr}/${formattedDate}T${timeStr}&details=${details}&location=${location}`;
+  const gCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${formattedDate}T${startTime}/${formattedDate}T${endTime}&details=${details}&location=${location}`;
   window.open(gCalUrl, '_blank');
 };
 
@@ -577,7 +579,7 @@ function renderRows(){
       <td>${r.catatan||''}</td>
       <td style="text-align:center">
         <div class="action-btns">
-          <button class="btn-calendar" title="Tambah ke Kalendar" onclick="addToCalendar('${r.nama}','${r.tarikh}','${r.masa}','${r.tempat}','${r.kampung}')">📅</button>
+          <button class="btn-calendar" title="Tambah ke Kalendar" onclick="addToCalendar('${r.nama}','${r.tarikh}','${r.masa}','${r.tempat}','${r.kampung}','${r.catatan}')">📅</button>
           <button class="btn-whatsapp-icon" title="WhatsApp" onclick="sendWhatsapp('${r.nama}','${r.tel}','${r.tarikh}','${r.hari}','${r.masa}','${r.kampung}','${r.tempat}','${r.wali}','${r.catatan}')">💬</button>
         </div>
       </td>
