@@ -80,11 +80,11 @@ main{margin-left:240px;padding:25px}
   background: var(--navy);
   color: var(--text-on-dark);
   border: 0;
-  padding: 8px 14px; /* Dikecilkan padding supaya butang lebih kecil & kemas */
+  padding: 8px 14px;
   border-radius: 9999px;
   font-weight: 600;
   cursor: pointer;
-  font-size: 11px; /* Saiz tulisan butang dikecilkan */
+  font-size: 11px;
   box-shadow: 0 3px 8px rgba(14, 18, 43, 0.15);
   transition: 0.2s;
   display: inline-flex;
@@ -312,12 +312,10 @@ main{margin-left:0;padding:12px}
         <h2 class="page-title">Pengurusan Rekod Nikah</h2>
         
         <div class="toolbar">
-          <!-- BARIS PERTAMA: Tambah Rekod & Senarai Rekod (Saiz Dikecilkan) -->
           <div class="toolbar-row">
             <button class="btn" id="showForm" type="button">＋ Tambah Rekod</button>
             <button class="btn" id="showList" type="button">📋 Senarai Rekod</button>
           </div>
-          <!-- BARIS KEDUA: Muat Turun PDF & Pilihan Tahun (Saiz Dikecilkan) -->
           <div class="toolbar-row">
             <button class="btn" id="pdfBtn" type="button">📥 Muat Turun PDF</button>
             <select id="yearSelect" style="flex:1;padding:8px 14px;border-radius:9999px;border:1px solid #bcc9d6;font-weight:600;font-size:11px;background:#fff;cursor:pointer"></select>
@@ -474,12 +472,12 @@ window.addEventListener('popstate', e => {
     switchPage('utama', true);
     history.replaceState({page: 'utama'}, '', '#utama');
   } else {
-    // Jika berada di halaman utama dan butang back ditekan kali kedua, ia akan keluar aplikasi
     history.back();
   }
 });
 
-window.addEventListener('DOMContentLoaded', () => {
+// Paksa paparan bermula terus pada halaman utama tanpa menunggu tindakan luaran
+document.addEventListener("DOMContentLoaded", () => {
   history.replaceState({page: 'utama'}, '', '#utama');
   window.scrollTo({top: 0, left: 0, behavior: 'instant'});
   switchPage('utama', true);
