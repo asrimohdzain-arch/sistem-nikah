@@ -70,16 +70,17 @@ main{margin-left:240px;padding:25px}
 .card b{display:block;color:#53657a;margin-bottom:6px;font-size:13px}
 .value{font-size:28px;font-weight:800;color:var(--navy)}
 
-/* SUSUNAN TOOLBAR YANG DIKEMASKINI DENGAN TEPAT */
+/* SUSUNAN TOOLBAR 2 BARIS SEPERTI KEHENDAK ANDA */
 .toolbar{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
 .toolbar-row{display:flex;gap:10px;align-items:center;width:100%}
+.toolbar-row .btn{flex:1;justify-content:center}
 
 .toolbar .btn,
 .btn-modern-primary {
   background: var(--navy);
   color: var(--text-on-dark);
   border: 0;
-  padding: 12px 24px;
+  padding: 12px 20px;
   border-radius: 9999px;
   font-weight: 650;
   cursor: pointer;
@@ -88,7 +89,6 @@ main{margin-left:240px;padding:25px}
   transition: 0.2s;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 8px;
 }
 .toolbar .btn:hover,
@@ -241,8 +241,8 @@ main{margin-left:0;padding:12px}
       <small>Mukim Banggol Setol</small>
     </div>
     <div class="nav-menu">
-      <button class="active" onclick="switchPage('utama')">🏠 Utama</button>
-      <button onclick="switchPage('rekod')">📋 Rekod Nikah</button>
+      <button onclick="switchPage('utama')">🏠 Utama</button>
+      <button class="active" onclick="switchPage('rekod')">📋 Rekod Nikah</button>
       <button onclick="switchPage('tetapan')">⚙️ Tetapan</button>
     </div>
   </aside>
@@ -260,11 +260,11 @@ main{margin-left:0;padding:12px}
         <p>Mukim Banggol Setol</p>
       </div>
       <div class="menu-grid">
-        <div class="menu-card active" id="mbtn-utama" onclick="switchPage('utama')">
+        <div class="menu-card" id="mbtn-utama" onclick="switchPage('utama')">
           <div class="menu-icon">🏠</div>
           <div class="menu-info"><b>Utama</b><span>Analisa</span></div>
         </div>
-        <div class="menu-card" id="mbtn-rekod" onclick="switchPage('rekod')">
+        <div class="menu-card active" id="mbtn-rekod" onclick="switchPage('rekod')">
           <div class="menu-icon">📋</div>
           <div class="menu-info"><b>Rekod Nikah</b><span>Senarai</span></div>
         </div>
@@ -280,7 +280,7 @@ main{margin-left:0;padding:12px}
       </div>
     </div>
     <!-- LAMAN UTAMA -->
-    <section id="utama" class="page active">
+    <section id="utama" class="page">
       <div class="panel">
         <h2 class="page-title">Analisa Rekod Nikah</h2>
         <div class="cards">
@@ -307,11 +307,10 @@ main{margin-left:0;padding:12px}
     </section>
     
     <!-- LAMAN REKOD NIKAH -->
-    <section id="rekod" class="page">
+    <section id="rekod" class="page active">
       <div class="panel" id="rekodPanel">
         <h2 class="page-title">Pengurusan Rekod Nikah</h2>
         
-        <!-- SUSUNAN BARISAN BUTANG TEPAT -->
         <div class="toolbar">
           <!-- BARIS PERTAMA: Tambah Rekod & Senarai Rekod -->
           <div class="toolbar-row">
@@ -321,7 +320,7 @@ main{margin-left:0;padding:12px}
           <!-- BARIS KEDUA: Muat Turun PDF & Pilihan Tahun -->
           <div class="toolbar-row">
             <button class="btn" id="pdfBtn" type="button">📥 Muat Turun PDF</button>
-            <select id="yearSelect" style="width:auto;padding:10px 16px;border-radius:9999px;border:1px solid #bcc9d6;font-weight:600;font-size:13px;background:#fff;cursor:pointer"></select>
+            <select id="yearSelect" style="flex:1;padding:10px 16px;border-radius:9999px;border:1px solid #bcc9d6;font-weight:600;font-size:13px;background:#fff;cursor:pointer"></select>
           </div>
         </div>
 
@@ -440,22 +439,27 @@ const $= s => document.querySelector(s),$$ = s => [...document.querySelectorAll(
 const days = ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'], months = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
 const formattedDate = new Intl.DateTimeFormat('ms-MY',{day:'2-digit',month:'long',year:'numeric'}).format(new Date());
 $('#todayPC').textContent = 'Tarikh: ' + formattedDate;
-$('#todayMobile').textContent = formattedDate;  let currentPage = 'utama';  window.switchPage = function(id, fromBack = false){ currentPage = id;  $$('.page').forEach(p => p.classList.toggle('active', p.id === id));
-  
-  $$('.sidebar .nav-menu button').forEach(b => { b.classList.toggle('active', b.getAttribute('onclick')?.includes(id)); });    $$
-('.menu-card').forEach(c => c.classList.remove('active'));
+$('#todayMobile').textContent = formattedDate;  
+
+let currentPage = 'rekod';  
+
+window.switchPage = function(id, fromBack = false){ 
+  currentPage = id;  
+  $$('.page').forEach(p => p.classList.toggle('active', p.id === id));
+  $$('.sidebar .nav-menu button').forEach(b => { b.classList.toggle('active', b.getAttribute('onclick')?.includes(id)); });    
+  $$('.menu-card').forEach(c => c.classList.remove('active'));
   const activeMobileBtn = $('#mbtn-' + id);
   if(activeMobileBtn) activeMobileBtn.classList.add('active');
   
   if(id === 'rekod') renderRows();
   if(!fromBack){
-    if(id !== 'utama'){
+    if(id !== 'rekod'){
       history.pushState({page: id}, '', '#' + id);
     } else {
-      history.replaceState({page: 'utama'}, '', '#utama');
+      history.replaceState({page: 'rekod'}, '', '#rekod');
     }
   }
-  if(id === 'utama'){
+  if(id === 'rekod'){
     window.scrollTo({top: 0, left: 0, behavior: 'instant'});
   } else if(window.innerWidth <= 768){
     setTimeout(() => {
@@ -464,17 +468,20 @@ $('#todayMobile').textContent = formattedDate;  let currentPage = 'utama';  wind
     }, 50);
   }
 };
+
 window.addEventListener('popstate', e => {
-  if (currentPage !== 'utama') {
-    switchPage('utama', true);
-    history.replaceState({page: 'utama'}, '', '#utama');
+  if (currentPage !== 'rekod') {
+    switchPage('rekod', true);
+    history.replaceState({page: 'rekod'}, '', '#rekod');
   }
 });
+
 window.addEventListener('DOMContentLoaded', () => {
   window.scrollTo({top: 0, left: 0, behavior: 'instant'});
-  switchPage('utama', true);
-  history.replaceState({page: 'utama'}, '', '#utama');
+  switchPage('rekod', true);
+  history.replaceState({page: 'rekod'}, '', '#rekod');
 });
+
 const tarikhInput = document.querySelector('#nikahForm input[name="tarikh"]');
 if(tarikhInput){
   tarikhInput.onchange = e => {
