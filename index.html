@@ -61,18 +61,20 @@ body{margin:0;background:var(--bg);font-family:'Segoe UI',sans-serif;color:var(-
 
 /* NOTIFICATION BELL */
 .notification-bell-container {
-  position: relative;
+  position: absolute;
+  top: 18px;
+  right: 18px;
   cursor: pointer;
   background: #ffffff22;
   border: 1px solid #ffffff55;
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: 0.2s;
-  z-index: 5;
+  z-index: 10;
 }
 .notification-bell-container:hover {
   background: #ffffff44;
@@ -358,14 +360,14 @@ main{margin-left:0;padding:12px}
     </div>
   </aside>
   
-  <!-- HEADER UTAMA PC DENGAN IKON LOCENG -->
+  <!-- HEADER UTAMA PC -->
   <header class="header">
     <div>
       <div class="brand">SISTEM REKOD NIKAH MUKIM</div>
       <div class="brand-sub">Mukim Banggol Setol</div>
     </div>
     <div class="header-right-pc">
-      <div class="notification-bell-container" onclick="showNotifications()" title="Notifikasi Tarikh Nikah">
+      <div class="notification-bell-container" style="position:relative; top:auto; right:auto;" onclick="showNotifications()" title="Notifikasi Tarikh Nikah">
         🔔
         <span class="notification-badge" id="notifBadgePC" style="display:none">0</span>
       </div>
@@ -393,15 +395,15 @@ main{margin-left:0;padding:12px}
         </div>
       </div>
       
-      <!-- HEADER BANNER MOBILE DENGAN IKON LOCENG -->
-      <div class="m-sub-banner" style="position:relative;">
+      <!-- HEADER BANNER MOBILE (IKON LOCENG DI SEBELAH KANAN) -->
+      <div class="m-sub-banner">
+        <h3>Mukim Banggol Setol</h3>
+        <p>Pengurusan Rekod Nikah Rasmi</p>
+        <div class="m-date-badge" id="todayMobile">15 Oktober 2026</div>
         <div class="notification-bell-container" onclick="showNotifications()" title="Notifikasi Tarikh Nikah">
           🔔
           <span class="notification-badge" id="notifBadgeMobile" style="display:none">0</span>
         </div>
-        <h3>Mukim Banggol Setol</h3>
-        <p>Pengurusan Rekod Nikah Rasmi</p>
-        <div class="m-date-badge" id="todayMobile">15 Oktober 2026</div>
       </div>
     </div>
     
