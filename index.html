@@ -9,214 +9,38 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <style>
-:root {
-  --navy: #0e122b;
-  --bg: #f5f6fa;
-  --line: #d1d9e6;
-  --text-on-dark: #ffffff;
-  --text-main: #17212b;
-}
+:root{--maroon:#550000;--navy:#082b57;--gold:#9a7200;--dark-gold:#7a5a00;--bg:#f2f6fb;--line:#d9e2ec}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);font-family:'Segoe UI',sans-serif;color:var(--text-main);font-size:14px}
+body{margin:0;background:var(--bg);font-family:'Segoe UI',sans-serif;color:#17212b;font-size:14px}
 .app{min-height:100vh;display:flex;flex-direction:column}
 /* SIDEBAR KIRI (MOD PC) */
 .sidebar{position:fixed;left:0;top:0;width:240px;height:100vh;background:#fff;border-right:1px solid var(--line);padding:20px 12px;z-index:10;display:flex;flex-direction:column;gap:15px}
-.sidebar-logo{background:var(--navy);color:var(--text-on-dark);text-align:center;border-radius:12px;padding:16px 10px;font-size:16px;font-weight:700}
+.sidebar-logo{background:var(--maroon);color:#fff;text-align:center;border-radius:12px;padding:16px 10px;font-size:16px;font-weight:700}
 .sidebar-logo small{display:block;font-size:11px;font-weight:normal;opacity:0.9;margin-top:3px}
 .nav-menu{display:flex;flex-direction:column;gap:8px}
-.nav-menu button{
-  border: 0;
-  background: #fff;
-  color: var(--text-main);
-  border-radius: 9999px;
-  padding: 12px 18px;
-  font-family: inherit;
-  font-weight: 650;
-  cursor: pointer;
-  text-align: left;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: .2s;
-  box-shadow: 0 2px 6px rgba(14, 18, 43, 0.05);
-}
-.nav-menu button.active{
-  background: var(--navy);
-  color: var(--text-on-dark);
-  box-shadow: 0 4px 12px rgba(14, 18, 43, 0.2);
-}
-.nav-menu button:hover:not(.active){
-  background: #e0e7ff;
-}
+.nav-menu button{border:0;background:var(--navy);color:#fff;border-radius:8px;padding:12px 14px;font-family:inherit;font-weight:650;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;transition:.2s}
+.nav-menu button:hover,.nav-menu button.active{background:var(--gold)}
 /* HEADER UTAMA PC */
-.header{background:var(--navy);color:var(--text-on-dark);padding:18px 25px;margin-left:240px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px #0003}
+.header{background:var(--maroon);color:#fff;padding:18px 25px;margin-left:240px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px #0003}
 .brand{font-size:19px;font-weight:700}
 .brand-sub{font-size:12px;opacity:0.9;margin-top:2px}
-.header-right-pc {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.date-pill{background:#ffffff22;border:1px solid #ffffff55;padding:8px 14px;border-radius:9999px;font-size:12px;font-weight:600}
-
-/* NOTIFICATION BELL */
-.notification-bell-container {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  cursor: pointer;
-  background: #ffffff22;
-  border: 1px solid #ffffff55;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: 0.2s;
-  z-index: 10;
-}
-.notification-bell-container:hover {
-  background: #ffffff44;
-}
-.notification-badge {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  background: #d32f2f;
-  color: #fff;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 9999px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-}
-
-/* CUSTOM INTERNAL MODAL STYLES */
-.custom-modal-overlay {
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(14, 18, 43, 0.6);
-  backdrop-filter: blur(2px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease;
-}
-.custom-modal-overlay.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-.custom-modal-box {
-  background: #fff;
-  width: 90%;
-  max-width: 400px;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  transform: scale(0.95);
-  transition: transform 0.25s ease;
-  text-align: center;
-}
-.custom-modal-overlay.active .custom-modal-box {
-  transform: scale(1);
-}
-.custom-modal-icon {
-  width: 50px;
-  height: 50px;
-  background: #e0e7ff;
-  color: var(--navy);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  margin: 0 auto 15px;
-}
-.custom-modal-title {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--navy);
-  margin-bottom: 8px;
-}
-.custom-modal-content {
-  font-size: 13px;
-  color: #53657a;
-  margin-bottom: 20px;
-  max-height: 220px;
-  overflow-y: auto;
-  text-align: left;
-}
-.custom-modal-btn {
-  background: var(--navy);
-  color: #fff;
-  border: 0;
-  padding: 10px 24px;
-  border-radius: 9999px;
-  font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(14, 18, 43, 0.2);
-  transition: 0.2s;
-  width: 100%;
-}
-.custom-modal-btn:hover {
-  opacity: 0.9;
-}
-
+.date-pill{background:#ffffff22;border:1px solid #ffffff55;padding:8px 14px;border-radius:16px;font-size:12px;font-weight:600}
 main{margin-left:240px;padding:25px}
 .page{display:none}
 .page.active{display:block}
 .panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 5px 15px #17324d0d;margin-bottom:18px}
-.page-title{margin:0 0 16px;color:var(--navy);font-size:18px;font-weight:700}
+.page-title{margin:0 0 16px;color:var(--maroon);font-size:18px;font-weight:700}
 .menu-grid{display:none} 
 .mobile-banner{display:none}
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .card{background:#fff;border:1px solid #cbd8e5;border-radius:12px;padding:16px}
 .card b{display:block;color:#53657a;margin-bottom:6px;font-size:13px}
 .value{font-size:28px;font-weight:800;color:var(--navy)}
-/* TOOLBAR & SAIZ KECIL BUTANG SERTA KOTAK PILIHAN TAHUN */
-.toolbar{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
-.toolbar-row{display:flex;gap:10px;align-items:center;width:100%}
-.toolbar-row .btn{flex:1;justify-content:center}
-.toolbar .btn,
-.btn-modern-primary {
-  background: var(--navy);
-  color: var(--text-on-dark);
-  border: 0;
-  padding: 8px 14px;
-  border-radius: 9999px;
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 11px;
-  box-shadow: 0 3px 8px rgba(14, 18, 43, 0.15);
-  transition: 0.2s;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.toolbar .btn:hover,
-.btn-modern-primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.toolbar .btn{background:var(--navy);color:#fff;border:0;padding:10px 14px;border-radius:8px;font-weight:650;cursor:pointer;font-size:13px}
 .smart-search{display:flex;align-items:center;gap:10px;margin:0 0 14px;padding:10px;background:#f6f9fc;border:1px solid var(--line);border-radius:10px}
 .smart-search input{flex:1;padding:9px 12px;border:1px solid #bcc9d6;border-radius:7px;font-size:13px}
-.clear-search{
-  border: 0;
-  background: #dfe8f2;
-  color: var(--navy);
-  border-radius: 9999px;
-  padding: 8px 16px;
-  font-weight: 700;
-  cursor: pointer;
-  font-size: 12px;
-  transition: 0.2s;
-}
-.clear-search:hover { background: #cbd8e5; }
+.clear-search{border:0;background:#dfe8f2;color:#082b57;border-radius:7px;padding:9px 12px;font-weight:700;cursor:pointer;font-size:12px}
 .search-count{color:#53657a;font-size:12px;white-space:nowrap}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .field.full{grid-column:1/-1}
@@ -227,7 +51,7 @@ textarea{resize:vertical}
 .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 table{width:100%;border-collapse:collapse;font-family:'Segoe UI',sans-serif;font-size:10px}
 th,td{padding:5px 8px;border:1px solid #bdc8d3;text-align:left;vertical-align:middle}
-th{background:var(--navy);color:var(--text-on-dark);text-align:center;white-space:nowrap;font-size:10px}
+th{background:var(--navy);color:#fff;text-align:center;white-space:nowrap;font-size:10px}
 th:first-child, td:first-child { text-align:center; width:45px; }
 th:last-child, td:last-child { text-align:center; }
 .completed-row { color: #0056b3 !important; font-weight: 600; }
@@ -244,14 +68,16 @@ th:last-child, td:last-child { text-align:center; }
 .month-10{background-color:#fff5e6!important}
 .month-11{background-color:#eaeaea!important}
 .chart-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+/* REKA BENTUK CARTA BAR 100% MENGIKUT RUJUKAN GAMBAR */
 .chart-container{position:relative;height:210px;background:#fff;border-bottom:1px solid #e2e8f0;padding:25px 10px 30px 10px;display:flex;flex-direction:column;justify-content:flex-end;}
 .chart-grid-lines{position:absolute;top:20px;left:10px;right:10px;bottom:30px;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none;z-index:1;}
 .chart-grid-line{width:100%;border-bottom:1px solid #e8edf2;}
 .bars{display:flex;align-items:flex-end;justify-content:space-around;height:140px;position:relative;z-index:2;margin:0 5px;}
 .bar-wrapper{display:flex;flex-direction:column;align-items:center;flex:1;position:relative;height:100%;justify-content:flex-end;}
 .bar{width:75%;max-width:24px;background:var(--navy);border-radius:12px 12px 0 0;min-height:2px;position:relative;transition:height 0.3s;}
-.bar-count{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;color:var(--text-main);}
+.bar-count{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;color:#17212b;}
 .bar-month{position:absolute;bottom:-25px;left:50%;transform:translateX(-50%);font-size:10px;color:#53657a;white-space:nowrap;font-weight:600;}
+/* GAYA IKON TINDAKAN (KALENDAR & WHATSAPP) */
 .action-btns {
   display: flex;
   align-items: center;
@@ -275,7 +101,6 @@ th:last-child, td:last-child { text-align:center; }
   text-decoration: none;
 }
 .btn-calendar:hover { background: #115293; }
-
 .btn-whatsapp-icon {
   background: #25D366;
   color: #fff;
@@ -287,18 +112,18 @@ th:last-child, td:last-child { text-align:center; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  font-size: 13px;
   box-shadow: 0 2px 5px rgba(37, 211, 102, 0.3);
   transition: 0.2s;
   text-decoration: none;
 }
 .btn-whatsapp-icon:hover { background: #1ebe57; }
-
 .btn-modern-danger {
   background: #d32f2f;
   color: #fff;
   border: 0;
-  padding: 12px 24px;
-  border-radius: 9999px;
+  padding: 10px 18px;
+  border-radius: 8px;
   font-weight: bold;
   font-size: 13px;
   cursor: pointer;
@@ -306,47 +131,52 @@ th:last-child, td:last-child { text-align:center; }
   transition: 0.2s;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 8px;
 }
 .btn-modern-danger:hover { background: #b71c1c; transform: translateY(-1px); }
+.btn-modern-primary {
+  background: var(--navy);
+  color: #fff;
+  border: 0;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-modern-primary:hover { background: var(--gold); }
+/* RESPONSIF TELEFON */
 @media(max-width:768px){
 .sidebar{display:none}
 .header{display:none}
 main{margin-left:0;padding:12px}
 .cards,.chart-row,.grid{grid-template-columns:1fr}
 .mobile-banner{display:block}
-.m-header{background:linear-gradient(135deg, var(--navy) 0%, #000000 100%);color:var(--text-on-dark);padding:22px 15px;text-align:center;border-radius:14px;box-shadow:0 4px 12px #0003;margin-bottom:14px}
+.m-header{background:linear-gradient(135deg, #550000 0%, #330000 100%);color:#fff;padding:22px 15px;text-align:center;border-radius:14px;box-shadow:0 4px 12px #0003;margin-bottom:14px}
 .m-header h1{margin:0 0 4px;font-size:20px;font-weight:800;letter-spacing:0.5px}
 .m-header p{margin:0;font-size:12px;opacity:0.9}
-.m-sub-banner{background:linear-gradient(135deg, #1c2555 0%, var(--navy) 100%);color:var(--text-on-dark);padding:18px;border-radius:14px;margin-bottom:14px;box-shadow:0 4px 12px #0003;position:relative;overflow:hidden}
+.m-sub-banner{background:linear-gradient(135deg, #7a1111 0%, #550000 100%);color:#fff;padding:18px;border-radius:14px;margin-bottom:14px;box-shadow:0 4px 12px #0003;position:relative;overflow:hidden}
 .m-sub-banner h3{margin:0 0 2px;font-size:16px;font-weight:700}
 .m-sub-banner p{margin:0 0 10px;font-size:11px;opacity:0.9}
-.m-date-badge{display:inline-block;background:#ffffff28;border:1px solid #ffffff55;padding:5px 12px;border-radius:9999px;font-size:11px;font-weight:600}
+.m-date-badge{display:inline-block;background:#ffffff28;border:1px solid #ffffff55;padding:5px 12px;border-radius:15px;font-size:11px;font-weight:600}
 .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
 .menu-card{background:#fff;border:1px solid #cbd8e5;border-radius:12px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;cursor:pointer;box-shadow:0 3px 10px #17324d08}
-.menu-icon{width:38px;height:38px;border-radius:10px;background:var(--navy);color:var(--text-on-dark);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.menu-icon{width:38px;height:38px;border-radius:10px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
 .menu-info b{display:block;font-size:12px;color:var(--navy)}
 .menu-info span{font-size:10px;color:#53657a}
-.menu-card.active{background:var(--navy)!important;border-color:var(--navy)!important;box-shadow:0 4px 12px rgba(14,18,43,0.4)!important}
-.menu-card.active .menu-icon{background:#fff!important;color:var(--navy)!important}
-.menu-card.active .menu-info b{color:var(--text-on-dark)!important}
-.menu-card.active .menu-info span{color:#ced4da!important}
+/* GAYA KUNING TUA GELAP BILA KAD MENU AKTIF */
+.menu-card.active{background:var(--dark-gold)!important;border-color:var(--gold)!important;box-shadow:0 4px 12px rgba(122,90,0,0.4)!important}
+.menu-card.active .menu-icon{background:#fff!important;color:var(--dark-gold)!important}
+.menu-card.active .menu-info b{color:#fff!important}
+.menu-card.active .menu-info span{color:#f0e6c2!important}
 }
 </style>
 </head>
 <body>
-
-<!-- KOTAK MODAL DALAMAN (CUSTOM INTERNAL MODAL) -->
-<div class="custom-modal-overlay" id="customModal">
-  <div class="custom-modal-box">
-    <div class="custom-modal-icon" id="modalIcon">ℹ️</div>
-    <div class="custom-modal-title" id="modalTitle">Notifikasi</div>
-    <div class="custom-modal-content" id="modalBody">Maklumat sistem...</div>
-    <button class="custom-modal-btn" onclick="closeCustomModal()">OK</button>
-  </div>
-</div>
-
 <div class="app" id="app">
   <aside class="sidebar">
     <div class="sidebar-logo">
@@ -359,20 +189,12 @@ main{margin-left:0;padding:12px}
       <button onclick="switchPage('tetapan')">⚙️ Tetapan</button>
     </div>
   </aside>
-  
-  <!-- HEADER UTAMA PC -->
   <header class="header">
     <div>
       <div class="brand">SISTEM REKOD NIKAH MUKIM</div>
       <div class="brand-sub">Mukim Banggol Setol</div>
     </div>
-    <div class="header-right-pc">
-      <div class="notification-bell-container" style="position:relative; top:auto; right:auto;" onclick="showNotifications()" title="Notifikasi Tarikh Nikah">
-        🔔
-        <span class="notification-badge" id="notifBadgePC" style="display:none">0</span>
-      </div>
-      <div class="date-pill" id="todayPC">Tarikh: Memuatkan...</div>
-    </div>
+    <div class="date-pill" id="todayPC">Tarikh: Memuatkan...</div>
   </header>
   <main>
     <div class="mobile-banner">
@@ -394,19 +216,12 @@ main{margin-left:0;padding:12px}
           <div class="menu-info"><b>Tetapan</b><span>Urus Data</span></div>
         </div>
       </div>
-      
-      <!-- HEADER BANNER MOBILE (IKON LOCENG DI SEBELAH KANAN) -->
       <div class="m-sub-banner">
         <h3>Mukim Banggol Setol</h3>
         <p>Pengurusan Rekod Nikah Rasmi</p>
         <div class="m-date-badge" id="todayMobile">15 Oktober 2026</div>
-        <div class="notification-bell-container" onclick="showNotifications()" title="Notifikasi Tarikh Nikah">
-          🔔
-          <span class="notification-badge" id="notifBadgeMobile" style="display:none">0</span>
-        </div>
       </div>
     </div>
-    
     <!-- LAMAN UTAMA -->
     <section id="utama" class="page active">
       <div class="panel">
@@ -438,16 +253,11 @@ main{margin-left:0;padding:12px}
     <section id="rekod" class="page">
       <div class="panel" id="rekodPanel">
         <h2 class="page-title">Pengurusan Rekod Nikah</h2>
-        
         <div class="toolbar">
-          <div class="toolbar-row">
-            <button class="btn" id="showForm" type="button">＋ Tambah Rekod</button>
-            <button class="btn" id="showList" type="button">📋 Senarai Rekod</button>
-          </div>
-          <div class="toolbar-row">
-            <button class="btn" id="pdfBtn" type="button">📥 Muat Turun PDF</button>
-            <select id="yearSelect" style="flex:1;padding:8px 14px;border-radius:9999px;border:1px solid #bcc9d6;font-weight:600;font-size:11px;background:#fff;cursor:pointer"></select>
-          </div>
+          <button class="btn" id="showForm" type="button">＋ Tambah Rekod</button>
+          <button class="btn" id="showList" type="button">📋 Senarai Rekod</button>
+          <button class="btn" id="pdfBtn" type="button">📥 Muat Turun PDF</button>
+          <select id="yearSelect" style="width:auto;padding:8px;border-radius:8px"></select>
         </div>
         <div id="searchPanel" class="smart-search">
           <input id="smartSearch" type="search" placeholder="Cari nama, kampung, tempat...">
@@ -507,7 +317,7 @@ main{margin-left:0;padding:12px}
               </div>
               <div class="field full"><label>Catatan</label><textarea name="catatan" rows="3"></textarea></div>
             </div>
-            <button class="btn" type="submit" id="saveBtn" style="margin-top:14px;background:var(--navy);color:var(--text-on-dark);width:100%;padding:12px;border-radius:9999px;font-weight:bold">Simpan Rekod Nikah</button>
+            <button class="btn" type="submit" id="saveBtn" style="margin-top:14px;background:var(--maroon);color:#fff;width:100%;padding:12px;font-weight:bold">Simpan Rekod Nikah</button>
           </form>
         </div>
         <div id="listPanel" class="table-wrap" style="margin-top:15px">
@@ -529,12 +339,13 @@ main{margin-left:0;padding:12px}
         <h2 class="page-title">Tetapan Sistem</h2>
         <div style="display:flex;flex-direction:column;gap:15px">
           
+          <!-- KEMASKINI REKOD IKUT NO BIL -->
           <div style="padding:15px;border:1px solid #cbd8e5;border-radius:10px">
             <b>Kemaskini Rekod Nikah</b>
             <p style="font-size:12px;color:#53657a;margin:5px 0 10px">Masukkan No. Bil rekod yang ingin dikemaskini maklumatnya.</p>
             <button class="btn-modern-primary" id="editByBilBtn" type="button">✏️ Kemaskini Ikut No Bil</button>
           </div>
-          
+          <!-- SANDARAN JSON (EKSPOR & IMPOR) -->
           <div style="padding:15px;border:1px solid #cbd8e5;border-radius:10px">
             <b>Sandaran Data (JSON)</b>
             <p style="font-size:12px;color:#53657a;margin:5px 0 10px">Ekspor data ke fail JSON atau impor semula data simpanan.</p>
@@ -544,7 +355,7 @@ main{margin-left:0;padding:12px}
               <input type="file" id="importFile" accept=".json" class="hidden">
             </div>
           </div>
-          
+          <!-- PENGURUSAN HAPUS REKOD -->
           <div style="padding:15px;border:1px solid #cbd8e5;border-radius:10px">
             <b>Pengurusan Hapus Rekod</b>
             <p style="font-size:12px;color:#53657a;margin:5px 0 10px">Padam rekod secara terpilih mengikut No. Bil atau hapus semua data.</p>
@@ -560,18 +371,14 @@ const firebaseConfig = { apiKey: "AIzaSyBflySl7ok21LE4urn0rKrSVxczRrZykQE", auth
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 let records = [];
-let upcomingNotifications = [];
 const $= s => document.querySelector(s),$$ = s => [...document.querySelectorAll(s)];
 const days = ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'], months = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
 const formattedDate = new Intl.DateTimeFormat('ms-MY',{day:'2-digit',month:'long',year:'numeric'}).format(new Date());
 $('#todayPC').textContent = 'Tarikh: ' + formattedDate;
-$('#todayMobile').textContent = formattedDate;  
-let currentPage = 'utama';  
-window.switchPage = function(id, fromBack = false){ 
-  currentPage = id;  
-  $$('.page').forEach(p => p.classList.toggle('active', p.id === id));
-  $$('.sidebar .nav-menu button').forEach(b => { b.classList.toggle('active', b.getAttribute('onclick')?.includes(id)); });    
-  $$('.menu-card').forEach(c => c.classList.remove('active'));
+$('#todayMobile').textContent = formattedDate;  let currentPage = 'utama';  window.switchPage = function(id, fromBack = false){ currentPage = id;  $$('.page').forEach(p => p.classList.toggle('active', p.id === id));
+  
+  $$('.sidebar .nav-menu button').forEach(b => { b.classList.toggle('active', b.getAttribute('onclick')?.includes(id)); });    $$
+('.menu-card').forEach(c => c.classList.remove('active'));
   const activeMobileBtn = $('#mbtn-' + id);
   if(activeMobileBtn) activeMobileBtn.classList.add('active');
   
@@ -583,6 +390,7 @@ window.switchPage = function(id, fromBack = false){
       history.replaceState({page: 'utama'}, '', '#utama');
     }
   }
+  // Kawalan Skrol: Utama di atas, Halaman lain automatik skrol ke tajuk panel
   if(id === 'utama'){
     window.scrollTo({top: 0, left: 0, behavior: 'instant'});
   } else if(window.innerWidth <= 768){
@@ -596,14 +404,12 @@ window.addEventListener('popstate', e => {
   if (currentPage !== 'utama') {
     switchPage('utama', true);
     history.replaceState({page: 'utama'}, '', '#utama');
-  } else {
-    history.back();
   }
 });
-document.addEventListener("DOMContentLoaded", () => {
-  history.replaceState({page: 'utama'}, '', '#utama');
+window.addEventListener('DOMContentLoaded', () => {
   window.scrollTo({top: 0, left: 0, behavior: 'instant'});
   switchPage('utama', true);
+  history.replaceState({page: 'utama'}, '', '#utama');
 });
 const tarikhInput = document.querySelector('#nikahForm input[name="tarikh"]');
 if(tarikhInput){
@@ -698,68 +504,12 @@ async function load(){
     const ys = [...new Set(records.map(r => (r.tarikh || '').slice(0,4)).filter(Boolean))].sort();
     $('#yearSelect').innerHTML = ys.map(y => `<option>${y}</option>`).join('') || `<option>${now.getFullYear()}</option>`;
     
-    checkNotifications();
     renderRows();
   }catch(err){
     console.error("Ralat data:", err);
   }
 }
-function checkNotifications() {
-  const today = new Date();
-  today.setHours(0,0,0,0);
-  
-  upcomingNotifications = records.filter(r => {
-    if(!r.tarikh) return false;
-    const eventDate = new Date(r.tarikh + 'T00:00:00');
-    eventDate.setHours(0,0,0,0);
-    const diffTime = eventDate - today;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays >= 0 && diffDays <= 3;
-  });
-  
-  const count = upcomingNotifications.length;
-  const badgePC = $('#notifBadgePC');
-  const badgeMobile = $('#notifBadgeMobile');
-  
-  if(count > 0) {
-    if(badgePC) { badgePC.textContent = count; badgePC.style.display = 'inline-block'; }
-    if(badgeMobile) { badgeMobile.textContent = count; badgeMobile.style.display = 'inline-block'; }
-  } else {
-    if(badgePC) badgePC.style.display = 'none';
-    if(badgeMobile) badgeMobile.style.display = 'none';
-  }
-}
-
-// FUNGSI MODAL DALAMAN (CUSTOM INTERNAL MODAL)
-window.showNotifications = function() {
-  const modal = $('#customModal');
-  const titleEl = $('#modalTitle');
-  const bodyEl = $('#modalBody');
-  const iconEl = $('#modalIcon');
-
-  if(upcomingNotifications.length === 0) {
-    iconEl.textContent = 'ℹ️';
-    titleEl.textContent = 'Notifikasi';
-    bodyEl.innerHTML = 'Tiada majlis nikah dalam masa 3 hari terdekat.';
-  } else {
-    iconEl.textContent = '🔔';
-    titleEl.textContent = 'Majlis Nikah (Dalam 3 Hari)';
-    let htmlList = '';
-    upcomingNotifications.forEach((r, idx) => {
-      htmlList += `<div style="padding:6px 0; border-bottom:1px solid #eee;">
-        <b>${idx + 1}. ${r.nama}</b><br>
-        <span style="font-size:12px; color:#555;">Tarikh: ${formatDateDMY(r.tarikh)} | Tempat: ${r.tempat}, ${r.kampung}</span>
-      </div>`;
-    });
-    bodyEl.innerHTML = htmlList;
-  }
-  modal.classList.add('active');
-};
-
-window.closeCustomModal = function() {
-  $('#customModal').classList.remove('active');
-};
-
+// Fungsi Format Tarikh kepada dd-mm-yyyy (Contoh: 21-11-2026)
 function formatDateDMY(dateStr) {
   if(!dateStr) return '';
   const parts = dateStr.split('-');
@@ -768,8 +518,10 @@ function formatDateDMY(dateStr) {
   }
   return dateStr;
 }
+// Fungsi Tambah ke Kalendar dengan Masa 8-10 am dan Format Teks Tepat Pilihan Anda
 window.addToCalendar = function(name, tarikh, masa, tempat, kampung, catatan){
   let formattedDate = tarikh.replace(/-/g, '');
+  // Masa tetap 8:00 pagi hingga 10:00 pagi (080000 / 100000)
   let startTime = '080000';
   let endTime = '100000';
   
@@ -785,7 +537,7 @@ window.sendWhatsapp = function(name, tel, tarikh, hari, masa, kampung, tempat, w
   if(cleanTel.startsWith('0')) cleanTel = '60' + cleanTel.slice(1);
   
   let formattedTarikh = formatDateDMY(tarikh);
-  const textMsg = `*Sistem Nikah Anak Mukim*\n*Maklumat Nikah :*\n1. Nama : ${name}\n2. Tarikh : ${formattedTarikh} (${hari})\n3. Masa : ${masa}\n4. Kampung: ${kampung}\n5. Tempat Nikah : ${tempat}\n6. Wali : ${wali}\n7. Catatan : ${catatan||'-'}\n8. Pertanyaan sila hubungi :\n   Imam : 019-9467894`;
+  const textMsg = `✨ **MAKLUMAT NIKAH** ✨\n📍 Sistem Nikah Anak Mukim\nAssalamualaikum\n\n📋 **Butiran Majlis :**\n• Nama : ${name}\n• Tarikh : ${formattedTarikh} (${hari})\n• Masa : ${masa}\n• Kampung : ${kampung}\n• Tempat Nikah : ${tempat}\n• Wali : ${wali}\n• Catatan : ${catatan||'-'}\n\n📞 **Sebarang Pertanyaan :**\n• Imam : 019-9467894`;
   
   window.open(`https://wa.me/${cleanTel}?text=${encodeURIComponent(textMsg)}`, '_blank');
 };
@@ -814,9 +566,7 @@ function renderRows(){
       <td style="text-align:center">
         <div class="action-btns">
           <button class="btn-calendar" title="Tambah ke Kalendar" onclick="addToCalendar('${r.nama}','${r.tarikh}','${r.masa}','${r.tempat}','${r.kampung}','${r.catatan}')">📅</button>
-          <button class="btn-whatsapp-icon" title="WhatsApp" onclick="sendWhatsapp('${r.nama}','${r.tel}','${r.tarikh}','${r.hari}','${r.masa}','${r.kampung}','${r.tempat}','${r.wali}','${r.catatan}')">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-          </button>
+          <button class="btn-whatsapp-icon" title="WhatsApp" onclick="sendWhatsapp('${r.nama}','${r.tel}','${r.tarikh}','${r.hari}','${r.masa}','${r.kampung}','${r.tempat}','${r.wali}','${r.catatan}')">💬</button>
         </div>
       </td>
     </tr>`;
@@ -825,6 +575,7 @@ function renderRows(){
 }
 $('#smartSearch').oninput = renderRows;
 $('#clearSearch').onclick = () => { $('#smartSearch').value = ''; renderRows(); };
+/* KEMASKINI REKOD IKUT NO BIL */
 $('#editByBilBtn').onclick = async () => {
   const { value: targetBil } = await Swal.fire({
     title: 'Kemaskini Rekod',
@@ -882,6 +633,7 @@ $('#editByBilBtn').onclick = async () => {
     }
   }
 };
+/* SANDARAN JSON: EKSPOR */
 $('#exportJson').onclick = () => {
   const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(records, null, 2));
   const dlAnchorElem = document.createElement('a');
@@ -892,6 +644,7 @@ $('#exportJson').onclick = () => {
   dlAnchorElem.remove();
   Swal.fire('Berjaya', 'Fail sandaran JSON telah berjaya dieksport.', 'success');
 };
+/* SANDARAN JSON: IMPOR */
 $('#importJsonBtn').onclick = () => { $('#importFile').click(); };
 $('#importFile').onchange = (e) => {
   const fileReader = new FileReader();
@@ -928,6 +681,7 @@ $('#importFile').onchange = (e) => {
     };
   }
 };
+/* PENGURUSAN HAPUS REKOD: IKUT BIL ATAU HAPUS SEMUA */
 $('#deleteAll').onclick = async() => {
   const choice = await Swal.fire({
     title: 'Pengurusan Hapus Rekod',
@@ -938,7 +692,7 @@ $('#deleteAll').onclick = async() => {
     confirmButtonText: 'Hapus Ikut No Bil',
     denyButtonText: 'Hapus Semua Data',
     cancelButtonText: 'Batal',
-    confirmButtonColor: '#0e122b',
+    confirmButtonColor: '#082b57',
     denyButtonColor: '#d32f2f'
   });
   if (choice.isConfirmed) {
