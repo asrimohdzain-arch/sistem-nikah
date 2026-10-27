@@ -16,17 +16,14 @@
   --text-on-dark: #ffffff;
   --text-main: #17212b;
 }
-
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);font-family:'Segoe UI',sans-serif;color:var(--text-main);font-size:14px}
 .app{min-height:100vh;display:flex;flex-direction:column}
-
 /* SIDEBAR KIRI (MOD PC) */
 .sidebar{position:fixed;left:0;top:0;width:240px;height:100vh;background:#fff;border-right:1px solid var(--line);padding:20px 12px;z-index:10;display:flex;flex-direction:column;gap:15px}
 .sidebar-logo{background:var(--navy);color:var(--text-on-dark);text-align:center;border-radius:12px;padding:16px 10px;font-size:16px;font-weight:700}
 .sidebar-logo small{display:block;font-size:11px;font-weight:normal;opacity:0.9;margin-top:3px}
 .nav-menu{display:flex;flex-direction:column;gap:8px}
-
 .nav-menu button{
   border: 0;
   background: #fff;
@@ -51,12 +48,42 @@ body{margin:0;background:var(--bg);font-family:'Segoe UI',sans-serif;color:var(-
 .nav-menu button:hover:not(.active){
   background: #e0e7ff;
 }
-
 /* HEADER UTAMA PC */
 .header{background:var(--navy);color:var(--text-on-dark);padding:18px 25px;margin-left:240px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px #0003}
 .brand{font-size:19px;font-weight:700}
 .brand-sub{font-size:12px;opacity:0.9;margin-top:2px}
+.header-right{display:flex;align-items:center;gap:15px;}
 .date-pill{background:#ffffff22;border:1px solid #ffffff55;padding:8px 14px;border-radius:9999px;font-size:12px;font-weight:600}
+
+/* NOTIFICATION BELL */
+.notification-bell-container {
+  position: relative;
+  cursor: pointer;
+  background: #ffffff22;
+  border: 1px solid #ffffff55;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+.notification-bell-container:hover {
+  background: #ffffff44;
+}
+.notification-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #d32f2f;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 9999px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
 
 main{margin-left:240px;padding:25px}
 .page{display:none}
@@ -69,12 +96,10 @@ main{margin-left:240px;padding:25px}
 .card{background:#fff;border:1px solid #cbd8e5;border-radius:12px;padding:16px}
 .card b{display:block;color:#53657a;margin-bottom:6px;font-size:13px}
 .value{font-size:28px;font-weight:800;color:var(--navy)}
-
 /* TOOLBAR & SAIZ KECIL BUTANG SERTA KOTAK PILIHAN TAHUN */
 .toolbar{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
 .toolbar-row{display:flex;gap:10px;align-items:center;width:100%}
 .toolbar-row .btn{flex:1;justify-content:center}
-
 .toolbar .btn,
 .btn-modern-primary {
   background: var(--navy);
@@ -96,10 +121,8 @@ main{margin-left:240px;padding:25px}
   opacity: 0.9;
   transform: translateY(-1px);
 }
-
 .smart-search{display:flex;align-items:center;gap:10px;margin:0 0 14px;padding:10px;background:#f6f9fc;border:1px solid var(--line);border-radius:10px}
 .smart-search input{flex:1;padding:9px 12px;border:1px solid #bcc9d6;border-radius:7px;font-size:13px}
-
 .clear-search{
   border: 0;
   background: #dfe8f2;
@@ -112,7 +135,6 @@ main{margin-left:240px;padding:25px}
   transition: 0.2s;
 }
 .clear-search:hover { background: #cbd8e5; }
-
 .search-count{color:#53657a;font-size:12px;white-space:nowrap}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .field.full{grid-column:1/-1}
@@ -148,20 +170,20 @@ th:last-child, td:last-child { text-align:center; }
 .bar{width:75%;max-width:24px;background:var(--navy);border-radius:12px 12px 0 0;min-height:2px;position:relative;transition:height 0.3s;}
 .bar-count{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;color:var(--text-main);}
 .bar-month{position:absolute;bottom:-25px;left:50%;transform:translateX(-50%);font-size:10px;color:#53657a;white-space:nowrap;font-weight:600;}
-
 .action-btns {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
 }
+/* KEMASKINI: BENTUK EMPAT SEGI (SQUARE) DENGAN BORDER-RADIUS KECIL */
 .btn-calendar {
   background: #1976d2;
   color: #fff;
   border: 0;
   width: 28px;
   height: 28px;
-  border-radius: 50%;
+  border-radius: 6px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -172,18 +194,18 @@ th:last-child, td:last-child { text-align:center; }
   text-decoration: none;
 }
 .btn-calendar:hover { background: #115293; }
+
 .btn-whatsapp-icon {
   background: #25D366;
   color: #fff;
   border: 0;
   width: 28px;
   height: 28px;
-  border-radius: 50%;
+  border-radius: 6px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
   box-shadow: 0 2px 5px rgba(37, 211, 102, 0.3);
   transition: 0.2s;
   text-decoration: none;
@@ -207,14 +229,14 @@ th:last-child, td:last-child { text-align:center; }
   gap: 8px;
 }
 .btn-modern-danger:hover { background: #b71c1c; transform: translateY(-1px); }
-
 @media(max-width:768px){
 .sidebar{display:none}
 .header{display:none}
 main{margin-left:0;padding:12px}
 .cards,.chart-row,.grid{grid-template-columns:1fr}
 .mobile-banner{display:block}
-.m-header{background:linear-gradient(135deg, var(--navy) 0%, #000000 100%);color:var(--text-on-dark);padding:22px 15px;text-align:center;border-radius:14px;box-shadow:0 4px 12px #0003;margin-bottom:14px}
+.m-header{background:linear-gradient(135deg, var(--navy) 0%, #000000 100%);color:var(--text-on-dark);padding:22px 15px;text-align:center;border-radius:14px;box-shadow:0 4px 12px #0003;margin-bottom:14px;position:relative}
+.m-header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .m-header h1{margin:0 0 4px;font-size:20px;font-weight:800;letter-spacing:0.5px}
 .m-header p{margin:0;font-size:12px;opacity:0.9}
 .m-sub-banner{background:linear-gradient(135deg, #1c2555 0%, var(--navy) 100%);color:var(--text-on-dark);padding:18px;border-radius:14px;margin-bottom:14px;box-shadow:0 4px 12px #0003;position:relative;overflow:hidden}
@@ -251,11 +273,25 @@ main{margin-left:0;padding:12px}
       <div class="brand">SISTEM REKOD NIKAH MUKIM</div>
       <div class="brand-sub">Mukim Banggol Setol</div>
     </div>
-    <div class="date-pill" id="todayPC">Tarikh: Memuatkan...</div>
+    <div class="header-right">
+      <!-- IKON LOCENG PC -->
+      <div class="notification-bell-container" id="bellPC" onclick="showNotifications()" title="Notifikasi Tarikh Nikah">
+        🔔
+        <span class="notification-badge" id="notifBadgePC" style="display:none">0</span>
+      </div>
+      <div class="date-pill" id="todayPC">Tarikh: Memuatkan...</div>
+    </div>
   </header>
   <main>
     <div class="mobile-banner">
       <div class="m-header">
+        <div class="m-header-top" style="width:100%; display:flex; justify-content:flex-end;">
+          <!-- IKON LOCENG MOBILE -->
+          <div class="notification-bell-container" id="bellMobile" onclick="showNotifications()" title="Notifikasi Tarikh Nikah">
+            🔔
+            <span class="notification-badge" id="notifBadgeMobile" style="display:none">0</span>
+          </div>
+        </div>
         <h1>SISTEM NIKAH</h1>
         <p>Mukim Banggol Setol</p>
       </div>
@@ -321,7 +357,6 @@ main{margin-left:0;padding:12px}
             <select id="yearSelect" style="flex:1;padding:8px 14px;border-radius:9999px;border:1px solid #bcc9d6;font-weight:600;font-size:11px;background:#fff;cursor:pointer"></select>
           </div>
         </div>
-
         <div id="searchPanel" class="smart-search">
           <input id="smartSearch" type="search" placeholder="Cari nama, kampung, tempat...">
           <button id="clearSearch" class="clear-search" type="button">Kosong</button>
@@ -433,14 +468,13 @@ const firebaseConfig = { apiKey: "AIzaSyBflySl7ok21LE4urn0rKrSVxczRrZykQE", auth
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 let records = [];
+let upcomingNotifications = [];
 const $= s => document.querySelector(s),$$ = s => [...document.querySelectorAll(s)];
 const days = ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'], months = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
 const formattedDate = new Intl.DateTimeFormat('ms-MY',{day:'2-digit',month:'long',year:'numeric'}).format(new Date());
 $('#todayPC').textContent = 'Tarikh: ' + formattedDate;
 $('#todayMobile').textContent = formattedDate;  
-
 let currentPage = 'utama';  
-
 window.switchPage = function(id, fromBack = false){ 
   currentPage = id;  
   $$('.page').forEach(p => p.classList.toggle('active', p.id === id));
@@ -466,7 +500,6 @@ window.switchPage = function(id, fromBack = false){
     }, 50);
   }
 };
-
 window.addEventListener('popstate', e => {
   if (currentPage !== 'utama') {
     switchPage('utama', true);
@@ -475,14 +508,11 @@ window.addEventListener('popstate', e => {
     history.back();
   }
 });
-
-// Paksa paparan bermula terus pada halaman utama tanpa menunggu tindakan luaran
 document.addEventListener("DOMContentLoaded", () => {
   history.replaceState({page: 'utama'}, '', '#utama');
   window.scrollTo({top: 0, left: 0, behavior: 'instant'});
   switchPage('utama', true);
 });
-
 const tarikhInput = document.querySelector('#nikahForm input[name="tarikh"]');
 if(tarikhInput){
   tarikhInput.onchange = e => {
@@ -576,11 +606,60 @@ async function load(){
     const ys = [...new Set(records.map(r => (r.tarikh || '').slice(0,4)).filter(Boolean))].sort();
     $('#yearSelect').innerHTML = ys.map(y => `<option>${y}</option>`).join('') || `<option>${now.getFullYear()}</option>`;
     
+    checkNotifications();
     renderRows();
   }catch(err){
     console.error("Ralat data:", err);
   }
 }
+function checkNotifications() {
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  
+  upcomingNotifications = records.filter(r => {
+    if(!r.tarikh) return false;
+    const eventDate = new Date(r.tarikh + 'T00:00:00');
+    eventDate.setHours(0,0,0,0);
+    const diffTime = eventDate - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays >= 0 && diffDays <= 3;
+  });
+  
+  const count = upcomingNotifications.length;
+  const badgePC = $('#notifBadgePC');
+  const badgeMobile = $('#notifBadgeMobile');
+  
+  if(count > 0) {
+    badgePC.textContent = count;
+    badgePC.style.display = 'inline-block';
+    badgeMobile.textContent = count;
+    badgeMobile.style.display = 'inline-block';
+  } else {
+    badgePC.style.display = 'none';
+    badgeMobile.style.display = 'none';
+  }
+}
+window.showNotifications = function() {
+  if(upcomingNotifications.length === 0) {
+    Swal.fire('Notifikasi', 'Tiada majlis nikah dalam masa 3 hari terdekat.', 'info');
+    return;
+  }
+  let htmlList = `<div style="text-align:left; max-height:300px; overflow-y:auto;">`;
+  upcomingNotifications.forEach((r, idx) => {
+    htmlList += `<div style="padding:8px 0; border-bottom:1px solid #eee;">
+      <b>${idx + 1}. ${r.nama}</b><br>
+      <small style="color:#555">Tarikh: ${formatDateDMY(r.tarikh)} | Tempat: ${r.tempat}, ${r.kampung}</small>
+    </div>`;
+  });
+  htmlList += `</div>`;
+  
+  Swal.fire({
+    title: 'Majlis Nikah (Dalam 3 Hari Lagi)',
+    html: htmlList,
+    icon: 'info',
+    confirmButtonText: 'Tutup'
+  });
+};
 function formatDateDMY(dateStr) {
   if(!dateStr) return '';
   const parts = dateStr.split('-');
@@ -635,7 +714,10 @@ function renderRows(){
       <td style="text-align:center">
         <div class="action-btns">
           <button class="btn-calendar" title="Tambah ke Kalendar" onclick="addToCalendar('${r.nama}','${r.tarikh}','${r.masa}','${r.tempat}','${r.kampung}','${r.catatan}')">📅</button>
-          <button class="btn-whatsapp-icon" title="WhatsApp" onclick="sendWhatsapp('${r.nama}','${r.tel}','${r.tarikh}','${r.hari}','${r.masa}','${r.kampung}','${r.tempat}','${r.wali}','${r.catatan}')">💬</button>
+          <!-- IKON WHATSAPP RASMI (SVG) -->
+          <button class="btn-whatsapp-icon" title="WhatsApp" onclick="sendWhatsapp('${r.nama}','${r.tel}','${r.tarikh}','${r.hari}','${r.masa}','${r.kampung}','${r.tempat}','${r.wali}','${r.catatan}')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+          </button>
         </div>
       </td>
     </tr>`;
