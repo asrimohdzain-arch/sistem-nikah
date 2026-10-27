@@ -383,10 +383,11 @@ main{margin-left:0;padding:12px}
         </div>
       </div>
       
+      <!-- HEADER BANNER DENGAN IKON LOCENG TUNGGAL -->
       <div class="m-sub-banner" style="position:relative;">
-        <div class="notification-bell-container" id="bellMobile" onclick="showNotifications()" title="Notifikasi Tarikh Nikah">
+        <div class="notification-bell-container" onclick="showNotifications()" title="Notifikasi Tarikh Nikah">
           🔔
-          <span class="notification-badge" id="notifBadgeMobile" style="display:none">0</span>
+          <span class="notification-badge" id="notifBadge" style="display:none">0</span>
         </div>
         <h3>Mukim Banggol Setol</h3>
         <p>Pengurusan Rekod Nikah Rasmi</p>
@@ -396,11 +397,7 @@ main{margin-left:0;padding:12px}
     
     <!-- LAMAN UTAMA -->
     <section id="utama" class="page active">
-      <div class="panel" style="position:relative;">
-        <div class="notification-bell-container" id="bellPC" onclick="showNotifications()" title="Notifikasi Tarikh Nikah" style="background:var(--navy); border-color:#ffffff55; color:#fff;">
-          🔔
-          <span class="notification-badge" id="notifBadgePC" style="display:none">0</span>
-        </div>
+      <div class="panel">
         <h2 class="page-title">Analisa Rekod Nikah</h2>
         <div class="cards">
           <div class="card"><b>Jumlah Rekod Nikah</b><span class="value" id="total">0</span></div>
@@ -709,15 +706,13 @@ function checkNotifications() {
   });
   
   const count = upcomingNotifications.length;
-  const badgePC = $('#notifBadgePC');
-  const badgeMobile = $('#notifBadgeMobile');
+  const badge = $('#notifBadge');
   
-  if(count > 0) {
-    if(badgePC) { badgePC.textContent = count; badgePC.style.display = 'inline-block'; }
-    if(badgeMobile) { badgeMobile.textContent = count; badgeMobile.style.display = 'inline-block'; }
-  } else {
-    if(badgePC) badgePC.style.display = 'none';
-    if(badgeMobile) badgeMobile.style.display = 'none';
+  if(count > 0 && badge) {
+    badge.textContent = count;
+    badge.style.display = 'inline-block';
+  } else if(badge) {
+    badge.style.display = 'none';
   }
 }
 
