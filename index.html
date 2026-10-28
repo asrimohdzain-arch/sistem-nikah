@@ -779,7 +779,7 @@ window.sendWhatsapp = function(name, tel, tarikh, hari, masa, kampung, tempat, w
   if(cleanTel.startsWith('0')) cleanTel = '60' + cleanTel.slice(1);
   
   let formattedTarikh = formatDateDMY(tarikh);
-  const textMsg = `✨ *MAKLUMAT NIKAH* ✨\n📍*Sistem Nikah Anak Mukim*\nAssalamualaikum\n\n📋*Butiran Majlis :*\n• *Nama* : ${name}\n• Tarikh : ${formattedTarikh} (${hari})\n• *Masa* : ${masa}\n• *Kampung* : ${kampung}\n• *Tempat Nikah* : ${tempat}\n• *Wali* : ${wali}\n• *Catatan* : ${catatan||'-'}\n\n📞*Sebarang Pertanyaan :*\n• *Imam* : 019-9467894`;
+  const textMsg = `✨ *MAKLUMAT NIKAH* ✨\n📍*Sistem Nikah Anak Mukim*\nAssalamualaikum\n\n📋*Butiran Majlis :*\n• *Nama* : ${name}\n• *Tarikh* : ${formattedTarikh} (${hari})\n• *Masa* : ${masa}\n• *Kampung* : ${kampung}\n• *Tempat Nikah* : ${tempat}\n• *Wali* : ${wali}\n• *Catatan* : ${catatan||'-'}\n\n📞*Sebarang Pertanyaan :*\n• *Imam* : 019-9467894`;
   
   window.open(`https://wa.me/${cleanTel}?text=${encodeURIComponent(textMsg)}`, '_blank');
 };
