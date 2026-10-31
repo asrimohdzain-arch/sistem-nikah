@@ -4,11 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sistem Rekod Nikah Mukim</title>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <style>
-:root{--maroon:#0a192f;--navy:#050b14;--gold:#314e89;--dark-gold:#172a45;--bg:#f2f6fb;--line:#d9e2ec}
+:root{--maroon:#550000;--navy:#082b57;--gold:#9a7200;--dark-gold:#7a5a00;--bg:#f2f6fb;--line:#d9e2ec}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);font-family:'Segoe UI',sans-serif;color:#17212b;font-size:14px}
 .app{min-height:100vh;display:flex;flex-direction:column}
@@ -23,11 +24,7 @@ body{margin:0;background:var(--bg);font-family:'Segoe UI',sans-serif;color:#1721
 .header{background:var(--maroon);color:#fff;padding:18px 25px;margin-left:240px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px #0003}
 .brand{font-size:19px;font-weight:700}
 .brand-sub{font-size:12px;opacity:0.9;margin-top:2px}
-.header-right{display:flex;align-items:center;gap:15px}
 .date-pill{background:#ffffff22;border:1px solid #ffffff55;padding:8px 14px;border-radius:16px;font-size:12px;font-weight:600}
-.notif-btn{position:relative;background:#ffffff22;border:1px solid #ffffff55;color:#fff;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:0.2s}
-.notif-btn:hover{background:#ffffff44}
-.notif-badge{position:absolute;top:-4px;right:-4px;background:#d32f2f;color:#fff;font-size:10px;font-weight:bold;padding:2px 6px;border-radius:10px;display:none}
 main{margin-left:240px;padding:25px}
 .page{display:none}
 .page.active{display:block}
@@ -152,106 +149,6 @@ th:last-child, td:last-child { text-align:center; }
   gap: 8px;
 }
 .btn-modern-primary:hover { background: var(--gold); }
-
-/* CUSTOM MODAL STYLES */
-.custom-modal-overlay {
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  padding: 15px;
-}
-.custom-modal-box {
-  background: #fff;
-  width: 100%;
-  max-width: 420px;
-  border-radius: 14px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  padding: 24px;
-  text-align: center;
-  animation: modalScaleIn 0.2s ease-out;
-  font-family: 'Segoe UI', sans-serif;
-}
-@keyframes modalScaleIn {
-  from { transform: scale(0.9); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-.custom-modal-icon {
-  width: 60px; height: 60px;
-  border-radius: 50%;
-  background: #e6f0fa;
-  color: var(--maroon);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  margin: 0 auto 15px;
-  border: 2px solid var(--gold);
-}
-.custom-modal-title {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--maroon);
-  margin: 0 0 10px;
-}
-.custom-modal-content {
-  font-size: 14px;
-  color: #53657a;
-  margin-bottom: 20px;
-  line-height: 1.5;
-}
-.custom-modal-input {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #bcc9d6;
-  border-radius: 8px;
-  font-size: 14px;
-  margin-bottom: 20px;
-  outline: none;
-}
-.custom-modal-input:focus {
-  border-color: var(--maroon);
-}
-.custom-modal-actions {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
-.custom-modal-btn {
-  flex: 1;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-weight: 650;
-  font-size: 13px;
-  cursor: pointer;
-  border: 0;
-  transition: 0.2s;
-}
-.custom-modal-btn-primary {
-  background: var(--maroon);
-  color: #fff;
-}
-.custom-modal-btn-primary:hover {
-  background: var(--navy);
-}
-.custom-modal-btn-secondary {
-  background: #e2e8f0;
-  color: #17212b;
-}
-.custom-modal-btn-secondary:hover {
-  background: #cbd8e5;
-}
-.custom-modal-btn-danger {
-  background: #d32f2f;
-  color: #fff;
-}
-.custom-modal-btn-danger:hover {
-  background: #b71c1c;
-}
-
 /* RESPONSIF TELEFON */
 @media(max-width:768px){
 .sidebar{display:none}
@@ -259,11 +156,10 @@ th:last-child, td:last-child { text-align:center; }
 main{margin-left:0;padding:12px}
 .cards,.chart-row,.grid{grid-template-columns:1fr}
 .mobile-banner{display:block}
-.m-header{background:linear-gradient(135deg, #0a192f 0%, #050b14 100%);color:#fff;padding:22px 15px;text-align:center;border-radius:14px;box-shadow:0 4px 12px #0003;margin-bottom:14px;position:relative}
-.m-notif-btn{position:absolute;top:15px;right:15px;background:#ffffff22;border:1px solid #ffffff55;color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px}
+.m-header{background:linear-gradient(135deg, #550000 0%, #330000 100%);color:#fff;padding:22px 15px;text-align:center;border-radius:14px;box-shadow:0 4px 12px #0003;margin-bottom:14px}
 .m-header h1{margin:0 0 4px;font-size:20px;font-weight:800;letter-spacing:0.5px}
 .m-header p{margin:0;font-size:12px;opacity:0.9}
-.m-sub-banner{background:linear-gradient(135deg, #172a45 0%, #0a192f 100%);color:#fff;padding:18px;border-radius:14px;margin-bottom:14px;box-shadow:0 4px 12px #0003;position:relative;overflow:hidden}
+.m-sub-banner{background:linear-gradient(135deg, #7a1111 0%, #550000 100%);color:#fff;padding:18px;border-radius:14px;margin-bottom:14px;box-shadow:0 4px 12px #0003;position:relative;overflow:hidden}
 .m-sub-banner h3{margin:0 0 2px;font-size:16px;font-weight:700}
 .m-sub-banner p{margin:0 0 10px;font-size:11px;opacity:0.9}
 .m-date-badge{display:inline-block;background:#ffffff28;border:1px solid #ffffff55;padding:5px 12px;border-radius:15px;font-size:11px;font-weight:600}
@@ -273,10 +169,10 @@ main{margin-left:0;padding:12px}
 .menu-info b{display:block;font-size:12px;color:var(--navy)}
 .menu-info span{font-size:10px;color:#53657a}
 /* GAYA KUNING TUA GELAP BILA KAD MENU AKTIF */
-.menu-card.active{background:var(--dark-gold)!important;border-color:var(--gold)!important;box-shadow:0 4px 12px rgba(23,42,69,0.4)!important}
+.menu-card.active{background:var(--dark-gold)!important;border-color:var(--gold)!important;box-shadow:0 4px 12px rgba(122,90,0,0.4)!important}
 .menu-card.active .menu-icon{background:#fff!important;color:var(--dark-gold)!important}
 .menu-card.active .menu-info b{color:#fff!important}
-.menu-card.active .menu-info span{color:#d9e2ec!important}
+.menu-card.active .menu-info span{color:#f0e6c2!important}
 }
 </style>
 </head>
@@ -298,21 +194,11 @@ main{margin-left:0;padding:12px}
       <div class="brand">SISTEM REKOD NIKAH MUKIM</div>
       <div class="brand-sub">Mukim Banggol Setol</div>
     </div>
-    <div class="header-right">
-      <div class="date-pill" id="todayPC">Tarikh: Memuatkan...</div>
-      <div class="notif-btn" id="notifBtnPC" title="Notifikasi Nikah Terdekat" onclick="showNotifications()">
-        🔔
-        <span class="notif-badge" id="notifBadgePC">0</span>
-      </div>
-    </div>
+    <div class="date-pill" id="todayPC">Tarikh: Memuatkan...</div>
   </header>
   <main>
     <div class="mobile-banner">
       <div class="m-header">
-        <div class="m-notif-btn" id="notifBtnMobile" title="Notifikasi Nikah Terdekat" onclick="showNotifications()">
-          🔔
-          <span class="notif-badge" id="notifBadgeMobile">0</span>
-        </div>
         <h1>SISTEM NIKAH</h1>
         <p>Mukim Banggol Setol</p>
       </div>
@@ -480,85 +366,12 @@ main{margin-left:0;padding:12px}
     </section>
   </main>
 </div>
-
-<!-- SISTEM CUSTOM MODAL CONTAINER -->
-<div id="customModal" class="custom-modal-overlay hidden">
-  <div class="custom-modal-box">
-    <div class="custom-modal-icon" id="modalIcon">ℹ️</div>
-    <h3 class="custom-modal-title" id="modalTitle">Makluman</h3>
-    <div class="custom-modal-content" id="modalContent">Mesej di sini</div>
-    <div id="modalInputContainer" class="hidden">
-      <input type="text" id="modalInputField" class="custom-modal-input" placeholder="Sila masukkan nilai...">
-    </div>
-    <div class="custom-modal-actions" id="modalActions">
-      <button class="custom-modal-btn custom-modal-btn-primary" id="modalOkBtn">OK</button>
-    </div>
-  </div>
-</div>
-
 <script>
 const firebaseConfig = { apiKey: "AIzaSyBflySl7ok21LE4urn0rKrSVxczRrZykQE", authDomain: "sistem-rekod-nikah.firebaseapp.com", projectId: "sistem-rekod-nikah", storageBucket: "sistem-rekod-nikah.firebasestorage.app", messagingSenderId: "473243104741", appId: "1:473243104741:web:be6dcfbe86256753beeb0c" };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 let records = [];
 const $= s => document.querySelector(s),$$ = s => [...document.querySelectorAll(s)];
-
-// Fungsi Custom Modal Pengganti SweetAlert2
-function showCustomModal({ title = 'Makluman', content = '', icon = 'ℹ️', input = false, inputValue = '', inputPlaceholder = '', showCancel = false, confirmText = 'OK', cancelText = 'Batal', confirmColor = 'primary', onConfirm, onCancel }) {
-  const modal = $('#customModal');
-  $('#modalTitle').textContent = title;
-  $('#modalIcon').textContent = icon;
-  
-  const contentEl = $('#modalContent');
-  if (typeof content === 'string') {
-    contentEl.innerHTML = content;
-  } else {
-    contentEl.innerHTML = '';
-    contentEl.appendChild(content);
-  }
-
-  const inputField = $('#modalInputField');
-  const inputContainer = $('#modalInputContainer');
-  if (input) {
-    inputContainer.classList.remove('hidden');
-    inputField.value = inputValue || '';
-    inputField.placeholder = inputPlaceholder || '';
-    setTimeout(() => inputField.focus(), 50);
-  } else {
-    inputContainer.classList.add('hidden');
-  }
-
-  const actions = $('#modalActions');
-  actions.innerHTML = '';
-
-  if (showCancel) {
-    const cancelBtn = document.createElement('button');
-    cancelBtn.className = 'custom-modal-btn custom-modal-btn-secondary';
-    cancelBtn.textContent = cancelText;
-    cancelBtn.onclick = () => {
-      modal.classList.add('hidden');
-      if (onCancel) onCancel();
-    };
-    actions.appendChild(cancelBtn);
-  }
-
-  const okBtn = document.createElement('button');
-  okBtn.className = `custom-modal-btn custom-modal-btn-${confirmColor}`;
-  okBtn.textContent = confirmText;
-  okBtn.onclick = () => {
-    const val = input ? inputField.value : true;
-    if (input && !val.trim()) {
-      inputField.style.borderColor = '#d32f2f';
-      return;
-    }
-    modal.classList.add('hidden');
-    if (onConfirm) onConfirm(val);
-  };
-  actions.appendChild(okBtn);
-
-  modal.classList.remove('hidden');
-}
-
 const days = ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'], months = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
 const formattedDate = new Intl.DateTimeFormat('ms-MY',{day:'2-digit',month:'long',year:'numeric'}).format(new Date());
 $('#todayPC').textContent = 'Tarikh: ' + formattedDate;
@@ -644,11 +457,11 @@ $('#nikahForm').onsubmit = async e => {
     };
     if(editId){
       await db.collection('rekod_nikah').doc(editId).update(payload);
-      showCustomModal({ title: 'Berjaya', content: 'Rekod nikah telah dikemaskini.', icon: '✅' });
+      Swal.fire('Berjaya','Rekod nikah telah dikemaskini.','success');
     } else {
       payload.diciptaPada = firebase.firestore.FieldValue.serverTimestamp();
       await db.collection('rekod_nikah').add(payload);
-      showCustomModal({ title: 'Berjaya', content: 'Rekod nikah telah disimpan.', icon: '✅' });
+      Swal.fire('Berjaya','Rekod nikah telah disimpan.','success');
     }
     e.target.reset();
     $('#editId').value = '';
@@ -658,7 +471,7 @@ $('#nikahForm').onsubmit = async e => {
     await load();
     switchPage('rekod');
   }catch(err){
-    showCustomModal({ title: 'Ralat', content: err.message, icon: '❌', confirmColor: 'danger' });
+    Swal.fire('Ralat',err.message,'error');
   }finally{
     $('#saveBtn').disabled = false;
   }
@@ -691,66 +504,11 @@ async function load(){
     const ys = [...new Set(records.map(r => (r.tarikh || '').slice(0,4)).filter(Boolean))].sort();
     $('#yearSelect').innerHTML = ys.map(y => `<option>${y}</option>`).join('') || `<option>${now.getFullYear()}</option>`;
     
-    checkNotifications();
     renderRows();
   }catch(err){
     console.error("Ralat data:", err);
   }
 }
-// Fungsi Semak Notifikasi Majlis 3 Hari Sebelum
-function checkNotifications() {
-  const today = new Date();
-  today.setHours(0,0,0,0);
-  
-  const upcoming = records.filter(r => {
-    if(!r.tarikh) return false;
-    const eventDate = new Date(r.tarikh + 'T00:00:00');
-    eventDate.setHours(0,0,0,0);
-    const diffTime = eventDate - today;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays >= 0 && diffDays <= 3;
-  });
-
-  const count = upcoming.length;
-  const badgePC = $('#notifBadgePC');
-  const badgeMob = $('#notifBadgeMobile');
-
-  if(count > 0) {
-    badgePC.textContent = count;
-    badgePC.style.display = 'inline-block';
-    badgeMob.textContent = count;
-    badgeMob.style.display = 'inline-block';
-  } else {
-    badgePC.style.display = 'none';
-    badgeMob.style.display = 'none';
-  }
-  window.upcomingNikah = upcoming;
-}
-
-window.showNotifications = function() {
-  const list = window.upcomingNikah || [];
-  if(list.length === 0) {
-    showCustomModal({ title: 'Notifikasi', content: 'Tiada majlis nikah dalam tempoh 3 hari ini.', icon: '🔔' });
-    return;
-  }
-  
-  const container = document.createElement('div');
-  container.style.cssText = 'text-align:left;max-height:250px;overflow-y:auto;font-size:13px';
-  list.forEach((r, idx) => {
-    const item = document.createElement('div');
-    item.style.cssText = 'padding:8px 0;border-bottom:1px solid #eee';
-    item.innerHTML = `<b>${idx+1}. ${r.nama}</b><br><small>📅 Tarikh: ${formatDateDMY(r.tarikh)} (${r.hari}) | Masa: ${r.masa}</small><br><small>📍 Tempat: ${r.tempat}, ${r.kampung}</small>`;
-    container.appendChild(item);
-  });
-
-  showCustomModal({
-    title: '🔔 Majlis Nikah (3 Hari Terdekat)',
-    content: container,
-    icon: '📅',
-    confirmText: 'Tutup'
-  });
-};
-
 // Fungsi Format Tarikh kepada dd-mm-yyyy (Contoh: 21-11-2026)
 function formatDateDMY(dateStr) {
   if(!dateStr) return '';
@@ -759,6 +517,19 @@ function formatDateDMY(dateStr) {
     return `${parts[2]}-${parts[1]}-${parts[0]}`;
   }
   return dateStr;
+}
+// Fungsi Format Masa kepada 12 Jam (Contoh: 14:00 kepada 2.00 ptg)
+function formatMasa12Jam(masaStr) {
+  if(!masaStr) return '';
+  if(!masaStr.includes(':')) return masaStr;
+  let parts = masaStr.split(':');
+  let jam = parseInt(parts[0], 10);
+  let minit = parts[1];
+  if(isNaN(jam)) return masaStr;
+  let ampm = jam >= 12 ? 'ptg' : 'pagi';
+  jam = jam % 12;
+  jam = jam ? jam : 12;
+  return `${jam}.${minit} ${ampm}`;
 }
 // Fungsi Tambah ke Kalendar dengan Masa 8-10 am dan Format Teks Tepat Pilihan Anda
 window.addToCalendar = function(name, tarikh, masa, tempat, kampung, catatan){
@@ -779,7 +550,7 @@ window.sendWhatsapp = function(name, tel, tarikh, hari, masa, kampung, tempat, w
   if(cleanTel.startsWith('0')) cleanTel = '60' + cleanTel.slice(1);
   
   let formattedTarikh = formatDateDMY(tarikh);
-  const textMsg = `✨ *MAKLUMAT NIKAH* ✨\n📍*Sistem Nikah Anak Mukim*\nAssalamualaikum\n\n📋*Butiran Majlis :*\n• *Nama* : ${name}\n• *Tarikh* : ${formattedTarikh} (${hari})\n• *Masa* : ${masa}\n• *Kampung* : ${kampung}\n• *Tempat Nikah* : ${tempat}\n• *Wali* : ${wali}\n• *Catatan* : ${catatan||'-'}\n\n📞*Sebarang Pertanyaan :*\n• *Imam* : 019-9467894`;
+  const textMsg = `*Sistem Nikah Anak Mukim*\n*Maklumat Nikah :*\n1. Nama : ${name}\n2. Tarikh : ${formattedTarikh} (${hari})\n3. Masa : ${masa}\n4. Kampung: ${kampung}\n5. Tempat Nikah : ${tempat}\n6. Wali : ${wali}\n7. Catatan : ${catatan||'-'}\n8. Pertanyaan sila hubungi :\n   Imam : 019-9467894`;
   
   window.open(`https://wa.me/${cleanTel}?text=${encodeURIComponent(textMsg)}`, '_blank');
 };
@@ -793,12 +564,13 @@ function renderRows(){
     const isCompleted = r.tarikh && r.tarikh < todayStr;
     const rowClass = `month-${monthIndex} ${isCompleted ? 'completed-row' : ''}`;
     const displayDate = formatDateDMY(r.tarikh);
+    const displayMasa = formatMasa12Jam(r.masa);
     
     return `<tr class="${rowClass}">
       <td style="text-align:center">${i+1}</td>
       <td>${displayDate}</td>
       <td>${r.hari||''}</td>
-      <td>${r.masa||''}</td>
+      <td>${displayMasa}</td>
       <td><b>${r.nama||''}</b></td>
       <td>${r.kampung||''}</td>
       <td>${r.tempat||''}</td>
@@ -818,64 +590,62 @@ function renderRows(){
 $('#smartSearch').oninput = renderRows;
 $('#clearSearch').onclick = () => { $('#smartSearch').value = ''; renderRows(); };
 /* KEMASKINI REKOD IKUT NO BIL */
-$('#editByBilBtn').onclick = () => {
-  showCustomModal({
+$('#editByBilBtn').onclick = async () => {
+  const { value: targetBil } = await Swal.fire({
     title: 'Kemaskini Rekod',
-    content: 'Masukkan No. Bil rekod yang ingin dikemaskini:',
-    icon: '✏️',
-    input: true,
-    inputPlaceholder: 'Contoh: 1',
-    showCancel: true,
-    confirmText: 'Teruskan',
-    onConfirm: (targetBil) => {
-      const index = parseInt(targetBil) - 1;
-      if (index >= 0 && index < records.length) {
-        const r = records[index];
-        $('#editId').value = r.id;
-        
-        $('#formPanel').classList.remove('hidden');
-        $('#listPanel').classList.add('hidden');
-        $('#searchPanel').classList.add('hidden');
-        
-        const form = $('#nikahForm');
-        form.elements['tarikh'].value = r.tarikh || '';
-        form.elements['hari'].value = r.hari || '';
-        form.elements['masa'].value = r.masa || '';
-        form.elements['nama'].value = r.nama || '';
-        
-        const kampungSel = form.elements['kampung'];
-        const standardKampung = [...kampungSel.options].some(opt => opt.value === r.kampung);
-        if(standardKampung){
-          kampungSel.value = r.kampung;
-          $('#kLain').classList.add('hidden');
-        } else {
-          kampungSel.value = 'Lain-lain';
-          $('#kLain').classList.remove('hidden');
-          form.elements['kampung_lain'].value = r.kampung || '';
-        }
-        
-        const tempatSel = form.elements['tempat'];
-        const standardTempat = [...tempatSel.options].some(opt => opt.value === r.tempat);
-        if(standardTempat){
-          tempatSel.value = r.tempat;
-          $('#tLain').classList.add('hidden');
-        } else {
-          tempatSel.value = 'Lain-lain';
-          $('#tLain').classList.remove('hidden');
-          form.elements['tempat_lain'].value = r.tempat || '';
-        }
-        
-        form.elements['tel'].value = r.tel || '';
-        form.elements['wali'].value = r.wali || '';
-        form.elements['catatan'].value = r.catatan || '';
-        $('#saveBtn').textContent = 'Kemaskini Rekod Nikah';
-        
-        switchPage('rekod');
-      } else {
-        showCustomModal({ title: 'Ralat', content: 'No. Bil tidak sah atau tiada dalam senarai.', icon: '❌', confirmColor: 'danger' });
-      }
-    }
+    input: 'text',
+    inputLabel: 'Masukkan No. Bil rekod yang ingin dikemaskini',
+    showCancelButton: true,
+    inputValidator: (value) => { if (!value) return 'Sila masukkan No. Bil!'; }
   });
+  if (targetBil) {
+    const index = parseInt(targetBil) - 1;
+    if (index >= 0 && index < records.length) {
+      const r = records[index];
+      $('#editId').value = r.id;
+      
+      $('#formPanel').classList.remove('hidden');
+      $('#listPanel').classList.add('hidden');
+      $('#searchPanel').classList.add('hidden');
+      
+      const form = $('#nikahForm');
+      form.elements['tarikh'].value = r.tarikh || '';
+      form.elements['hari'].value = r.hari || '';
+      form.elements['masa'].value = r.masa || '';
+      form.elements['nama'].value = r.nama || '';
+      
+      const kampungSel = form.elements['kampung'];
+      const standardKampung = [...kampungSel.options].some(opt => opt.value === r.kampung);
+      if(standardKampung){
+        kampungSel.value = r.kampung;
+        $('#kLain').classList.add('hidden');
+      } else {
+        kampungSel.value = 'Lain-lain';
+        $('#kLain').classList.remove('hidden');
+        form.elements['kampung_lain'].value = r.kampung || '';
+      }
+      
+      const tempatSel = form.elements['tempat'];
+      const standardTempat = [...tempatSel.options].some(opt => opt.value === r.tempat);
+      if(standardTempat){
+        tempatSel.value = r.tempat;
+        $('#tLain').classList.add('hidden');
+      } else {
+        tempatSel.value = 'Lain-lain';
+        $('#tLain').classList.remove('hidden');
+        form.elements['tempat_lain'].value = r.tempat || '';
+      }
+      
+      form.elements['tel'].value = r.tel || '';
+      form.elements['wali'].value = r.wali || '';
+      form.elements['catatan'].value = r.catatan || '';
+      $('#saveBtn').textContent = 'Kemaskini Rekod Nikah';
+      
+      switchPage('rekod');
+    } else {
+      Swal.fire('Ralat', 'No. Bil tidak sah atau tiada dalam senarai.', 'error');
+    }
+  }
 };
 /* SANDARAN JSON: EKSPOR */
 $('#exportJson').onclick = () => {
@@ -886,7 +656,7 @@ $('#exportJson').onclick = () => {
   document.body.appendChild(dlAnchorElem);
   dlAnchorElem.click();
   dlAnchorElem.remove();
-  showCustomModal({ title: 'Berjaya', content: 'Fail sandaran JSON telah berjaya dieksport.', icon: '📤' });
+  Swal.fire('Berjaya', 'Fail sandaran JSON telah berjaya dieksport.', 'success');
 };
 /* SANDARAN JSON: IMPOR */
 $('#importJsonBtn').onclick = () => { $('#importFile').click(); };
@@ -898,101 +668,92 @@ $('#importFile').onchange = (e) => {
       try {
         const importedData = JSON.parse(event.target.result);
         if(Array.isArray(importedData)){
-          showCustomModal({
+          const confirmImp = await Swal.fire({
             title: 'Impor Data JSON?',
-            content: `Jumpa ${importedData.length} rekod. Teruskan import ke pangkalan data?`,
-            icon: '📥',
-            showCancel: true,
-            confirmText: 'Ya, Impor',
-            onConfirm: async () => {
-              const batch = db.batch();
-              importedData.forEach(r => {
-                const newRef = db.collection('rekod_nikah').doc();
-                const { id, ...dataWithoutId } = r;
-                batch.set(newRef, dataWithoutId);
-              });
-              await batch.commit();
-              await load();
-              showCustomModal({ title: 'Berjaya', content: 'Data JSON telah berjaya diimpor.', icon: '✅' });
-            }
+            text: `Jumpa ${importedData.length} rekod. Teruskan import ke pangkalan data?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Impor'
           });
+          if(confirmImp.isConfirmed){
+            const batch = db.batch();
+            importedData.forEach(r => {
+              const newRef = db.collection('rekod_nikah').doc();
+              const { id, ...dataWithoutId } = r;
+              batch.set(newRef, dataWithoutId);
+            });
+            await batch.commit();
+            await load();
+            Swal.fire('Berjaya', 'Data JSON telah berjaya diimpor.', 'success');
+          }
         } else {
-          showCustomModal({ title: 'Ralat', content: 'Format fail JSON tidak sah.', icon: '❌', confirmColor: 'danger' });
+          Swal.fire('Ralat', 'Format fail JSON tidak sah.', 'error');
         }
       } catch(err) {
-        showCustomModal({ title: 'Ralat', content: 'Gagal membaca fail JSON.', icon: '❌', confirmColor: 'danger' });
+        Swal.fire('Ralat', 'Gagal membaca fail JSON.', 'error');
       }
     };
   }
 };
 /* PENGURUSAN HAPUS REKOD: IKUT BIL ATAU HAPUS SEMUA */
 $('#deleteAll').onclick = async() => {
-  showCustomModal({
+  const choice = await Swal.fire({
     title: 'Pengurusan Hapus Rekod',
-    content: 'Sila pilih kaedah penghapusan data:',
-    icon: '⚠️',
-    showCancel: true,
-    confirmText: 'Hapus Ikut No Bil',
-    cancelText: 'Hapus Semua Data',
-    confirmColor: 'primary',
-    onConfirm: () => {
-      showCustomModal({
-        title: 'Hapus Ikut No Bil',
-        content: 'Masukkan No. Bil yang ingin dipadam:',
-        icon: '🗑️',
-        input: true,
-        inputPlaceholder: 'Contoh: 1',
-        showCancel: true,
-        confirmText: 'Padam',
-        confirmColor: 'danger',
-        onConfirm: async (targetBil) => {
-          const index = parseInt(targetBil) - 1;
-          if (index >= 0 && index < records.length) {
-            const targetRec = records[index];
-            showCustomModal({
-              title: `Hapus rekod Bil ${targetBil} (${targetRec.nama})?`,
-              content: 'Tindakan ini tidak boleh diundur.',
-              icon: '⚠️',
-              showCancel: true,
-              confirmText: 'Ya, Padam',
-              confirmColor: 'danger',
-              onConfirm: async () => {
-                await db.collection('rekod_nikah').doc(targetRec.id).delete();
-                await load();
-                showCustomModal({ title: 'Selesai', content: `Rekod Bil ${targetBil} telah dipadam.`, icon: '✅' });
-              }
-            });
-          } else {
-            showCustomModal({ title: 'Ralat', content: 'No. Bil tidak sah / tiada dalam senarai.', icon: '❌', confirmColor: 'danger' });
-          }
-        }
-      });
-    },
-    onCancel: () => {
-      // Jika butang kedua (Hapus Semua) ditekan
-      showCustomModal({
-        title: 'Hapus SEMUA rekod?',
-        content: 'Tindakan ini akan memadam seluruh data secara kekal.<br>Taip <b>HAPUS SEMUA</b> untuk mengesahkan:',
-        icon: '🚨',
-        input: true,
-        inputPlaceholder: 'HAPUS SEMUA',
-        showCancel: true,
-        confirmText: 'Padam Semua',
-        confirmColor: 'danger',
-        onConfirm: async (v) => {
-          if (v === 'HAPUS SEMUA') {
-            const batch = db.batch();
-            records.forEach(r => batch.delete(db.collection('rekod_nikah').doc(r.id)));
-            await batch.commit();
-            await load();
-            showCustomModal({ title: 'Selesai', content: 'Semua rekod telah dipadam.', icon: '✅' });
-          } else {
-            showCustomModal({ title: 'Ralat', content: 'Pengesahan salah. Pembatalan dilakukan.', icon: '❌', confirmColor: 'danger' });
-          }
-        }
-      });
-    }
+    text: 'Sila pilih kaedah penghapusan data:',
+    icon: 'warning',
+    showDenyButton: true,
+    showCancelButton: true,
+    confirmButtonText: 'Hapus Ikut No Bil',
+    denyButtonText: 'Hapus Semua Data',
+    cancelButtonText: 'Batal',
+    confirmButtonColor: '#082b57',
+    denyButtonColor: '#d32f2f'
   });
+  if (choice.isConfirmed) {
+    const { value: targetBil } = await Swal.fire({
+      title: 'Hapus Ikut No Bil',
+      input: 'text',
+      inputLabel: 'Masukkan No. Bil yang ingin dipadam',
+      showCancelButton: true,
+      inputValidator: (value) => { if (!value) return 'Sila masukkan No. Bil!'; }
+    });
+    if (targetBil) {
+      const index = parseInt(targetBil) - 1;
+      if (index >= 0 && index < records.length) {
+        const targetRec = records[index];
+        const confirmDel = await Swal.fire({
+          title: `Hapus rekod Bil ${targetBil} (${targetRec.nama})?`,
+          showCancelButton: true,
+          confirmButtonText: 'Ya, Padam',
+          confirmButtonColor: '#d32f2f'
+        });
+        if (confirmDel.isConfirmed) {
+          await db.collection('rekod_nikah').doc(targetRec.id).delete();
+          await load();
+          Swal.fire('Selesai', `Rekod Bil ${targetBil} telah dipadam.`, 'success');
+        }
+      } else {
+        Swal.fire('Ralat', 'No. Bil tidak sah / tiada dalam senarai.', 'error');
+      }
+    }
+  } else if (choice.isDenied) {
+    const confirmText = await Swal.fire({
+      title: 'Hapus SEMUA rekod?',
+      text: 'Tindakan ini akan memadam seluruh data secara kekal.',
+      input: 'text',
+      inputLabel: 'Taip HAPUS SEMUA untuk mengesahkan',
+      showCancelButton: true,
+      confirmButtonColor: '#d32f2f',
+      preConfirm: v => v === 'HAPUS SEMUA'
+    });
+    if (confirmText.isConfirmed) {
+      const batch = db.batch();
+      records.forEach(r => batch.delete(db.collection('rekod_nikah').doc(r.id)));
+      await batch.commit();
+      await load();
+      Swal.fire('Selesai', 'Semua rekod telah dipadam.', 'success');
+    }
+  }
 };
 $('#pdfBtn').onclick = () => {
   const y = $('#yearSelect').value, data = records.filter(r => (r.tarikh || '').startsWith(y)), {jsPDF} = window.jspdf, pdf = new jsPDF('l','mm','a4');
