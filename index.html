@@ -152,7 +152,6 @@ th:last-child, td:last-child { text-align:center; }
   gap: 8px;
 }
 .btn-modern-primary:hover { background: var(--gold); }
-
 /* CUSTOM MODAL STYLES */
 .custom-modal-overlay {
   position: fixed;
@@ -251,7 +250,6 @@ th:last-child, td:last-child { text-align:center; }
 .custom-modal-btn-danger:hover {
   background: #b71c1c;
 }
-
 /* RESPONSIF TELEFON */
 @media(max-width:768px){
 .sidebar{display:none}
@@ -385,7 +383,7 @@ main{margin-left:0;padding:12px}
             <div class="grid">
               <div class="field"><label>Tarikh Nikah</label><input type="date" name="tarikh" required></div>
               <div class="field"><label>Hari</label><input name="hari" readonly required placeholder="Automatik"></div>
-              <div class="field"><label>Masa Nikah</label><input type="time" name="masa" required></div>
+              <div class="field"><label>Masa Nikah</label><input type="text" name="masa" required placeholder="Contoh: 09:30 malam"></div>
               <div class="field"><label>Nama Pengantin</label><input name="nama" required placeholder="Nama penuh"></div>
               <div class="field">
                 <label>Kampung</label>
@@ -480,7 +478,6 @@ main{margin-left:0;padding:12px}
     </section>
   </main>
 </div>
-
 <!-- SISTEM CUSTOM MODAL CONTAINER -->
 <div id="customModal" class="custom-modal-overlay hidden">
   <div class="custom-modal-box">
@@ -495,14 +492,12 @@ main{margin-left:0;padding:12px}
     </div>
   </div>
 </div>
-
 <script>
 const firebaseConfig = { apiKey: "AIzaSyBflySl7ok21LE4urn0rKrSVxczRrZykQE", authDomain: "sistem-rekod-nikah.firebaseapp.com", projectId: "sistem-rekod-nikah", storageBucket: "sistem-rekod-nikah.firebasestorage.app", messagingSenderId: "473243104741", appId: "1:473243104741:web:be6dcfbe86256753beeb0c" };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 let records = [];
 const $= s => document.querySelector(s),$$ = s => [...document.querySelectorAll(s)];
-
 // Fungsi Custom Modal Pengganti SweetAlert2
 function showCustomModal({ title = 'Makluman', content = '', icon = 'ℹ️', input = false, inputValue = '', inputPlaceholder = '', showCancel = false, confirmText = 'OK', cancelText = 'Batal', confirmColor = 'primary', onConfirm, onCancel }) {
   const modal = $('#customModal');
@@ -516,7 +511,6 @@ function showCustomModal({ title = 'Makluman', content = '', icon = 'ℹ️', in
     contentEl.innerHTML = '';
     contentEl.appendChild(content);
   }
-
   const inputField = $('#modalInputField');
   const inputContainer = $('#modalInputContainer');
   if (input) {
@@ -527,10 +521,8 @@ function showCustomModal({ title = 'Makluman', content = '', icon = 'ℹ️', in
   } else {
     inputContainer.classList.add('hidden');
   }
-
   const actions = $('#modalActions');
   actions.innerHTML = '';
-
   if (showCancel) {
     const cancelBtn = document.createElement('button');
     cancelBtn.className = 'custom-modal-btn custom-modal-btn-secondary';
@@ -541,7 +533,6 @@ function showCustomModal({ title = 'Makluman', content = '', icon = 'ℹ️', in
     };
     actions.appendChild(cancelBtn);
   }
-
   const okBtn = document.createElement('button');
   okBtn.className = `custom-modal-btn custom-modal-btn-${confirmColor}`;
   okBtn.textContent = confirmText;
@@ -555,10 +546,8 @@ function showCustomModal({ title = 'Makluman', content = '', icon = 'ℹ️', in
     if (onConfirm) onConfirm(val);
   };
   actions.appendChild(okBtn);
-
   modal.classList.remove('hidden');
 }
-
 const days = ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'], months = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
 const formattedDate = new Intl.DateTimeFormat('ms-MY',{day:'2-digit',month:'long',year:'numeric'}).format(new Date());
 $('#todayPC').textContent = 'Tarikh: ' + formattedDate;
@@ -634,7 +623,7 @@ $('#nikahForm').onsubmit = async e => {
     const payload = {
       tarikh: f.tarikh,
       hari: f.hari,
-      masa: f.masa,
+      masa: f.masa.trim(),
       nama: f.nama.trim(),
       kampung: f.kampung === 'Lain-lain' ? f.kampung_lain.trim() : f.kampung,
       tempat: f.tempat === 'Lain-lain' ? f.tempat_lain.trim() : f.tempat,
@@ -710,11 +699,9 @@ function checkNotifications() {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays >= 0 && diffDays <= 3;
   });
-
   const count = upcoming.length;
   const badgePC = $('#notifBadgePC');
   const badgeMob = $('#notifBadgeMobile');
-
   if(count > 0) {
     badgePC.textContent = count;
     badgePC.style.display = 'inline-block';
@@ -726,7 +713,6 @@ function checkNotifications() {
   }
   window.upcomingNikah = upcoming;
 }
-
 window.showNotifications = function() {
   const list = window.upcomingNikah || [];
   if(list.length === 0) {
@@ -742,7 +728,6 @@ window.showNotifications = function() {
     item.innerHTML = `<b>${idx+1}. ${r.nama}</b><br><small>📅 Tarikh: ${formatDateDMY(r.tarikh)} (${r.hari}) | Masa: ${r.masa}</small><br><small>📍 Tempat: ${r.tempat}, ${r.kampung}</small>`;
     container.appendChild(item);
   });
-
   showCustomModal({
     title: '🔔 Majlis Nikah (3 Hari Terdekat)',
     content: container,
@@ -750,7 +735,6 @@ window.showNotifications = function() {
     confirmText: 'Tutup'
   });
 };
-
 // Fungsi Format Tarikh kepada dd-mm-yyyy (Contoh: 21-11-2026)
 function formatDateDMY(dateStr) {
   if(!dateStr) return '';
@@ -763,7 +747,6 @@ function formatDateDMY(dateStr) {
 // Fungsi Tambah ke Kalendar dengan Masa 8-10 am dan Format Teks Tepat Pilihan Anda
 window.addToCalendar = function(name, tarikh, masa, tempat, kampung, catatan){
   let formattedDate = tarikh.replace(/-/g, '');
-  // Masa tetap 8:00 pagi hingga 10:00 pagi (080000 / 100000)
   let startTime = '080000';
   let endTime = '100000';
   
@@ -969,7 +952,6 @@ $('#deleteAll').onclick = async() => {
       });
     },
     onCancel: () => {
-      // Jika butang kedua (Hapus Semua) ditekan
       showCustomModal({
         title: 'Hapus SEMUA rekod?',
         content: 'Tindakan ini akan memadam seluruh data secara kekal.<br>Taip <b>HAPUS SEMUA</b> untuk mengesahkan:',
@@ -1002,7 +984,7 @@ $('#pdfBtn').onclick = () => {
   let yy = 25;
   data.forEach((r,i) => {
     if(yy > 180){ pdf.addPage(); yy = 15; }
-    pdf.text(`${i+1}. ${formatDateDMY(r.tarikh)} | ${r.hari} | ${r.nama} | Kampung: ${r.kampung} | Tempat: ${r.tempat} | Tel: ${r.tel}`, 14, yy);
+    pdf.text(`${i+1}. ${formatDateDMY(r.tarikh)} | ${r.hari} | ${r. nama} | Kampung: ${r.kampung} | Tempat: ${r.tempat} | Tel: ${r.tel}`, 14, yy);
     yy += 7;
   });
   pdf.save('Rekod Nikah '+y+'.pdf');
