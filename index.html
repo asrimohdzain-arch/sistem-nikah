@@ -383,7 +383,7 @@ main{margin-left:0;padding:12px}
             <div class="grid">
               <div class="field"><label>Tarikh Nikah</label><input type="date" name="tarikh" required></div>
               <div class="field"><label>Hari</label><input name="hari" readonly required placeholder="Automatik"></div>
-              <div class="field"><label>Masa Nikah</label><input type="text" name="masa" required placeholder="Contoh: 09:30 malam"></div>
+              <div class="field"><label>Masa Nikah</label><input type="time" name="masa" required></div>
               <div class="field"><label>Nama Pengantin</label><input name="nama" required placeholder="Nama penuh"></div>
               <div class="field">
                 <label>Kampung</label>
@@ -614,6 +614,54 @@ $('#showForm').onclick = () => {
   $('#searchPanel').classList.add('hidden'); 
 };
 $('#showList').onclick = () => { $('#formPanel').classList.add('hidden'); $('#listPanel').classList.remove('hidden'); $('#searchPanel').classList.remove('hidden'); renderRows(); };
+
+// Fungsi Penukar Format Masa Mengikut Julat Terkini (Pagi, Tengah Hari, Petang, Malam)
+function formatTimeTo12Hours(timeStr) {
+  if (!timeStr) return '';
+  if (timeStr.includes('pagi') || timeStr.includes('tengah hari') || timeStr.includes('petang') || timeStr.includes('malam') || timeStr.includes('AM') || timeStr.includes('PM')) {
+    return timeStr;
+  }
+  const parts = timeStr.split(':');
+  if (parts.length >= 2) {
+    let hours = parseInt(parts[0], 10);
+    const minutes = parseInt(parts[1], 10);
+    if (isNaN(hours)) return timeStr;
+    
+    let period = 'pagi';
+    
+    if (hours >= 19) {
+      // 7:00 malam (19:00) hingga 11:59 malam
+      period = 'malam';
+      hours -= 12;
+    } else if (hours >= 14) {
+      // 2:00 petang (14:00) hingga 6:59 petang (18:59)
+      period = 'petang';
+      hours -= 12;
+    } else if (hours >= 12) {
+      // 12:00 tengah hari hingga 1:59 petang (13:59)
+      if (hours === 12 && minutes === 0) {
+        period = 'tengah hari';
+      } else if (hours === 12) {
+        period = 'tengah hari';
+      } else {
+        // Jam 13:00 hingga 13:59 dikira tengah hari
+        period = 'tengah hari';
+        hours -= 12;
+      }
+    } else if (hours === 0) {
+      hours = 12;
+      period = 'pagi';
+    } else {
+      period = 'pagi';
+    }
+
+    const formattedHour = String(hours).padStart(2, '0');
+    const formattedMin = String(minutes).padStart(2, '0');
+    return `${formattedHour}:${formattedMin} ${period}`;
+  }
+  return timeStr;
+}
+
 $('#nikahForm').onsubmit = async e => {
   e.preventDefault();
   const f = Object.fromEntries(new FormData(e.target));
@@ -623,7 +671,7 @@ $('#nikahForm').onsubmit = async e => {
     const payload = {
       tarikh: f.tarikh,
       hari: f.hari,
-      masa: f.masa.trim(),
+      masa: formatTimeTo12Hours(f.masa),
       nama: f.nama.trim(),
       kampung: f.kampung === 'Lain-lain' ? f.kampung_lain.trim() : f.kampung,
       tempat: f.tempat === 'Lain-lain' ? f.tempat_lain.trim() : f.tempat,
@@ -984,7 +1032,7 @@ $('#pdfBtn').onclick = () => {
   let yy = 25;
   data.forEach((r,i) => {
     if(yy > 180){ pdf.addPage(); yy = 15; }
-    pdf.text(`${i+1}. ${formatDateDMY(r.tarikh)} | ${r.hari} | ${r. nama} | Kampung: ${r.kampung} | Tempat: ${r.tempat} | Tel: ${r.tel}`, 14, yy);
+    pdf.text(`${i+1}. ${formatDateDMY(r.tarikh)} | ${r.hari} | ${r.nama} | Kampung: ${r.kampung} | Tempat: ${r.tempat} | Tel: ${r.tel}`, 14, yy);
     yy += 7;
   });
   pdf.save('Rekod Nikah '+y+'.pdf');
