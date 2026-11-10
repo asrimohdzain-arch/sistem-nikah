@@ -604,10 +604,10 @@ function toggle(sel, box, input){
   if(!on) input.value = '';
 }
 $('#kampung').onchange = e => toggle(e.target, $('#kLain'), document.querySelector('#nikahForm input[name="kampung_lain"]'));
-$('#tempat').onchange = e => toggle(e.target, $('#tLain'), document.querySelector('#nikahForm input[name="tempat_lain"]'));
+function setupManualNikahFields() {   const form = $('#nikahForm');   [['tempat', 'tLain', 'tempat_lain', 'Tempat Nikah Lain'], ['wali', 'wLain', 'wali_lain', 'Jenis Wali Lain']].forEach(([name, boxId, inputName, labelText]) => {     const sel = form.elements[name];     let box = $('#' + boxId);     if (!box) {       box = document.createElement('div');       box.id = boxId;       box.className = 'field hidden';       const label = document.createElement('label');       label.textContent = labelText;       const input = document.createElement('input');       input.name = inputName;       box.appendChild(label);       box.appendChild(input);       sel.closest('.field').insertAdjacentElement('afterend', box);     }     box.querySelector('label').textContent = labelText;     const input = box.querySelector('input');     const update = () => toggle(sel, box, input);     sel.onchange = update;     sel.onclick = update;     update();   }); } setupManualNikahFields();
 $('#showForm').onclick = () => { 
   $('#editId').value = '';
-  $('#nikahForm').reset();
+  $('#nikahForm').reset();   setupManualNikahFields();   toggle($('#kampung'), $('#kLain'), document.querySelector('#nikahForm input[name="kampung_lain"]'));
   $('#saveBtn').textContent = 'Simpan Rekod Nikah';
   $('#formPanel').classList.remove('hidden'); 
   $('#listPanel').classList.add('hidden'); 
@@ -676,7 +676,7 @@ $('#nikahForm').onsubmit = async e => {
       kampung: f.kampung === 'Lain-lain' ? f.kampung_lain.trim() : f.kampung,
       tempat: f.tempat === 'Lain-lain' ? f.tempat_lain.trim() : f.tempat,
       tel: f.tel.trim(),
-      wali: f.wali,
+      wali: f.wali === 'Lain-lain' ? f.wali_lain.trim() : f.wali,
       catatan: f.catatan.trim()
     };
     if(editId){
@@ -690,7 +690,7 @@ $('#nikahForm').onsubmit = async e => {
     e.target.reset();
     $('#editId').value = '';
     $('#kLain').classList.add('hidden');
-    $('#tLain').classList.add('hidden');
+    setupManualNikahFields();     toggle($('#kampung'), $('#kLain'), document.querySelector('#nikahForm input[name="kampung_lain"]'));
     $('#saveBtn').textContent = 'Simpan Rekod Nikah';
     await load();
     switchPage('rekod');
@@ -897,7 +897,7 @@ $('#editByBilBtn').onclick = () => {
         }
         
         form.elements['tel'].value = r.tel || '';
-        form.elements['wali'].value = r.wali || '';
+        const waliSel = form.elements['wali'];         const standardWali = [...waliSel.options].some(opt => opt.value === r.wali && opt.value !== 'Lain-lain');         waliSel.value = standardWali ? r.wali : 'Lain-lain';         form.elements['wali_lain'].value = standardWali ? '' : (r.wali || '');         $('#wLain').classList.toggle('hidden', standardWali);         form.elements['wali_lain'].required = !standardWali;         form.elements['tempat_lain'].required = tempatSel.value === 'Lain-lain';         form.elements['kampung_lain'].required = kampungSel.value === 'Lain-lain';
         form.elements['catatan'].value = r.catatan || '';
         $('#saveBtn').textContent = 'Kemaskini Rekod Nikah';
         
